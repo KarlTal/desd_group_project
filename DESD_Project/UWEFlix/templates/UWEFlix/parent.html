@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'UWEFlix/main.css' %}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cinema Manager</title>
+</head>
+
+<body>
+
+<div class="top_bar">
+    <h1><a href="/">Top bar</a></h1>
+</div>
+
+<div class="main">
+    {% block page %}
+
+    {% endblock %}
+
+</div>
+
+<div class="foot">
+    <p>Footer</p>
+</div>
+
+</body>
+
+</html>
