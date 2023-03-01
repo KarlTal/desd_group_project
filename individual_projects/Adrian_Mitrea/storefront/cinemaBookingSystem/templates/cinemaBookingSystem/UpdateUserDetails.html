@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Page</title>
+    </head>
+    
+    <body>
+        <a href = "{% url 'homePage'%}"><h1> Homepage </h1></a>
+        <h1>Update user details</h1>
+
+        <form method = "POST" class = "UpdateForm-form">
+            {% csrf_token %}
+            {{form.as_p}}
+        <input type="submit" name = "Update Details">
+        </form>
+    </body>
+
+</html>

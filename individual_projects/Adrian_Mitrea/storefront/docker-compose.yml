@@ -1,0 +1,13 @@
+services:
+    storefront:
+      image: storefront
+      build:
+        context: .
+        dockerfile: DockerFile
+      restart: unless-stopped
+      ports:
+        - "8000:8000"
+      volumes:
+        - .:/app
+      entrypoint: ["./storefront-entrypoint.sh"]
+        

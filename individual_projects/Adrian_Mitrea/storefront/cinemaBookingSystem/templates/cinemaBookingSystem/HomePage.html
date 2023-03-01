@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Homepage </title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'cinemaBookingSystem/homepage.css'%}"/>
+    </head>
+
+    <body>
+        <a href = "{% url 'homePage'%}"><h1> Homepage </h1></a>
+        <a href = "{% url 'registrationPage' %}"> Register </a>
+        <br>
+        <a href = "{% url 'userDetailsPage'%}"> View User Details </a>
+        <br>
+        <br>
+        
+        <h2 class="h2"> Book a movie! </h2>
+        <div>
+            <table border="1px solid black">
+                <tr>
+                    <th>Film Name</th>
+                    <th>Duration</th>
+                    <th>Age Rating</th>
+                </tr>
+                    {% for film in list_of_films %}
+                        <tr>
+                            <td>{{film.film_name}}</td>
+                            <td>{{film.film_duration}}</td>
+                            <td>{{film.film_age_rating}}</td>
+                        </tr>
+                    {% endfor %} 
+            </table>
+        
+               
+            
+           
+        </div>
+
+
+    </body>
+</html>
+    
