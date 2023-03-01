@@ -1,0 +1,12 @@
+services:
+  uweflix_project:
+    image: uweflix_project
+    build:
+      context: .
+      dockerfile: DockerFile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    entrypoint: ["./uweflix_project-entrypoint.sh"]

@@ -1,0 +1,42 @@
+{% extends "UWEFlix/layout.html" %}
+{% load static %}
+{% block title %}
+    Home
+{% endblock %}
+{% block content %}
+    <h2>Films</h2>
+
+    {% if films_list %}
+        <table class="films_list">
+            <thead>
+            <tr>
+                <th>Film Title</th>
+                <th>Age Rating</th>
+                <th>Duration</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th colspan="2">Actions </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for film in films_list %}
+                <tr>
+                    <td>{{ film.filmTitle }}</td>
+                    <td>{{ film.ageRating }}</td>
+                    <td>{{ film.duration }}</td>
+                    <td>{{ film.description }}</td>
+                    <td>   
+                        {% if film.filmImages %}
+                        <img src="{{film.filmImages.url}}" width="50">
+                        {% endif %}
+                    </td>
+                    <td class = "update-field"><a class = "actions" href="update/{{ film.id }}">update</a>
+                    <td class = "delete-field"><a class = "actions" href="delete/{{ film.id }}">delete</a>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No messages have been logged.</p>
+    {% endif %}
+{% endblock %}

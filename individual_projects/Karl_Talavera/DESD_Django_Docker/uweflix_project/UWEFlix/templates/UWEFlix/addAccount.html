@@ -1,0 +1,15 @@
+{% extends "UWEFlix/layout.html" %}
+{% block title %}
+Adding new films
+{% endblock %}
+{% block content %}
+
+<h3>Create an account </h3>
+
+    <form method="POST" class="addAccount-form">
+        {% csrf_token %}
+        {{ form.media}}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Add account</button>
+    </form>
+{% endblock %}

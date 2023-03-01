@@ -1,0 +1,13 @@
+{% extends "UWEFlix/layout.html" %}
+{% block title %}
+Update Club Rep
+{% endblock %}
+{% block content %}
+Update a Film
+        <form method="POST" class="updateFilms-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media}}
+            {{ form.as_p }}
+        <input type="submit" name ="Submit"> 
+{% endblock %}
+
