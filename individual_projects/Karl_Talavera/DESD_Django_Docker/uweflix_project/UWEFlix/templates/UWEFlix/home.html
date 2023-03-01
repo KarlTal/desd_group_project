@@ -1,0 +1,46 @@
+{% extends "UWEFlix/layout.html" %}
+{% block title %}
+    Home
+{% endblock %}
+{% block css %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'UWEFlix/site.css' %}"/>
+{% endblock %}
+{% block content %}
+    <h2>Accounts (Cinema Manager User Type)</h2>
+
+    {% if accounts_list %}
+        <div class = "HomeTable">
+        <table class="accounts_list">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Email</th>
+                <th colspan="2">Actions </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for accounts in accounts_list %}
+                <tr>
+                    <td>{{ accounts.id }}</a></td>
+                    <td>{{ accounts.username }}</td>
+                    <td> {{ accounts.password }} </td>
+                    <td>{{ accounts.firstName}}</td>
+                    <td>{{ accounts.surname }}</td>
+                    <td>{{accounts.dateOfBirth }} </td>
+                    <td>{{accounts.email }} </td>
+                    <td class = "update-field"><a class = "actions" href="update/account/{{ accounts.id }}" class="btn btn-primary">Update</a></td>
+                    <td class = "delete-field"><a class = "actions" href="delete/account/{{ accounts.id }}" class="btn btn-primary">Delete</a></td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}

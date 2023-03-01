@@ -1,0 +1,80 @@
+.body-content {
+    padding: 5px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input[name=message] {
+    width: 80%;
+}
+
+.films_list th,td {
+    text-align: left;
+    padding-right: 15px;
+}
+
+
+
+tr:nth-child(even){
+    background: lightgrey;
+}
+
+nav {
+    /* display: flex; */
+    justify-content:center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav ul {
+    margin: 0;
+    padding: 0;
+    background-color: #3d393c;
+    overflow: hidden;
+    list-style: none;
+  }
+  
+  nav li {
+    display: inline-block;
+    padding: 14px 16px;
+    text-align: center;
+    padding-top: 20px;
+    
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 20px;
+  }
+  
+  nav a:hover {
+    color: #8D538D;
+  }
+  
+
+  nav a::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background-color: #FFFF;
+    position: absolute;
+    top: 70px; 
+    width: 0%;
+  
+    transition: all ease-in-out 100ms;
+  }
+  
+  nav a:hover::before {
+    width: 3.5%;
+  }
+
+  .nav-active {
+    background-color: #afcdb7;
+    padding: 24px 12px;
+    color:white;
+    pointer-events: none;
+    
+
+  }
+

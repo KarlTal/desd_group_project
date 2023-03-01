@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    {% block css %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'UWEFlix/site.css' %}"/>
+</head>
+
+<body>
+<div class="navbar">
+    <nav>
+        <ul>
+    <li> <a href="{% url 'home' %}" class="navbar-brand">Home</a> </li>
+    <li> <a href="{% url 'addAccounts' %}" class="navbar-item">Create an account</a> </li>
+    <li> <a href="{% url 'films' %}" class="navbar-item">View films</a> </li>
+    <li> <a href="{% url 'clubs' %}" class="navbar-item">View clubs</a> </li>
+    <li> <a href="{% url 'clubReps' %}" class="navbar-item">View club reps</a> </li>
+    <li> <a href="{% url 'addFilms' %}" class="navbar-item"> Add a film</a> </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div class="body-content">
+    {% block content %}
+    {% endblock %}
+    <hr/>
+    <footer>
+        <p>&copy; 2023</p>
+    </footer>
+</div>
+</body>
+</html>
