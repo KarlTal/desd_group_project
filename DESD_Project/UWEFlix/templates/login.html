@@ -1,0 +1,42 @@
+{%extends "layout.html" %}
+{%block title %}
+Login
+{% endblock %}
+{% block content %}
+<p> Welcome to the login page for UWEFlix Cinema </p>
+<p> Log in with your username and password.</p>
+
+<form method="POST" action="">
+    {% csrf_token %}
+    {{form.as_p}}
+    <!-- <table class="addingForms">
+        <label>Username : </label>
+        <input type="text" name="username" placeholder="Enter your username...">
+        <br>
+        <label>Password :   </label>
+        <input type="password" name="password" placeholder="Enter your password...">
+        <br> -->
+    <input type="submit" name="Register User">
+    <!-- </table>  -->
+    <!-- <button type="submit">Sign Up</button> -->
+</form>
+
+<br>
+<p>Or sign in as a guest user.</p>
+
+<div class="guest">
+    <a href="{% url 'guest' %}" class="cinemaAdminButtons">Guest Login</a>
+</div>
+
+
+{% for errorMessage in messages %}
+<p>{{errorMessage}}</p>
+{% endfor %}
+
+<!-- <a href="{% url 'cinemaAdmin' %}" class="navbar-item">Cinema Admin</a>
+
+<a href="{% url 'accountAdmin' %}" class="navbar-item">Account Admin</a>
+
+<a href="{% url 'studentAccount' %}" class="navbar-item">Account Student</a> -->
+
+{% endblock %}
