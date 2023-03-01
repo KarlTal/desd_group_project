@@ -1,0 +1,91 @@
+body {
+    font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    background-color: #E9E7DA;
+    flex-flow: column;
+    color: black;
+}
+
+.top_bar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0% 1% 0% 1%;
+    background-color: gray;
+}
+
+.button {
+    height: 50px;
+    width: 150px;
+}
+
+.main {
+    text-align: center;
+    font-size: 25px;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+}
+
+.foot {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    padding: 0px 0px 0px 0px;
+    background-color: black;
+    color: white;
+}
+
+.container {
+  display:flex;
+  justify-content: center;
+  clear: both;
+}
+
+.container input, select {
+  width: 100%;
+  clear: both;
+}
+
+.float-container {
+    padding: 20px;
+}
+
+.float-child {
+    width: 48%;
+    float: left;
+    padding: 20px;
+}
+
+table, th, td {
+  padding: px;
+  border: 5px solid black;
+  border-collapse: collapse;
+  background-color: #e6e2ca;
+}
+
+form input[type=text], form input[type=datetime-local], form input[type=number], form input[type=email], form input[type=search], form input[type=date], select{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	border:1px solid #BEBEBE;
+	padding: 7px;
+	margin:0px;
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	outline: none;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
+  width: 100%;
+}
