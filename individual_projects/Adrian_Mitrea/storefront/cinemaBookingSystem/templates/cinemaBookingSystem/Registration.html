@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Page</title>
+    </head>
+    
+    <body>
+        <a href = "{% url 'homePage'%}"><h1> Homepage </h1></a>
+        <h1>Register</h1>
+
+        <form action = "" method = "POST">
+            {% csrf_token %}
+            <label for="first_name_form">First name: </label>
+            <input type = "text", name = "first_name_form">
+            <br>
+            <br>
+
+            <label for="last_name_form">Last name: </label>
+            <input type = "text", name = "last_name_form">
+            <br>
+            <br>
+
+            <label for="date_of_birth_form">Date of birth: </label>
+            <input type = "text", name = "date_of_birth_form">
+            <br>
+            <br>
+
+            <label for="email_form">Email: </label>
+            <input type = "text", name = "email_form">
+            <br>
+            <br>
+
+            <label for="address_form">Address: </label>
+            <input type = "text", name = "address_form">
+            <br>
+            <br>
+
+            <label for="username_form">Username: </label>
+            <input type = "text", name = "username_form">
+            <br>
+            <br>
+            
+            <label for="password_form">Password: </label>
+            <input type = "password", name = "password_form">
+            <br>
+            <br>
+
+            <input type = "submit", value = "Register">
+
+
+        </form>
+    </body>
+
+</html>
