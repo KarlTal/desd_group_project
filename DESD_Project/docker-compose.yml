@@ -1,0 +1,12 @@
+services:
+  uweflix_project:
+    image: desd_project
+    build:
+      context: .
+      dockerfile: DockerFile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    entrypoint: ["./DESD_Project-entrypoint.sh"]
