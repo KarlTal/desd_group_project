@@ -5,3 +5,4 @@
 .venv/
 DESD_Project/DESD_Project/.env
 __pycache__/
+DESD_Project/.env
