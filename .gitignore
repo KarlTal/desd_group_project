@@ -3,3 +3,4 @@
 *.xml
 *.pyc
 .venv/
+DESD_Project/DESD_Project/.env
