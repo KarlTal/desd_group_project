@@ -1,12 +1,24 @@
 services:
-  uweflix_project:
-    image: desd_project
+  desd_project:
+    image: ${APP_NAME}
     build:
       context: .
       dockerfile: DockerFile
     restart: unless-stopped
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
     entrypoint: ["./DESD_Project-entrypoint.sh"]
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: ${APP_NAME}-mysql_db
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASS}
+    ports:
+    - '3307:3306'
+    restart: always
