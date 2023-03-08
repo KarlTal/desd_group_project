@@ -1,42 +1,29 @@
-{%extends "layout.html" %}
-{%block title %}
-Login
-{% endblock %}
-{% block content %}
-<p> Welcome to the login page for UWEFlix Cinema </p>
-<p> Log in with your username and password.</p>
+{% extends 'UWEFlix/parent.html' %}
 
-<form method="POST" action="">
+{% block page %}
+
+<h1>Login</h1>
+
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{form.as_p}}
-    <!-- <table class="addingForms">
-        <label>Username : </label>
-        <input type="text" name="username" placeholder="Enter your username...">
-        <br>
-        <label>Password :   </label>
-        <input type="password" name="password" placeholder="Enter your password...">
-        <br> -->
-    <input type="submit" name="Register User">
-    <!-- </table>  -->
-    <!-- <button type="submit">Sign Up</button> -->
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required/>
+
+    <br>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required/>
+
+    <br>
+
+    <button class="button">Login</button>
 </form>
 
-<br>
-<p>Or sign in as a guest user.</p>
+{% if error %}
+    {{error}}
+{% endif %}
 
-<div class="guest">
-    <a href="{% url 'guest' %}" class="cinemaAdminButtons">Guest Login</a>
-</div>
-
-
-{% for errorMessage in messages %}
-<p>{{errorMessage}}</p>
-{% endfor %}
-
-<!-- <a href="{% url 'cinemaAdmin' %}" class="navbar-item">Cinema Admin</a>
-
-<a href="{% url 'accountAdmin' %}" class="navbar-item">Account Admin</a>
-
-<a href="{% url 'studentAccount' %}" class="navbar-item">Account Student</a> -->
+<p>Don't have an account? <a href="{% url 'Register' %}">Sign Up</a></p>
 
 {% endblock %}

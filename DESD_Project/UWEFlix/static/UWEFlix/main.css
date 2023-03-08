@@ -18,3 +18,10 @@
     background-color: black;
     color: white;
 }
+
+.main {
+    font-size: 25px;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+}

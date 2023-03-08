@@ -1,0 +1,33 @@
+{% extends 'UWEFlix/parent.html' %}
+
+{% block page %}
+
+<h1>Register</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{form.first_name.label}}
+    {{form.first_name}}
+    <br>
+    {{form.last_name.label}}
+    {{form.last_name}}
+    <br>
+    {{form.email.label}}
+    {{form.email}}
+    <br>
+    {{form.password1.label}}
+    {{form.password1}}
+    <br>
+    {{form.password2.label}}
+    {{form.password2}}
+    <br>
+
+    <button class="button">Submit</button>
+</form>
+
+{{form.errors}}
+
+<p>Already have an account? <a href="{% url 'Login' %}">Login</a></p>
+
+{% endblock %}
