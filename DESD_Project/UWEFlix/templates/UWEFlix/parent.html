@@ -6,13 +6,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Cinema Manager</title>
+    <title>UWEFlix</title>
 </head>
 
 <body>
 
 <div class="top_bar">
-    <h1><a href="/">Top bar</a></h1>
+    {% if request.user.is_anonymous %}
+        <h1><a href="/">Home</a> - <a href="{% url 'Login' %}">Login</a></h1>
+    {% else %}
+        <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a></h1>
+    {% endif %}
 </div>
 
 <div class="main">
