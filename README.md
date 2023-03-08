@@ -30,17 +30,18 @@ C:\Users\talav\Desktop\New folder\desd_group_project
 
 (.venv) C:\Users\talav\Desktop\New folder\desd_group_project\DESD_Project>
 ```
-4. Before executing docker compuse up -d, ensure that the ```end of line sequence for the DESD_Project-entrypoint.sh``` is ```LF``` as GIT sometimes changes it CRLF which causes the docker cointainer to break as it cannot find the file.
+4. Before executing docker compose --env-file .env up -d, ensure that the ```end of line sequence for the DESD_Project-entrypoint.sh``` is ```LF``` as ```GIT``` sometimes changes it ```CRLF``` which causes the docker cointainer to break as it cannot find the file.
 
-5. Execute ```docker compose up -d ```to initialise the docker container.
+5. Execute ```docker compose --env-file .env up -d```to initialise the docker container.
 ```cmd
-(.venv) C:\Users\talav\Desktop\Group\desd_group_project\DESD_Project>docker compose up -d
+(.venv) C:\Users\talav\Desktop\Group\desd_group_project\DESD_Project>docker compose --env-file .env up -d
 [+] Running 0/1
- - uweflix_project Warning                         1.8s 
-[+] Building 4.6s (6/10)
-[+] Running 2/2
- - Network desd_project_default              Created                                         0.8s
- - Container desd_project-uweflix_project-1  S...                                            1.6s
+ - desd_project Warning                      1.4s 
+[+] Building 3.7s (11/11) FINISHED
+[+] Running 3/3
+ - Network desd_project_default           Create...                                0.8s
+ - Container desd_project-mysql_db        Sta...                                   1.6s
+ - Container desd_project-desd_project-1  Started                                  2.8s
 ```
 
 6. Enter ```Docker Desktop``` and open the port in the browser and now the application should be running.
