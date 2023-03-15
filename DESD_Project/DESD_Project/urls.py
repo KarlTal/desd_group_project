@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('UWEFlix.urls')),
+    path('account/CinemaManager/', include('CinemaManager.urls')),
 ]
