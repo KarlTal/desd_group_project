@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -133,3 +134,8 @@ AXES_FAILURE_LIMIT = 5 #Sets the number of attempts before the user gets locked 
 AXES_COOLOFF_TIME = 0.5 #Int represented by hours, and dictates how long the user has to wait before attempting to login
 AXES_RESET_ON_SUCCESS = True #If the user has successfully logged in after 2 attempts, their attempted attempts must be reseted.
 AXES_RESET_COOL_OFF_ON_FAILURE_DURING_LOCKOUT = False # Cool off period won't get extended even if the user attempts to login again within the cool off period
+
+
+#Sessions configuration
+SESSION_EXPIRE_SECONDS = 60  # 1 hour
+SESSION_TIMEOUT_REDIRECT = 'login/'
