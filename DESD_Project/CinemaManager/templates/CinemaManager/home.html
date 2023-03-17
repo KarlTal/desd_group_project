@@ -61,14 +61,14 @@
         <tr>
             <td>{{screen.screen_id}}</td>
             <td>{{screen.capacity}}</td>
-            <td><a href="/account/CinemaManager//delete_screen/{{screen.screen_id}}">Delete</a></td>
+            <td><a href="/account/CinemaManager/delete_screen/{{screen.screen_id}}">Delete</a></td>
         </tr>
         {% endfor %}
     </table>
 
     <br>
 
-    <input type="submit" class="button" onclick="window.location.href='account/CinemaManager/add_screen/'" value="Add Screen"/>
+    <input type="submit" class="button" onclick="window.location.href='/account/CinemaManager/add_screen/'" value="Add Screen"/>
 </div>
 
 <div class="float-child">
