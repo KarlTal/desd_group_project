@@ -33,14 +33,14 @@
             <td>{{film.age_rating}}</td>
             <td>{{film.duration}} Minutes</td>
             <td>{{film.description}}</td>
-            <td><a href="/update_film/{{film.id}}">Modify</a></td>
+            <td><a href="/account/CinemaManager/update_film/{{film.id}}">Modify</a></td>
         </tr>
         {% endfor %}
     </table>
 
     <br>
 
-    <input type="submit" class="button" onclick="window.location.href='add_film/'" value="Add Film"/>
+    <input type="submit" class="button" onclick="window.location.href='/account/CinemaManager/add_film/'" value="Add Film"/>
 </div>
 
 <br>
@@ -61,14 +61,14 @@
         <tr>
             <td>{{screen.screen_id}}</td>
             <td>{{screen.capacity}}</td>
-            <td><a href="/delete_screen/{{screen.screen_id}}">Delete</a></td>
+            <td><a href="/account/CinemaManager//delete_screen/{{screen.screen_id}}">Delete</a></td>
         </tr>
         {% endfor %}
     </table>
 
     <br>
 
-    <input type="submit" class="button" onclick="window.location.href='add_screen/'" value="Add Screen"/>
+    <input type="submit" class="button" onclick="window.location.href='account/CinemaManager/add_screen/'" value="Add Screen"/>
 </div>
 
 <div class="float-child">
@@ -88,14 +88,14 @@
             <td>{{showing.film}}</td>
             <td>{{showing.screen}}</td>
             <td>{{showing.time}}</td>
-            <td><a href="/update_showing/{{showing.id}}">Modify</a></td>
+            <td><a href="/account/CinemaManager/update_showing/{{showing.id}}">Modify</a></td>
         </tr>
         {% endfor %}
     </table>
 
     <br>
 
-    <input type="submit" class="button" onclick="window.location.href='add_showing/'" value="Add Showing"/>
+    <input type="submit" class="button" onclick="window.location.href='/account/CinemaManager/add_showing/'" value="Add Showing"/>
 </div>
 </div>
 
