@@ -8,6 +8,13 @@
 <hr class="solid">
 
 <div>
+
+    {% if request.user.is_anonymous %}
+
+    <h2>No Permissions</h2>
+
+    {% else %}
+
     <h2>Current Films</h2>
 
     <table style="width:100%">
@@ -95,5 +102,7 @@
 <br>
 
 <hr class="solid">
+
+{% endif %}
 
 {% endblock %}
