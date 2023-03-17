@@ -4,8 +4,15 @@ from .forms import *
 from .models import *
 
 
+# The handler for the homepage of the website.
 def home(request):
-    return render(request, 'CinemaManager/home.html', {})
+    # Lookup all current films, screens and showings, so we can display them on the page.
+    films = Film.objects.all()
+    screens = Screen.objects.all()
+    showings = Showing.objects.all()
+
+    # Render the page.
+    return render(request, 'CinemaManager/home.html', {'films': films, 'screens': screens, 'showings': showings})
 
 
 # The handler for the adding film page.

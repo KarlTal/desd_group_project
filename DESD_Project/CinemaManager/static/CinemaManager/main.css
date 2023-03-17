@@ -25,3 +25,10 @@
     display: flex;
     flex-direction: column;
 }
+
+table, th, td {
+  padding: px;
+  border: 5px solid black;
+  border-collapse: collapse;
+  background-color: #e6e2ca;
+}
