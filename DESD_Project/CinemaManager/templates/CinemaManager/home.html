@@ -1,0 +1,108 @@
+{% extends 'CinemaManager/parent.html' %}
+
+{% block page %}
+
+
+<h1>Manage Cinema</h1>
+
+<hr class="solid">
+
+<div>
+
+    {% if request.user.is_anonymous %}
+
+    <h2>No Permissions</h2>
+
+    {% else %}
+
+    <h2>Current Films</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Rating</th>
+            <th>Duration</th>
+            <th>Description</th>
+            <th>Edit</th>
+        </tr>
+        {% for film in films %}
+        <tr>
+            <td>{{film.id}}</td>
+            <td>{{film.title}}</td>
+            <td>{{film.age_rating}}</td>
+            <td>{{film.duration}} Minutes</td>
+            <td>{{film.description}}</td>
+            <td><a href="/account/CinemaManager/update_film/{{film.id}}">Modify</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <input type="submit" class="button" onclick="window.location.href='/account/CinemaManager/add_film/'" value="Add Film"/>
+</div>
+
+<br>
+
+<hr class="solid">
+
+<div class="float-container">
+    <div class="float-child">
+    <h2>Current Screens</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>ID</th>
+            <th>Capacity</th>
+            <th>Edit</th>
+        </tr>
+        {% for screen in screens %}
+        <tr>
+            <td>{{screen.screen_id}}</td>
+            <td>{{screen.capacity}}</td>
+            <td><a href="/account/CinemaManager/delete_screen/{{screen.screen_id}}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <input type="submit" class="button" onclick="window.location.href='/account/CinemaManager/add_screen/'" value="Add Screen"/>
+</div>
+
+<div class="float-child">
+    <h2>Current Showings</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>ID</th>
+            <th>Film</th>
+            <th>Screen</th>
+            <th>Time</th>
+            <th>Edit</th>
+        </tr>
+        {% for showing in showings %}
+        <tr>
+            <td>{{showing.id}}</td>
+            <td>{{showing.film}}</td>
+            <td>{{showing.screen}}</td>
+            <td>{{showing.time}}</td>
+            <td><a href="/account/CinemaManager/update_showing/{{showing.id}}">Modify</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <input type="submit" class="button" onclick="window.location.href='/account/CinemaManager/add_showing/'" value="Add Showing"/>
+</div>
+</div>
+
+<br>
+
+<hr class="solid">
+
+{% endif %}
+
+{% endblock %}
