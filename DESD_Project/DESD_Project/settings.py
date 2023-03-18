@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'axes', # Axes 
     'UWEFlix',
     'CinemaManager',
+    'ClubRep',
+    'AccountManager'
 ]
 
 MIDDLEWARE = [
@@ -134,8 +136,9 @@ AXES_FAILURE_LIMIT = 5 #Sets the number of attempts before the user gets locked 
 AXES_COOLOFF_TIME = 0.5 #Int represented by hours, and dictates how long the user has to wait before attempting to login
 AXES_RESET_ON_SUCCESS = True #If the user has successfully logged in after 2 attempts, their attempted attempts must be reseted.
 AXES_RESET_COOL_OFF_ON_FAILURE_DURING_LOCKOUT = False # Cool off period won't get extended even if the user attempts to login again within the cool off period
-
+AXES_USE_USER_AGENT = True # If True, lock out / log based on an IP address AND a user agent. This means requests from different user agents but from the same IP are treated differently
 
 #Sessions configuration
-SESSION_EXPIRE_SECONDS = 60  # 1 hour
+SESSION_EXPIRE_SECONDS = 1200  # 20 mins
 SESSION_TIMEOUT_REDIRECT = 'login/'
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True

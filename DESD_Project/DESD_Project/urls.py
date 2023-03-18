@@ -20,4 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('UWEFlix.urls')),
     path('account/CinemaManager/', include('CinemaManager.urls')),
+    path('account/ClubRep/', include('ClubRep.urls')),
+    path('account/AccountManager/', include('AccountManager.urls')),
+
 ]
