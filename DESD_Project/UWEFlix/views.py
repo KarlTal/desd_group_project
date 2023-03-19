@@ -35,6 +35,29 @@ def logout_user(request):
     return redirect(login_user)
 
 
+# View handling for registering a new student.
+@unauthenticated_user
+def registerStudent(request):
+    student_form = CreateStudentForm()
+    user_form = CreateUserForm()
+    if request.method == 'POST':
+        user_form = CreateUserForm(request.POST)
+        student_form = CreateStudentForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            student = student_form.save(commit=False)
+            student.user = user
+            student.save()
+            group = Group.objects.get(name='student')
+            user.groups.add(group)
+            return redirect(login_user)
+        else:
+            print("Not valid")
+    return render(request, 
+                  'UWEFlix/register_student.html', 
+                  {'user_form': user_form,'student_form':student_form})
+
+
 # View handling for registering a new user.
 @unauthenticated_user
 def register(request):
@@ -44,12 +67,8 @@ def register(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            if 'studentbox' in request.POST:
-                #Check for 
-                pass
-            else:
-                group = Group.objects.get(name='customer')
-                user.groups.add(group)
+            group = Group.objects.get(name='customer')
+            user.groups.add(group)
 
             return redirect(login_user)
 
