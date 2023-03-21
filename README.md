@@ -30,7 +30,9 @@ C:\Users\talav\Desktop\New folder\desd_group_project
 
 (.venv) C:\Users\talav\Desktop\New folder\desd_group_project\DESD_Project>
 ```
-4. Before executing docker compose --env-file .env up -d, ensure that the ```end of line sequence for the DESD_Project-entrypoint.sh``` is ```LF``` as ```GIT``` sometimes changes it ```CRLF``` which causes the docker cointainer to break as it cannot find the file.
+4. Run docker-compose up --build. 
+
+5. Before executing docker compose --env-file .env up -d, ensure that the ```end of line sequence for the DESD_Project-entrypoint.sh``` is ```LF``` as ```GIT``` sometimes changes it ```CRLF``` which causes the docker cointainer to break as it cannot find the file.
 
 5. Execute ```docker compose --env-file .env up -d```to initialise the docker container.
 ```cmd
