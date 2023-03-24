@@ -1,14 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from .decorators import allowed_users
 from .forms import *
 from .models import *
-from .decorators import *
-from django.contrib.auth.decorators import login_required
-from UWEFlix.models import Student
+
 
 # The handler for the homepage of the website.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
-def cinemaManager_home(request):
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def home(request):
     # Lookup all current films, screens and showings, so we can display them on the page.
     films = Film.objects.all()
     screens = Screen.objects.all()
@@ -19,8 +20,8 @@ def cinemaManager_home(request):
 
 
 # The handler for the adding film page.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def add_film(request):
     # If request is POST and the form used on the page is valid, save it to the database.
     if request.POST:
@@ -34,8 +35,8 @@ def add_film(request):
 
 
 # The handler for the film information updating page.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def update_film(request, film_id):
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
@@ -54,8 +55,8 @@ def update_film(request, film_id):
 
 
 # The handler for deleting a film.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def delete_film(request, film_id):
     # If a film_id exists, lookup the film and also any showings that contain that film. If there exists a showing
     # that is displaying that film, send an error message to the user. Otherwise, delete the Film.
@@ -75,8 +76,8 @@ def delete_film(request, film_id):
 
 
 # The handler for adding a new screen page.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def add_screen(request):
     if request.POST:
         form = ScreenForm(request.POST)
@@ -89,8 +90,8 @@ def add_screen(request):
 
 
 # The handler for deleting a screen.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def delete_screen(request, screen_id):
     # If a screen_id is provided, lookup the Screen object and delete it.
     if screen_id:
@@ -102,8 +103,8 @@ def delete_screen(request, screen_id):
 
 
 # The handler for adding a showing page.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def add_showing(request):
     if request.POST:
         form = ShowingForm(request.POST)
@@ -114,9 +115,10 @@ def add_showing(request):
     # Render the page.
     return render(request, 'CinemaManager/add_showing.html', {'form': ShowingForm})
 
+
 # The handler for the showing information updating page.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def update_showing(request, showing_id):
     # If the showing_id exists and the form is valid, update the Showing database object with the data from the form.
     if showing_id:
@@ -134,8 +136,8 @@ def update_showing(request, showing_id):
     return redirect(cinemaManager_home)
 
 # The handler for deleting a showing.
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def delete_showing(request, showing_id):
     # If a showing_id is provided, lookup the Showing object and delete it.
     if showing_id:
@@ -146,8 +148,8 @@ def delete_showing(request, showing_id):
 
 
 #View students
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def view_students(request):
 
     students = Student.objects.filter(pending=0)
@@ -155,8 +157,8 @@ def view_students(request):
     return render(request, 'CinemaManager/view_students.html', {'students': students})
 
 #Approval
-@login_required
-@allowed_users(allowed_roles=['cinemaManager'])
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
 def approve_student(request,id):
     student = Student.objects.get(id=id)
     student.pending=1
