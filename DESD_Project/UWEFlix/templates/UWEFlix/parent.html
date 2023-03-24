@@ -13,13 +13,14 @@
 
 <div class="top_bar">
     {% if request.user.is_anonymous %}
-        <h1><a href="/">Home</a> - <a href="{% url 'Login' %}">Login</a> -
-    {% elif request.user|has_group:"cinemaManager"%}
-    <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a> -
-        <a href="{% url 'Dashboard' %}">Manage</a></h1>
-    {% else %}
-        <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a>
-    {% endif %}
+    <h1>
+        <a href="/">Home</a> - <a href="{% url 'Login' %}">Login</a> -
+        {% elif request.user|has_group:"CinemaManager"%}
+        <h1><a href="/">Home</a> - Hello, {{request.user.get_short_name}} <a href="{% url 'Logout' %}">Logout</a> -<a href="{% url 'Dashboard' %}">Manage</a></h1>
+        {% else %}
+        <h1><a href="/">Home</a> - Hello, {{request.user.get_short_name}} <a href="{% url 'Logout' %}">Logout</a></h1>
+        {% endif %}
+    </h1>
 </div>
 
 <div class="main">

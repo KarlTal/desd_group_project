@@ -35,11 +35,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'axes', # Axes 
     'UWEFlix',
     'CinemaManager',
     'ClubRep',
     'AccountManager'
+]
+
+AUTH_USER_MODEL = 'UWEFlix.User'
+
+AUTHENTICATION_BACKENDS = [
+    # 'axes.backends.AxesStandaloneBackend',
+    'UWEFlix.forms.UWEFlixBackend'
 ]
 
 MIDDLEWARE = [
@@ -51,7 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware', # Axes 
 ]
 
 ROOT_URLCONF = 'DESD_Project.urls'
@@ -126,19 +131,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTHENTICATION_BACKENDS = [
-   'axes.backends.AxesStandaloneBackend', # Axes must be first
-   'UWEFlix.models.EmailBackend']
-
-#Axes configurations
-AXES_FAILURE_LIMIT = 5 #Sets the number of attempts before the user gets locked out for a period of time
-AXES_COOLOFF_TIME = 0.5 #Int represented by hours, and dictates how long the user has to wait before attempting to login
-AXES_RESET_ON_SUCCESS = True #If the user has successfully logged in after 2 attempts, their attempted attempts must be reseted.
-AXES_RESET_COOL_OFF_ON_FAILURE_DURING_LOCKOUT = False # Cool off period won't get extended even if the user attempts to login again within the cool off period
-AXES_USE_USER_AGENT = True # If True, lock out / log based on an IP address AND a user agent. This means requests from different user agents but from the same IP are treated differently
-
-#Sessions configuration
-SESSION_EXPIRE_SECONDS = 1200  # 20 mins
-SESSION_TIMEOUT_REDIRECT = 'login/'
-SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True

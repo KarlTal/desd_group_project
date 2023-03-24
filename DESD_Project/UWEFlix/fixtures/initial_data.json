@@ -1,113 +1,68 @@
 [
-    {
-        "model": "auth.group",
-        "pk": 1,
-        "fields": {
-            "name": "student",
-            "permissions": []
-        }
-    },
-    {
-        "model": "auth.group",
-        "pk": 2,
-        "fields": {
-            "name": "cinemaManager",
-            "permissions": []
-        }
-    },
-    {
-        "model": "auth.group",
-        "pk": 3,
-        "fields": {
-            "name": "accountManager",
-            "permissions": []
-        }
-    },
-    {
-        "model": "auth.group",
-        "pk": 4,
-        "fields": {
-            "name": "clubRep",
-            "permissions": []
-        }
-    },
-    {
-        "model": "auth.group",
-        "pk": 5,
-        "fields": {
-            "name": "customer",
-            "permissions": []
-        }
-    },
-
-    {
-        "model": "auth.user",
-        "pk": 1,
-        "fields": {
-            "password": "pbkdf2_sha256$390000$eWbZQOklL2ZYKlpGCRZvAr$Z8lW7Ln9ZLQdTPTkJn5uWc02rtEkTybiA+k4cqWr2Z8=",
-            "last_login": "2023-03-19T22:04:42.274Z",
-            "is_superuser": false,
-            "username": "20001879",
-            "first_name": "Karl",
-            "last_name": "Talavera",
-            "email": "Karl2.Talavera@live.uwe.ac.uk",
-            "is_staff": false,
-            "is_active": true,
-            "date_joined": "2023-03-19T21:55:39Z",
-            "groups": [
-                1
-            ],
-            "user_permissions": []
-        }
-    },
-
-    
-    {
-        "model": "auth.user",
-        "pk": 3,
-        "fields": {
-            "password": "pbkdf2_sha256$390000$BtZRecHVrL5ubNvY5yLWVb$8utpPz+pQPS7d/d0aZJZKtAXMeF5fcRBAHNIcPg1Sm4=",
-            "last_login": "2023-03-19T22:05:26.300Z",
-            "is_superuser": true,
-            "username": "admin",
-            "first_name": "",
-            "last_name": "",
-            "email": "super@admin.com",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2023-03-19T21:59:40.971Z",
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "auth.user",
-        "pk": 4,
-        "fields": {
-            "password": "pbkdf2_sha256$390000$DU6O8BIV8EzEzVyxnPpeKt$3aPxgp6osTkzhlSN8BYs92A30G4NPvAxp2gLcn/mjL4=",
-            "last_login": "2023-03-19T22:06:00.268Z",
-            "is_superuser": false,
-            "username": "CinemaManager1",
-            "first_name": "Cinema",
-            "last_name": "Manager",
-            "email": "cinema@manager.com",
-            "is_staff": false,
-            "is_active": true,
-            "date_joined": "2023-03-19T22:05:14Z",
-            "groups": [
-                2
-            ],
-            "user_permissions": []
-        }
-    },
-
-
-    {
-        "model": "UWEFlix.student",
-        "pk": 2,
-        "fields": {
-            "user": 4,
-            "pending": false
-        }
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$eWbZQOklL2ZYKlpGCRZvAr$Z8lW7Ln9ZLQdTPTkJn5uWc02rtEkTybiA+k4cqWr2Z8=",
+      "last_login": "2023-03-19T22:04:42.274Z",
+      "is_superuser": false,
+      "username": "20001879",
+      "first_name": "Karl",
+      "last_name": "Talavera",
+      "email": "Karl2.Talavera@live.uwe.ac.uk",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-03-19T21:55:39Z",
+      "groups": [
+        1
+      ],
+      "user_permissions": []
     }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$BtZRecHVrL5ubNvY5yLWVb$8utpPz+pQPS7d/d0aZJZKtAXMeF5fcRBAHNIcPg1Sm4=",
+      "last_login": "2023-03-19T22:05:26.300Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "super@admin.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2023-03-19T21:59:40.971Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$DU6O8BIV8EzEzVyxnPpeKt$3aPxgp6osTkzhlSN8BYs92A30G4NPvAxp2gLcn/mjL4=",
+      "last_login": "2023-03-19T22:06:00.268Z",
+      "is_superuser": false,
+      "username": "CinemaManager1",
+      "first_name": "Cinema",
+      "last_name": "Manager",
+      "email": "cinema@manager.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-03-19T22:05:14Z",
+      "groups": [
+        2
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "UWEFlix.student",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "pending": false
+    }
+  }
 ]
