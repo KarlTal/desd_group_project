@@ -25,10 +25,10 @@ def home(request):
 def add_film(request):
     # If request is POST and the form used on the page is valid, save it to the database.
     if request.POST:
-        form = FilmForm(request.POST)
+        form = FilmForm(request.POST, request.FILES) #Added for images
         if form.is_valid():
             form.save()
-        return redirect(home)
+        return redirect(cinemaManager_home)
 
     # Render the page.
     return render(request, 'CinemaManager/add_film.html', {'form': FilmForm})
@@ -41,17 +41,17 @@ def update_film(request, film_id):
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
         lookup = Film.objects.get(id=film_id)
-        form = FilmForm(request.POST or None, instance=lookup)
+        form = FilmForm(request.POST or None, request.FILES or None,instance=lookup)
 
         if form.is_valid():
             form.save()
-            return redirect(home)
+            return redirect(cinemaManager_home)
 
         # Render the page.
         return render(request, 'CinemaManager/update_film.html', {'film': lookup, 'form': form})
 
     # Redirect back to the homepage.
-    return redirect(home)
+    return redirect(cinemaManager_home)
 
 
 # The handler for deleting a film.
@@ -72,7 +72,7 @@ def delete_film(request, film_id):
         lookup.delete()
 
     # Redirect back to the homepage.
-    return redirect(home)
+    return redirect(cinemaManager_home)
 
 
 # The handler for adding a new screen page.
@@ -83,7 +83,7 @@ def add_screen(request):
         form = ScreenForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect(home)
+        return redirect(cinemaManager_home)
 
     # Render the page.
     return render(request, 'CinemaManager/add_screen.html', {'form': ScreenForm})
@@ -99,7 +99,7 @@ def delete_screen(request, screen_id):
         lookup.delete()
 
     # Redirect back to the homepage.
-    return redirect(home)
+    return redirect(cinemaManager_home)
 
 
 # The handler for adding a showing page.
@@ -110,7 +110,7 @@ def add_showing(request):
         form = ShowingForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect(home)
+        return redirect(cinemaManager_home)
 
     # Render the page.
     return render(request, 'CinemaManager/add_showing.html', {'form': ShowingForm})
@@ -127,14 +127,13 @@ def update_showing(request, showing_id):
             form = ShowingForm(request.POST or None, instance=lookup)
             if form.is_valid():
                 form.save()
-                return redirect(home)
+                return redirect(cinemaManager_home)
 
             # Render the page.
             return render(request, 'CinemaManager/update_showing.html', {'showing': lookup, 'form': form})
 
     # Redirect back to the homepage.
-    return redirect(home)
-
+    return redirect(cinemaManager_home)
 
 # The handler for deleting a showing.
 @login_required(login_url='/login')
@@ -144,6 +143,25 @@ def delete_showing(request, showing_id):
     if showing_id:
         lookup = Showing.objects.get(id=showing_id)
         lookup.delete()
-
     # Redirect back to the homepage.
-    return redirect(home)
+    return redirect(cinemaManager_home)
+
+
+#View students
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def view_students(request):
+
+    students = Student.objects.filter(pending=0)
+    # Render the page.
+    return render(request, 'CinemaManager/view_students.html', {'students': students})
+
+#Approval
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_student(request,id):
+    student = Student.objects.get(id=id)
+    student.pending=1
+    student.save()
+    return redirect(view_students)
+

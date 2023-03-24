@@ -24,6 +24,7 @@
             <th>Rating</th>
             <th>Duration</th>
             <th>Description</th>
+            <th>Poster</ht>
             <th>Edit</th>
         </tr>
         {% for film in films %}
@@ -33,6 +34,7 @@
             <td>{{film.age_rating}}</td>
             <td>{{film.duration}} Minutes</td>
             <td>{{film.description}}</td>
+            <td><img src = "{{film.image.url}}" style="width:100px; height:100px;"></td>
             <td><a href="/account/CinemaManager/update_film/{{film.id}}">Modify</a></td>
         </tr>
         {% endfor %}
