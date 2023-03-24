@@ -1,26 +1,81 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, Group
 from django.db import models
-from django.contrib.auth.models import User
-# Overriding model for handling user authentication. Instead of checking that the username matches, we check that
-# the email matches.
-class EmailBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        user_model = get_user_model()
-        try:
-            user = user_model.objects.get(email=username)
-        except user_model.DoesNotExist:
-            return None
-        else:
-            if user.check_password(password):
-                return user
-        return None
+from django.utils import timezone
 
 
-class Student(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    pending = models.BooleanField(default = 0)
+# Create the user groups.
+def setup_groups():
+    Group.objects.get_or_create(name='AccountManager')
+    Group.objects.get_or_create(name='CinemaManager')
+    Group.objects.get_or_create(name='ClubRepresentative')
+    Group.objects.get_or_create(name='Student')
 
 
+class CustomUserManager(UserManager):
+    def _create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("You have not provided a valid e-mail address")
 
-     
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_user(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+
+        user = self._create_user(email, password, **extra_fields)
+
+        setup_groups()
+        group = Group.objects.get(name='Student')
+        user.groups.add(group)
+
+        return user
+
+    def create_superuser(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        user = self._create_user(email, password, **extra_fields)
+
+        setup_groups()
+        group = Group.objects.get(name='Student')
+        user.groups.add(group)
+
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(blank=True, default='', unique=True)
+
+    username = models.CharField(max_length=150, blank=True, default='')
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+
+    is_active = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+
+    date_joined = models.DateTimeField(default=timezone.now)
+    last_login = models.DateTimeField(blank=True, null=True)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+
+    def get_full_name(self):
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        return self.first_name or self.email.split('@')[0]
