@@ -6,11 +6,25 @@ from CinemaManager.views import cinema_dashboard
 from ClubRep.views import rep_dashboard
 from .decorators import *
 from .forms import *
+from CinemaManager.models import *
 
 
 # View handling for the UWEFlix homepage.
 def home(request):
-    return render(request, 'UWEFlix/home.html', {})
+    films = Film.objects.all()
+    return render(request, 'UWEFlix/home.html', {'films': films})
+
+
+def film(request, film_id):
+    # If the film_id exists and the form is valid, update the Film database object with the data from the form.
+    if film_id:
+        lookup = Film.objects.get(id=film_id)
+
+        # Render the page.
+        return render(request, 'UWEFlix/film.html', {'film': lookup})
+
+    # Redirect back to the homepage.
+    return redirect(home)
 
 
 # View handling for user logins.

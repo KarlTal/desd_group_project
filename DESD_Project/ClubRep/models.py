@@ -44,6 +44,7 @@ class Ticket(models.Model):
     price = models.FloatField()
     seat = models.CharField(max_length=3)
 
+
 # class BlockBooking(models.Model):
 #     repID = models.ForeignKey(ClubRepProfile, on_delete=models.SET_NULL,null=True)
 #     quantity = models.PositiveIntegerField()
