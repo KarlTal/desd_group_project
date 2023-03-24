@@ -1,0 +1,28 @@
+{% extends 'UWEFlix/parent.html' %}
+
+{% block page %}
+
+<h1>{{film.title}}</h1>
+
+<h2>Current Showings</h2>
+
+<table style="width:100%">
+    <tr>
+        <th>ID</th>
+        <th>Film</th>
+        <th>Screen</th>
+        <th>Time</th>
+        <th>Edit</th>
+    </tr>
+    {% for showing in showings %}
+    <tr>
+        <td>{{showing.id}}</td>
+        <td>{{showing.film}}</td>
+        <td>{{showing.screen}}</td>
+        <td>{{showing.time}}</td>
+        <td><a href="/booking/{{film.id}}:{{showing.id}}">Book</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -10,7 +10,7 @@ class Film(models.Model):
     age_rating = models.CharField(max_length=5, choices=RATINGS)
     duration = models.IntegerField()
     description = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='films/',null=True)
+    image = models.ImageField(upload_to='films/', null=True)
 
     def __str__(self):
         return self.title
@@ -23,6 +23,7 @@ class Screen(models.Model):
 
     def __str__(self):
         return "Screen " + str(self.screen_id) + " (Capacity: " + str(self.capacity) + ")"
+
 
 # The database class for the Showings at UWEFlix
 class Showing(models.Model):

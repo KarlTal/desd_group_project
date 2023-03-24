@@ -11,6 +11,12 @@ def setup_groups():
     Group.objects.get_or_create(name='Student')
 
 
+def set_user_group(user, group_key):
+    setup_groups()
+    group = Group.objects.get(name=group_key)
+    user.groups.add(group)
+
+
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
@@ -18,6 +24,7 @@ class CustomUserManager(UserManager):
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+
         user.set_password(password)
         user.save(using=self._db)
 
@@ -26,26 +33,16 @@ class CustomUserManager(UserManager):
     def create_user(self, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-
         user = self._create_user(email, password, **extra_fields)
-
-        setup_groups()
-        group = Group.objects.get(name='Student')
-        user.groups.add(group)
-
+        set_user_group(user, 'Student')
         return user
 
     def create_superuser(self, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
-
         user = self._create_user(email, password, **extra_fields)
-
-        setup_groups()
-        group = Group.objects.get(name='Student')
-        user.groups.add(group)
-
+        set_user_group(user, 'AccountManager')
         return user
 
 
@@ -78,4 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return full_name.strip()
 
     def get_short_name(self):
-        return self.first_name or self.email.split('@')[0]
+        if not self.first_name or self.first_name == '':
+            return self.email.split('@')[0]
+        else:
+            return self.first_name
