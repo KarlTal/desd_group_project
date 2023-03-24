@@ -24,15 +24,14 @@ class CustomUserManager(UserManager):
         return user
 
     def create_user(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
 
         user = self._create_user(email, password, **extra_fields)
 
         setup_groups()
         group = Group.objects.get(name='Student')
-        group.user_set.add(user)
+        user.groups.add(group)
 
         return user
 

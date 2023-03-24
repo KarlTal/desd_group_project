@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     # Generic URLs.
-    path('', views.club_rep_home, name='ClubRepDashboard'),
+    path('', views.rep_dashboard, name='ClubRepDashboard'),
     #Club related URLs.
     path('view_clubs/',views.view_clubs,name="ViewClubs"),
     path('register/club',views.add_club, name="AddClub"),

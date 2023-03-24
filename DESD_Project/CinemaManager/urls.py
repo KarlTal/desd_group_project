@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     # Generic URLs.
-    path('', views.cinemaManager_home, name='Dashboard'),
+    path('', views.cinema_dashboard, name='Dashboard'),
     path('view_students/',views.view_students, name = "View unapproved students"),
 
     # Film related URLs.
