@@ -4,6 +4,8 @@ from django.contrib.auth.models import Group
 from .forms import *
 from .decorators import *
 from django.contrib.auth.decorators import login_required
+from CinemaManager.views import cinemaManager_home
+from ClubRep.views import club_rep_home
 # View handling for the UWEFlix homepage.
 def home(request):
     return render(request, 'UWEFlix/home.html', {})
@@ -21,11 +23,42 @@ def login_user(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect(home)
+
+            group = request.user.groups.all()[0].name
+            if "cinemaManager" in group:
+                return redirect(cinemaManager_home)
+            elif 'student' in group:
+                if request.user.student.pending==0:
+                    logout(request)
+                    error = "Your student account is not approved yet!"
+                    return render(request, 'UWEFlix/login.html', {'error': error})
+                else:
+                    return redirect(home)
+            else:
+                return redirect(home)
         else:
             error = "Invalid email or password!"
 
     return render(request, 'UWEFlix/login.html', {'error': error})
+
+
+# View handling for club rep logins.
+@unauthenticated_user
+def login_club_rep(request):
+    error = None
+
+    if request.method == 'POST':
+        clubRepNumber = request.POST.get('clubRepNumber')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=clubRepNumber, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(club_rep_home)
+        else:
+            error = "Invalid club rep number or password!"
+
+    return render(request, 'UWEFlix/login_club_rep.html', {'error': error})
 
 
 # View handling for user logging out.

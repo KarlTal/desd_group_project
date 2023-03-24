@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -88,6 +88,14 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -129,6 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = [
    'axes.backends.AxesStandaloneBackend', # Axes must be first
+   'django.contrib.auth.backends.ModelBackend',
    'UWEFlix.models.EmailBackend']
 
 #Axes configurations
@@ -142,3 +151,8 @@ AXES_USE_USER_AGENT = True # If True, lock out / log based on an IP address AND 
 SESSION_EXPIRE_SECONDS = 1200  # 20 mins
 SESSION_TIMEOUT_REDIRECT = 'login/'
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+
+
+#Images
+MEDIA_ROOT = BASE_DIR / 'media' #Path lib object
+MEDIA_URL = '/media/'

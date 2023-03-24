@@ -5,7 +5,8 @@ from . import views
 
 urlpatterns = [
     # Generic URLs.
-    path('', views.home, name='Dashboard'),
+    path('', views.cinemaManager_home, name='Dashboard'),
+    path('view_students/',views.view_students, name = "View unapproved students"),
 
     # Film related URLs.
     path('add_film/', views.add_film, name='Add a new Film'),
@@ -19,7 +20,11 @@ urlpatterns = [
     # Showings related URLs.
     path('add_showing/', views.add_showing, name='Add Showing'),
     path('update_showing/<showing_id>', views.update_showing, name='Update a Showing'),
-    path('delete_showing/<showing_id>', views.delete_showing, name='Delete a Showing')
+    path('delete_showing/<showing_id>', views.delete_showing, name='Delete a Showing'),
+
+    #Approval of accounts 
+    path('approve_student/<id>',views.approve_student,name='Approve a Student'),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()
