@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     # Generic URLs.
-    path('', views.home, name='AccountManagerDashboard'),
+    path('', views.home, name='Manager Dashboard'),
 
 ]
 

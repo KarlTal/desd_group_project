@@ -1,10 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from UWEFlix.models import User
-from .decorators import allowed_users
+from UWEFlix.decorators import allowed_users
 from .forms import *
-from .models import *
 
 
 # The handler for the homepage of the website.

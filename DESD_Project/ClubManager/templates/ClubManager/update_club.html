@@ -2,9 +2,13 @@
 
 {% block page %}
 
-<h1>Update: {{showing.time}}</h1>
+<h1>Update: {{club.title}}</h1>
 
 <hr class="solid">
+
+{% if error %}
+<h3 style="color:red;">{{error}}</h3>
+{% endif %}
 
 <div class="container">
     <form id="update" method="POST" enctype="multipart/form-data">
@@ -18,7 +22,7 @@
 
 <div>
     <button class="button" form="update">Update</button>
-    <button class="button" onclick="window.location.href='/manager/delete_showing/{{showing.id}}'">Delete Showing</button>
+    <button class="button" onclick="window.location.href='/clubs/delete_club/{{club.id}}'">Delete Club</button>
 </div>
 
 {% endblock %}

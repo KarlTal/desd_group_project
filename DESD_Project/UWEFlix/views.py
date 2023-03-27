@@ -2,17 +2,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from CinemaManager.models import *
 from CinemaManager.views import cinema_dashboard
+from UWEFlix.models import *
 from .decorators import *
 from .forms import *
+
+
 # View handling for the UWEFlix homepage.
-from .models import set_user_group
-
-
 def home(request):
     films = Film.objects.all()
-    return render(request, 'UWEFlix/home.html', {'films': films})
+    return render(request, 'UWEFlix/home.html', {'films': {}})
 
 
 def film(request, film_id):

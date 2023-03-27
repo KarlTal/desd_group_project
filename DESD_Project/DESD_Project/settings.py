@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'UWEFlix',
     'CinemaManager',
-    'ClubRep',
+    'ClubManager',
     'AccountManager'
 ]
 

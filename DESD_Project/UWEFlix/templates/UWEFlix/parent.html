@@ -16,8 +16,8 @@
         <h1><a href="/">Home</a> - <a href="{% url 'Login' %}">Login</a> </h1>
     {% elif request.user|has_group:"CinemaManager"%}
     <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a> -
-        <a href="{% url 'Dashboard' %}">Manage</a> - <a href="{% url 'ViewClubs' %}">View Clubs</a> - 
-        <a href="{% url 'ViewClubReps' %}">View Club Reps </a> - <a href="{% url 'View unapproved students' %}">View Students </a> </h1>
+        <a href="{% url 'Dashboard' %}">Manage</a> - <a href="{% url 'View Clubs' %}">View Clubs</a> -
+        <a href="{% url 'View Reps' %}">View Club Reps </a> - <a href="{% url 'View Unapproved Students' %}">View Students </a> </h1>
     {% elif request.user|has_group:"ClubRepresentative"%}
     <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a> -
     </h1>

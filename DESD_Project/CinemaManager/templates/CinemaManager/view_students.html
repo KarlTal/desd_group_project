@@ -1,4 +1,4 @@
-{% extends 'ClubRep/parent.html' %}
+{% extends 'ClubManager/parent.html' %}
 
 {% block page %}
 
@@ -33,7 +33,7 @@
             <td>{{student.user.last_name}}</td>
             <td>{{student.user.username}}</td>
             <td>{{student.user.email}}</td>
-            <td><a href="/account/CinemaManager/approve_student/{{student.id}}">Approve</a></td>
+            <td><a href="/manager/approve_student/{{student.id}}">Approve</a></td>
         </tr>
         {% endfor %}
     </table>

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import *
+from UWEFlix.models import *
 
 
 # The Form used when creating and editing Films available at UWEFlix.
@@ -14,7 +14,7 @@ class FilmForm(ModelForm):
     # Specify the Meta so Django knows what fields we're modifying.
     class Meta:
         model = Film
-        fields = ['title', 'age_rating', 'duration', 'description','image']
+        fields = ['title', 'age_rating', 'duration', 'description', 'image']
 
 
 # The Form used to add Screens available.
