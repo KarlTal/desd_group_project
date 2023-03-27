@@ -11,7 +11,7 @@ from .forms import *
 # View handling for the UWEFlix homepage.
 def home(request):
     films = Film.objects.all()
-    return render(request, 'UWEFlix/home.html', {'films': {}})
+    return render(request, 'UWEFlix/home.html', {'films': films})
 
 
 def film(request, film_id):
