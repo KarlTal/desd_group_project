@@ -1,9 +1,24 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
 .top_bar {
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
-    padding: 0% 1% 0% 1%;
     background-color: gray;
 }
 

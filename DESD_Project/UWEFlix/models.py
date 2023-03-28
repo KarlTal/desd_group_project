@@ -72,9 +72,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return self.first_name
 
-    def get_profile(self):
-        return UserProfile.objects.get_or_create(user=self)
-
 
 # The database class for the Clubs available at UWEFlix
 class Club(models.Model):
@@ -133,11 +130,13 @@ class Ticket(models.Model):
 
 # The database class for the club representative
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_obj = models.OneToOneField(User, on_delete=models.CASCADE)
     club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE)
-    date_of_birth = models.DateField(auto_now_add=False, auto_now=False, blank=False)
-    credit = models.PositiveIntegerField()
-    autocomplete_fields = ['user']
+    date_of_birth = models.DateField(default=timezone.now)
+    credits = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.user_obj.email + "'s Profile"
 
 
 # Create the user groups.

@@ -1,29 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load userfilter %}
+{% load customtags %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'UWEFlix/main.css' %}">
 
 <head>
     <meta charset="UTF-8">
     <title>UWEFlix</title>
+
+    <style>
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+      border-left:1px solid #bbb;
+      border-right:1px solid #bbb;
+    }
+
+    li:last-child {
+      border-right: none;
+    }
+
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 25px 30px;
+      text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+      background-color: #111;
+    }
+
+    .active {
+      background-color: #04AA6D;
+    }
+
+    </style>
 </head>
 
 <body>
 
 <div class="top_bar">
-    {% if request.user.is_anonymous %}
-        <h1><a href="/">Home</a> - <a href="{% url 'Login' %}">Login</a> </h1>
-    {% elif request.user|has_group:"CinemaManager"%}
-    <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a> -
-        <a href="{% url 'Dashboard' %}">Manage</a> - <a href="{% url 'View Clubs' %}">View Clubs</a> -
-        <a href="{% url 'View Reps' %}">View Club Reps </a> - <a href="{% url 'View Unapproved Students' %}">View Students </a> </h1>
-    {% elif request.user|has_group:"ClubRepresentative"%}
-    <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a> -
-    </h1>
-    {% else %}
-        <h1><a href="/">Home</a> - Hello, {{request.user.first_name}} <a href="{% url 'Logout' %}">Logout</a>
-    {% endif %}
+
+    <ul>
+        <li><a class="active" href="/">Home</a></li>
+
+        {% if request.user.is_anonymous %}
+
+        <li style="float:right"><a href="{% url 'Login' %}">Login</a></li>
+
+        {% else %}
+
+            {% if request.user|has_group:"AccountManager" %}
+
+            <!--TODO-->
+
+            {% elif request.user|has_group:"CinemaManager" %}
+
+            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+            <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
+            <li><a href="{% url 'View Reps' %}">Reps</a></li>
+            <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
+
+            {% elif request.user|has_group:"ClubRepresentative" %}
+
+            <!--TODO-->
+
+            {% endif %}
+
+            <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
+            <li style="float:right"><a>Total Credits: {% get_credits request.user %}</a></li>
+
+        {% endif %}
+    </ul>
+
 </div>
 
 <div class="main">

@@ -1,22 +1,109 @@
 [
   {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "AccountManager",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "CinemaManager",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "ClubRepresentative",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "Student",
+      "permissions": []
+    }
+  },
+  {
     "model": "UWEFlix.user",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$390000$rhGKbiSM36ERXshVdHMpO0$taPJwAMoUQ7dMI9cuio45In5gw2NIcaNcBi7BKPrJPg=",
-      "email": "alex@main.com",
-      "username": "",
-      "first_name": "",
-      "last_name": "",
+      "password": "pbkdf2_sha256$390000$fyuSjSdFR5Bn46wvWtVsBe$7TSLwPhFo/bmAGYp9gFdVg9YH3Dr0XiN7pL4nXTlaBY=",
+      "email": "admin@main.com",
+      "username": "Admin",
+      "first_name": "Admin",
+      "last_name": "Account",
       "is_active": true,
       "is_superuser": true,
       "is_staff": true,
-      "date_joined": "2023-03-26T20:54:14Z",
-      "last_login": "2023-03-26T20:54:16Z",
+      "date_joined": "2023-03-27T21:15:22.213Z",
+      "last_login": "2023-03-28T00:43:42.553Z",
       "groups": [
         2
       ],
       "user_permissions": []
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 1,
+    "fields": {
+      "title": "Movie 1",
+      "age_rating": "U",
+      "duration": 150,
+      "description": "The first movie.",
+      "image": "films/485685046.jpg"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 2,
+    "fields": {
+      "title": "Movie 2",
+      "age_rating": "12A",
+      "duration": 165,
+      "description": "Highly anticipated sequel.",
+      "image": "films/jeffpacito.jpeg"
+    }
+  },
+  {
+    "model": "UWEFlix.screen",
+    "pk": 1,
+    "fields": {
+      "capacity": 100
+    }
+  },
+  {
+    "model": "UWEFlix.screen",
+    "pk": 2,
+    "fields": {
+      "capacity": 150
+    }
+  },
+  {
+    "model": "UWEFlix.showing",
+    "pk": 1,
+    "fields": {
+      "film": 1,
+      "screen": 2,
+      "time": "2023-03-28T00:45:40Z"
+    }
+  },
+  {
+    "model": "UWEFlix.userprofile",
+    "pk": 1,
+    "fields": {
+      "user_obj": 1,
+      "club": null,
+      "date_of_birth": "2023-03-27",
+      "credits": 1000
     }
   }
 ]

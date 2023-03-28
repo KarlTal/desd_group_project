@@ -28,7 +28,7 @@ def view_clubs(request):
 def view_club_reps(request):
     # Lookup all club reps
     club_reps = ClubRepProfile.objects.all()
-    return render(request, 'ClubManager/view_club_reps.html', {'club_reps': club_reps})
+    return render(request, 'ClubManager/view_reps.html', {'club_reps': club_reps})
 
 
 # View handling for registering a new club representative
