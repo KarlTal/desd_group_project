@@ -2,7 +2,113 @@
 
 {% block page %}
 
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+         jQuery(document).ready(($) => {
+        $('.quantity').on('click', '.plus', function(e) {
+            let $input = $(this).prev('input.qty');
+            let val = parseInt($input.val());
+            $input.val( val+1 ).change();
+        });
+
+        $('.quantity').on('click', '.minus',
+            function(e) {
+            let $input = $(this).next('input.qty');
+            var val = parseInt($input.val());
+            if (val > 0) {
+                $input.val( val-1 ).change();
+            }
+        });
+    });
+
+            function calculateAmountChild(val){
+                var total = val * 4.99;
+                var child_tick_quantity=document.getElementById("childtotal");
+                console.log(total)
+                child_tick_quantity.value =total.toFixed(2);
+
+                var totalPrice=document.getElementById("totalPrice");
+                var adult_tick_quantitys=document.getElementById("adulttotal");
+                var student_tick_quantity=document.getElementById("studenttotal");
+                console.log(total)
+                totalPrice.value = parseFloat(adult_tick_quantitys.value) + parseFloat(child_tick_quantity.value) + parseFloat(student_tick_quantity.value)
+                totalPrice.value = parseFloat(totalPrice.value).toFixed(2)
+            }
+
+    </script>
+
+    <style>
+    #myform {
+        text-align: center;
+        padding: 5px;
+        border: 1px dotted #ccc;
+        margin: 2%;
+    }
+
+    .qty {
+        width: 40px;
+        height: 25px;
+        text-align: center;
+    }
+
+    input.qtyplus { width:25px; height:25px;}
+    input.qtyminus { width:25px; height:25px;}
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      padding: 10px;
+    }
+
+    .grid-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      font-size: 30px;
+      text-align: center;
+    }
+
+    </style>
+</head>
+
 <h1>{{film.title}}</h1>
 <h1>{{showing.screen}}</h1>
+
+{% if request.user.is_anonymous %}
+
+<form id='myform' method='POST' class='quantity' action='#'>
+    <input type='button' value='-' class='qtyminus minus' field='quantity'/>
+    <input type='text' name='quantity' value='0' class='qty'/>
+    <input type='button' value='+' class='qtyplus plus' field='quantity'/>
+</form>
+
+<form id='myform' method='POST' class='quantity' action='#'>
+    <input type='button' value='-' class='qtyminus minus' field='quantity'/>
+    <input type='text' name='quantity' value='0' class='qty'/>
+    <input type='button' value='+' class='qtyplus plus' field='quantity'/>
+</form>
+
+{% else %}
+
+<div class="grid-container">
+    <div class="grid-item">
+        <h3>Student</h3>
+    </div>
+
+    <form id='myform' method='POST' class='quantity' action='#'>
+        <div class="grid-item">
+            <input type='button' value='-' class='qtyminus minus' field='quantity'/>
+            <input type='text' name='child_quantity' id="child_tick_quantity" onchange="calculateAmountChild(this.value)" value='0' class='qty'/>
+            <input type='button' value='+' class='qtyplus plus' field='quantity'/>
+
+            £ <input type="text" id="childtotal" readonly class="individual_totals" value="0">
+        </div>
+        <button class="button" form="myform">Submit</button>
+    </form>
+</div>
+
+{% endif %}
 
 {% endblock %}

@@ -119,12 +119,23 @@ class Showing(models.Model):
     time = models.DateTimeField(default=timezone.now)
 
 
-# The database class for the Tickets at UWEFlix.
-class Ticket(models.Model):
-    seat = models.IntegerField()
-    showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
+# The database class for Ticket Bookings at UWEFlix.
+class Booking(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
+    showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
+    date = models.DateTimeField(default=timezone.now)
+    total_price = models.IntegerField(default=0)
+    ticket_count = models.IntegerField(default=0)
+
+
+# The database class for the Tickets at UWEFlix.
+class Ticket(models.Model):
+    TYPES = (('Adult', 'Adult'), ('Child', 'Child'), ('Student', 'Student'))
+
+    # seat = models.IntegerField()
+    booking = models.ForeignKey(Booking, null=True, on_delete=models.SET_NULL)
+    ticket_type = models.CharField(max_length=10, default='Adult', choices=TYPES)
     price = models.FloatField()
 
 
