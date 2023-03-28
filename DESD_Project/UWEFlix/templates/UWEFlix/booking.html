@@ -31,10 +31,22 @@
 
                 var totalPrice=document.getElementById("totalPrice");
                 var adult_tick_quantitys=document.getElementById("adulttotal");
-                var student_tick_quantity=document.getElementById("studenttotal");
                 console.log(total)
-                totalPrice.value = parseFloat(adult_tick_quantitys.value) + parseFloat(child_tick_quantity.value) + parseFloat(student_tick_quantity.value)
+                totalPrice.value = parseFloat(adult_tick_quantitys.value) + parseFloat(child_tick_quantity.value)
                 totalPrice.value = parseFloat(totalPrice.value).toFixed(2)
+            }
+
+            function calculateAmountAdult(val){
+                var total = val * 6.99;
+                var adult_tick_quantitys=document.getElementById("adulttotal");
+                console.log(total)
+                adult_tick_quantitys.value =total.toFixed(2);
+
+                var totalPrice=document.getElementById("totalPrice");
+                var child_tick_quantity=document.getElementById("childtotal");
+                console.log(total)
+                totalPrice.value = parseFloat(adult_tick_quantitys.value) + parseFloat(child_tick_quantity.value) 
+                totalPrice.value = parseFloat(totalPrice.value).toFixed(2)           
             }
 
     </script>
@@ -76,19 +88,45 @@
 <h1>{{film.title}}</h1>
 <h1>{{showing.screen}}</h1>
 
+
 {% if request.user.is_anonymous %}
+<div class="grid-container">
+<form id='myform' method='POST' class='quantity' action='#' enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="grid-item">
+        <h3>Adult</h3>
+    </div>
+        <div class="grid-item">
+        <input type='button' value='-' class='qtyminus minus' field='quantity' />
+        <input type='text' name='adult_quantity' value='0' class='qty' id="adult_tick_quantity" onchange="calculateAmountAdult(this.value)"/>
+        <input type='button' value='+' class='qtyplus plus' field='quantity' />
+        £
+        <input type="text" id="adulttotal" readonly class="individual_totals" value="0">
+    </div>
+<br>
 
-<form id='myform' method='POST' class='quantity' action='#'>
-    <input type='button' value='-' class='qtyminus minus' field='quantity'/>
-    <input type='text' name='quantity' value='0' class='qty'/>
-    <input type='button' value='+' class='qtyplus plus' field='quantity'/>
+<div class="grid-item">
+    <h3>Child</h3>
+</div>
+
+    <div class="grid-item">
+        <input type='button' value='-' class='qtyminus minus' field='quantity' />
+        <input type='text' name='child_quantity' value='0' class='qty' id="child_tick_quantity" onchange="calculateAmountChild(this.value)"/>
+        <input type='button' value='+' class='qtyplus plus' field='quantity' />
+        £
+        <input type="text" id="childtotal" readonly class="individual_totals" value="0">
+    </div>
+<br>
+
+<h3>Total</h3>
+<input type="text" id="totalPrice" readonly class="individual_totals" value="0">
+<div class="grid-item">
+<input type="email" name = "user_email">
+</div>
+<button class="button" form="myform">Submit</button>
 </form>
 
-<form id='myform' method='POST' class='quantity' action='#'>
-    <input type='button' value='-' class='qtyminus minus' field='quantity'/>
-    <input type='text' name='quantity' value='0' class='qty'/>
-    <input type='button' value='+' class='qtyplus plus' field='quantity'/>
-</form>
+</div>
 
 {% else %}
 
@@ -97,15 +135,16 @@
         <h3>Student</h3>
     </div>
 
-    <form id='myform' method='POST' class='quantity' action='#'>
+    <form id='myform1' method='POST' class='quantity' action='#' enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="grid-item">
             <input type='button' value='-' class='qtyminus minus' field='quantity'/>
-            <input type='text' name='child_quantity' id="child_tick_quantity" onchange="calculateAmountChild(this.value)" value='0' class='qty'/>
+            <input type='text' name='student_quantity' id="student_tick_quantity" onchange="calculateAmountChild(this.value)" value='0' class='qty'/>
             <input type='button' value='+' class='qtyplus plus' field='quantity'/>
 
             £ <input type="text" id="childtotal" readonly class="individual_totals" value="0">
         </div>
-        <button class="button" form="myform">Submit</button>
+        <button class="button" form="myform1">Submit</button>
     </form>
 </div>
 

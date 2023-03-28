@@ -117,11 +117,13 @@ class Showing(models.Model):
     film = models.ForeignKey(Film, null=True, on_delete=models.SET_NULL)
     screen = models.ForeignKey(Screen, null=True, on_delete=models.SET_NULL)
     time = models.DateTimeField(default=timezone.now)
+    seats_taken = models.IntegerField(default=0)
 
 
 # The database class for Ticket Bookings at UWEFlix.
 class Booking(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    # user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user_email= models.EmailField(null=True)
     club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
     showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(default=timezone.now)
