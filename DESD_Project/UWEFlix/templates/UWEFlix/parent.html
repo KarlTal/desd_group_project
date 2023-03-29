@@ -69,15 +69,17 @@
             <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
             <li><a href="{% url 'View Reps' %}">Reps</a></li>
             <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
+            <li style="float:right"><a>Total Credits: {% get_credits request.user %}</a></li>
 
             {% elif request.user|has_group:"ClubRepresentative" %}
 
             <!--TODO-->
-
+            <li><a href = "{% url 'View Club Transactions' %}">View All Transactions</a></li>
+            <li style="float:right"><a>Total Credits: {% get_credits request.user %}</a></li>
             {% endif %}
 
             <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
-            <li style="float:right"><a>Total Credits: {% get_credits request.user %}</a></li>
+
 
         {% endif %}
     </ul>

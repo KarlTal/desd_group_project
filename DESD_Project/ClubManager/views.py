@@ -6,7 +6,7 @@ from CinemaManager.views import cinema_dashboard
 from UWEFlix.decorators import *
 from UWEFlix.forms import *
 from .forms import *
-
+from UWEFlix.models import *
 
 # The handler for the homepage of the website.
 @login_required(login_url='/login')
@@ -14,6 +14,15 @@ from .forms import *
 def rep_dashboard(request):
     return render(request, 'ClubManager/home.html', {})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles="ClubRepresentative")
+def view_all_club_transactions(request):
+    club_transactions = Booking.objects.get(user_email=request.user.email) #Gets all the bookings associated with the user's email
+    
+    context = {
+        'club_transactions': club_transactions,
+    }
+    return render(request, 'ClubManager/view_all_club_transactions.html', {context})
 
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
@@ -27,7 +36,9 @@ def view_clubs(request):
 @allowed_users(allowed_roles='CinemaManager')
 def view_club_reps(request):
     # Lookup all club reps
-    club_reps = ClubRepProfile.objects.all()
+    club_reps = UserProfile.objects.exclude(club__isnull=True) 
+    print("hello")
+    print(club_reps)
     return render(request, 'ClubManager/view_reps.html', {'club_reps': club_reps})
 
 
@@ -44,7 +55,7 @@ def add_club(request):
         else:
             print("Not valid")
     return render(request,
-                  'ClubManager/create_club.html',
+                  'ClubManager/add_club.html',
                   {'club_form': club_form})
 
 
@@ -82,14 +93,14 @@ def delete_club(request, club_id):
 @allowed_users(allowed_roles='CinemaManager')
 def update_club_rep(request, rep_id):
     if rep_id:
-        lookup = ClubRepProfile.objects.get(repID=rep_id)
+        lookup = UserProfile.objects.get(id=rep_id)
         form = CreateClubRepForm(request.POST or None, instance=lookup)
 
         if form.is_valid():
             form.save()
             return redirect(view_club_reps)
         # Render the page.
-        return render(request, 'ClubManager/update_club_rep.html', {'club_rep': lookup, 'form': form})
+        return render(request, 'ClubManager/update_rep.html', {'club_rep': lookup, 'form': form})
 
     # Redirect back to the homepage.
     print("failed")
@@ -100,8 +111,10 @@ def update_club_rep(request, rep_id):
 @allowed_users(allowed_roles='CinemaManager')
 def delete_club_rep(request, rep_id):
     if rep_id:
-        lookup = ClubRepProfile.objects.get(repID=rep_id)
-        lookup.delete()
+        lookup = UserProfile.objects.get(id=rep_id)
+        user_lookup = User.objects.get(id=lookup.user_obj.id)
+        # lookup.delete()
+        user_lookup.delete()
     # Redirect back to the view clubs.
     return redirect(view_club_reps)
 
@@ -119,17 +132,17 @@ def register_club_rep(request):
         club_rep_form = CreateClubRepForm(request.POST)
         if user_form.is_valid() and club_rep_form.is_valid():
             user = user_form.save()
+            user.is_active = True #Makes the account active
             club_rep = club_rep_form.save(commit=False)
-            club_rep.user = user
+            club_rep.user_obj = user
             club_rep.save()
-            user.username = club_rep.repID
-            user.email = club_rep.repID
+            user.username = int(club_rep.id) + 1000
             user = user_form.save()
-            group = Group.objects.get(name='clubRep')
+            group = Group.objects.get(name='ClubRepresentative')
             user.groups.add(group)
             return redirect(view_club_reps)
         else:
             print("Not valid")
     return render(request,
-                  'ClubManager/register_club_rep.html',
+                  'ClubManager/add_rep.html',
                   {'user_form': user_form, 'club_rep_form': club_rep_form})

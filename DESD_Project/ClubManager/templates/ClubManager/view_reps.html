@@ -29,13 +29,13 @@
         </tr>
         {% for clubreps in club_reps %}
         <tr>
-            <td>{{clubreps.repID}}</td>
-            <td>{{clubreps.user.first_name}}</td>
-            <td>{{clubreps.user.last_name}}</td>
-            <td>{{clubreps.dob}}</td>
-            <td>{{clubreps.clubID}}</td>
-            <td>{{clubreps.credit}}</td>
-            <td><a href="/clubs/update_rep/{{clubreps.repID}}">Modify</a></td>
+            <td>{{clubreps.id}}</td>
+            <td>{{clubreps.user_obj.first_name}}</td>
+            <td>{{clubreps.user_obj.last_name}}</td>
+            <td>{{clubreps.date_of_birth}}</td>
+            <td>{{clubreps.club}}</td>
+            <td>{{clubreps.credits}}</td>
+            <td><a href="/clubs/update_rep/{{clubreps.id}}">Modify</a></td>
         </tr>
         {% endfor %}
     </table>

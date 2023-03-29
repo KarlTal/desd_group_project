@@ -7,7 +7,7 @@ from UWEFlix.models import *
 from .decorators import *
 from .forms import *
 from datetime import date
-
+from ClubManager.views import rep_dashboard
 
 # View handling for the UWEFlix homepage.
 def home(request):
@@ -37,7 +37,7 @@ def booking(request, film_id, showing_id):
         adult_price = 6.99
         child_price = 4.99
 
-
+    
         if request.POST:
 
             if request.user.is_authenticated:
@@ -117,6 +117,8 @@ def login_user(request):
                     error = "Your student account has not yet been approved!"
                 else:
                     return redirect(home)
+            elif 'ClubRepresentative' in group:
+                return redirect(rep_dashboard)
             else:
                 return redirect(home)
         else:
