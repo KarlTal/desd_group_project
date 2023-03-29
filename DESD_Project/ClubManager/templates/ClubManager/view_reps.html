@@ -27,22 +27,18 @@
             <th>Credit Count</th>
             <th>Edit</th>
         </tr>
-        {% for clubreps in club_reps %}
+        {% for rep in club_reps %}
         <tr>
-            <td>{{clubreps.id}}</td>
-            <td>{{clubreps.user_obj.first_name}}</td>
-            <td>{{clubreps.user_obj.last_name}}</td>
-            <td>{{clubreps.date_of_birth}}</td>
-            <td>{{clubreps.club}}</td>
-            <td>{{clubreps.credits}}</td>
-            <td><a href="/clubs/update_rep/{{clubreps.id}}">Modify</a></td>
+            <td>{{rep.id}}</td>
+            <td>{{rep.user_obj.first_name}}</td>
+            <td>{{rep.user_obj.last_name}}</td>
+            <td>{{rep.date_of_birth}}</td>
+            <td>{{rep.club}}</td>
+            <td>{{rep.credits}}</td>
+            <td><a href="/clubs/update_rep/{{rep.id}}">Modify</a></td>
         </tr>
         {% endfor %}
     </table>
-
-    <br>
-
-    <!-- <input type="submit" class="button" onclick="window.location.href='/clubs/add_rep/'" value="Add Club Reps"/> -->
 </div>
 
 

@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     # Generic URLs.
     path('', views.rep_dashboard, name='ClubRepDashboard'),
-    path('view_all_club_transactions',views.view_all_club_transactions, name="View Club Transactions"),
+    path('view_transactions', views.view_transactions, name="View Club Transactions"),
 
     # Club related URLs.
     path('view_clubs/', views.view_clubs, name="View Clubs"),
@@ -22,4 +22,3 @@ urlpatterns = [
 ]
 
 urlpatterns += staticfiles_urlpatterns()
-
