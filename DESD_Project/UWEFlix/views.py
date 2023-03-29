@@ -6,7 +6,6 @@ from CinemaManager.views import cinema_dashboard
 from UWEFlix.models import *
 from .decorators import *
 from .forms import *
-from datetime import date
 
 
 # View handling for the UWEFlix homepage.
@@ -28,69 +27,10 @@ def film(request, film_id):
     return redirect(home)
 
 
-def booking(request, film_id, showing_id):
-    if film_id and showing_id:
-        lookup = Film.objects.get(id=film_id)
-        showing = Showing.objects.get(id=showing_id)
-        
-        student_price = 5.99
-        adult_price = 6.99
-        child_price = 4.99
-
-
-        if request.POST:
-
-            if request.user.is_authenticated:
-                student_quantity=request.POST["student_quantity"]
-
-                if showing.screen.capacity - showing.seats_taken < int(student_quantity):
-                    error_message = "Not enough available seats"
-
-                    return render(request, 'UWEFlix/booking.html', {'film': lookup, 'showing': showing, "error_message":error_message})
-                else:
-                    total_price = float(int(student_quantity) * student_price)
-                    bookingObj = Booking.objects.create(user_email=request.user.email,showing=showing,date=date.today(),total_price =total_price,ticket_count=int(student_quantity))
-                    
-                    for student in range(int(student_quantity)):
-                        Ticket.objects.create(booking=bookingObj,ticket_type="Student", price=student_price)
-
-                    showing.seats_taken +=student_quantity
-                    showing.save()
-                    
-                    return redirect(home)
-                    
-            else:
-                user_email = request.POST["user_email"]
-                adult_quantity = request.POST["adult_quantity"]
-                child_quantity = request.POST["child_quantity"]
-                total_quantity = int(adult_quantity) + int(child_quantity)
-
-                if showing.screen.capacity - showing.seats_taken < total_quantity:
-                    error_message = "Not enough available seats"
-
-                    return render(request, 'UWEFlix/booking.html', {'film': lookup, 'showing': showing, "error_message":error_message})
-                else:
-                    total_price = float(int(adult_quantity) * adult_price + (int(child_quantity) * child_price))
-                    bookingObj = Booking.objects.create(user_email=user_email,showing=showing,date=date.today(),total_price =total_price,ticket_count=int(total_quantity))
-                    
-                    for i in range(int(adult_quantity)):
-                        Ticket.objects.create(booking=bookingObj,ticket_type="Adult", price=adult_price)
-                    
-                    for i in range(int(child_quantity)):
-                        Ticket.objects.create(booking=bookingObj,ticket_type="Child", price=child_price)
-                    
-                    showing.seats_taken +=total_quantity
-                    showing.save()
-
-                    return redirect(home)
-                
-        return render(request, 'UWEFlix/booking.html', {'film': lookup, 'showing': showing})
-    # Redirect back to the homepage.
-    return redirect(home)
-
-
-
-
+# View handling for user profile.
+@login_required(login_url='/login')
+def profile(request):
+    return render(request, 'UWEFlix/profile.html', {})
 
 
 # View handling for user logins.

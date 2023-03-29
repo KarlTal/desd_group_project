@@ -2,11 +2,87 @@
 
 {% block page %}
 
-<h1>{{film.title}}</h1>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+        const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+        $(document).ready( function() {
+            updateDate(new Date());
+        });
+
+        function updateDate(date) {
+            var date_picker = document.getElementById("date_picker");
+            var value = date_picker.value;
+
+            var now = new Date(value.replaceAll('-', '/'));
+            if (date) now = date;
+
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+
+            $('#date_picker').val(today);
+            document.getElementById("current_date").innerHTML = "Selected Date: " + weekday[now.getDay()] + " " + today;
+
+            updateTable(now);
+        }
+
+        function updateTable(check_date) {
+            table = document.getElementById("available_viewings");
+            rows = table.rows;
+
+            for (i = 1; i < rows.length; i++) {
+                var showing = rows[i];
+                var date = showing.cells[3];
+                var data = date.innerHTML.replaceAll(',', "").split(" ");
+                var parsed_date = new Date((month.indexOf(data[0]) + 1) + "/" + data[1] + "/" + data[2])
+
+                if (!isSameDay(check_date, parsed_date)) {
+                    showing.style.display = "none";
+                } else {
+                    showing.style.display = "";
+                }
+            }
+        }
+
+        function showAll() {
+            for (i = 1; i < rows.length; i++) {
+                var showing = rows[i];
+                showing.style.display = "";
+            }
+        }
+
+        function isSameDay(first, second) {
+            return first.getFullYear() === second.getFullYear() &&
+                first.getMonth() === second.getMonth() &&
+                first.getDate() === second.getDate();
+        }
+    </script>
+</head>
+
+<h1>{{film.title}} ({{film.age_rating}})</h1>
+<p>Runtime: {{film.duration}} mins</p>
+<p>{{film.description}}</p>
 
 <h2>Current Showings</h2>
 
-<table style="width:100%">
+<div>
+    <input type="date" id="date_picker" onchange="updateDate()">
+    <button onclick="showAll()">Show All</button>
+    <p id="current_date"></p>
+</div>
+
+<br>
+
+<table style="width:100%" id="available_viewings">
     <tr>
         <th>ID</th>
         <th>Film</th>
@@ -20,7 +96,7 @@
         <td>{{showing.film}}</td>
         <td>{{showing.screen}}</td>
         <td>{{showing.time}}</td>
-        <td><a href="/booking/{{film.id}}:{{showing.id}}">Book</a></td>
+        <td><a href="/booking/book_film/{{film.id}}:{{showing.id}}">Book</a></td>
     </tr>
     {% endfor %}
 </table>

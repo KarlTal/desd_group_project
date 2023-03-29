@@ -84,6 +84,10 @@
                 <th>Film</th>
                 <th>Screen</th>
                 <th>Time</th>
+                <th>Cost (Child)</th>
+                <th>Cost (Adult)</th>
+                <th>Cost (Student)</th>
+                <th>Seats Taken</th>
                 <th>Edit</th>
             </tr>
             {% for showing in showings %}
@@ -92,6 +96,10 @@
                 <td>{{showing.film}}</td>
                 <td>{{showing.screen}}</td>
                 <td>{{showing.time}}</td>
+                <td>{{showing.child_cost}}</td>
+                <td>{{showing.adult_cost}}</td>
+                <td>{{showing.student_cost}}</td>
+                <td>{{showing.seats_taken}}</td>
                 <td><a href="/manager/update_showing/{{showing.id}}">Modify</a></td>
             </tr>
             {% endfor %}

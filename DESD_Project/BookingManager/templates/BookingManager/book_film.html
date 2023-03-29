@@ -1,0 +1,185 @@
+{% extends 'BookingManager/parent.html' %}
+
+{% block page %}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+         jQuery(document).ready(($) => {
+            $('.quantity').on('click', '.plus', function(e) {
+                let $input = $(this).prev('input.qty');
+                let val = parseInt($input.val());
+                $input.val( val+1 ).change();
+            });
+
+            $('.quantity').on('click', '.minus',
+                function(e) {
+                let $input = $(this).next('input.qty');
+                var val = parseInt($input.val());
+                if (val > 0) {
+                    $input.val( val-1 ).change();
+                }
+            });
+        });
+
+        function calculateAmount() {
+            var total_price = document.getElementById("total_price");
+
+            var child_cost = document.getElementById("child_tick_quantity").value * "{{showing.child_cost}}"
+            var adult_cost = document.getElementById("adult_tick_quantity").value * "{{showing.adult_cost}}"
+            var student_cost = document.getElementById("student_tick_quantity").value * "{{showing.student_cost}}"
+
+            document.getElementById("child_total").value = child_cost.toFixed(2)
+            document.getElementById("adult_total").value = adult_cost.toFixed(2)
+            document.getElementById("student_total").value = student_cost.toFixed(2)
+
+            total_price.value = (child_cost + adult_cost + student_cost).toFixed(2);
+        }
+    </script>
+
+    <style>
+        #booking_form {
+            text-align: center;
+            padding: 5px;
+            border: 1px dotted #ccc;
+            margin: 2%;
+        }
+
+        .qty {
+            width: 40px;
+            height: 25px;
+            text-align: center;
+        }
+
+        input.qtyplus {
+            width:25px;
+            height:25px;
+        }
+
+        input.qtyminus {
+            width:25px;
+            height:25px;
+        }
+
+        .container {
+          display: grid;
+          grid-template-columns: auto auto;
+          border: 1px solid rgba(0, 0, 0, 0.8);
+        }
+
+        .sub_container {
+          display: grid;
+          grid-template-columns: auto auto auto;
+          padding: 10px;
+        }
+
+        .item {
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          padding: 20px;
+          font-size: 30px;
+          text-align: center;
+        }
+    </style>
+
+</head>
+
+{% if error %}
+<h1 style="text-align: center;">{{error}}</h1>
+{% endif %}
+
+<div class="container">
+
+    <div class="item">
+
+        <h1>{{film.title}} ({{film.age_rating}})</h1>
+        <p>Runtime: {{film.duration}} mins</p>
+        <p>{{film.description}}</p>
+
+        <br>
+
+        <h1>{{showing.screen}}</h1>
+        <p>{{showing.time}}</p>
+        <p>Remaining Seats: {{remaining_seats}}</p>
+
+    </div>
+
+    <div class="item">
+
+        <form id='booking_form' method='POST' class='quantity' action='#' enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="sub_container">
+                <div class="item">
+                    <h3>Adult</h3>
+                </div>
+
+                <div class="item">
+                    <input type='button' value='-' class='qtyminus minus'/>
+                    <input type='text' name='adult_quantity' value='0' class='qty' id="adult_tick_quantity"
+                           onchange="calculateAmount()"/>
+                    <input type='button' value='+' class='qtyplus plus'/>
+                </div>
+
+                <div class="item">
+                    £ <input type="text" id="adult_total" readonly class="individual_totals" value="0.00">
+                </div>
+            </div>
+
+            <div class="sub_container">
+                <div class="item">
+                    <h3>Child</h3>
+                </div>
+
+                <div class="item">
+                    <input type='button' value='-' class='qtyminus minus'/>
+                    <input type='text' name='child_quantity' value='0' class='qty' id="child_tick_quantity"
+                           onchange="calculateAmount()"/>
+                    <input type='button' value='+' class='qtyplus plus'/>
+                </div>
+
+                <div class="item">
+                    £ <input type="text" id="child_total" readonly class="individual_totals" value="0.00">
+                </div>
+            </div>
+
+            <div class="sub_container">
+                <div class="item">
+                    <h3>Student</h3>
+                </div>
+
+                <div class="item">
+                    <input type='button' value='-' class='qtyminus minus'/>
+                    <input type='text' name='student_quantity' value='0' class='qty' id="student_tick_quantity"
+                           onchange="calculateAmount()"/>
+                    <input type='button' value='+' class='qtyplus plus'/>
+                </div>
+
+                <div class="item">
+                    £ <input type="text" id="student_total" readonly class="individual_totals" value="0.00">
+                </div>
+            </div>
+
+            <div class="item">
+                <h3>Total:</h3>
+                £ <input type="text" id="total_price" readonly class="individual_totals" value="0.00">
+            </div>
+
+            {% if request.user.is_anonymous %}
+
+            <div class="item">
+                <h4>Please Enter your Email</h4>
+                <input type="email" name="user_email">
+            </div>
+
+            {% endif %}
+
+            <button class="button" form="booking_form">Submit</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

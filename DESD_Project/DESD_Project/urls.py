@@ -29,5 +29,6 @@ urlpatterns = [
                   path('manager/', include('CinemaManager.urls')),
                   path('clubs/', include('ClubManager.urls')),
                   path('accounts/', include('AccountManager.urls')),
+                  path('booking/', include('BookingManager.urls')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

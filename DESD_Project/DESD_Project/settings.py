@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'UWEFlix',
     'CinemaManager',
     'ClubManager',
-    'AccountManager'
+    'AccountManager',
+    'BookingManager'
 ]
 
 AUTH_USER_MODEL = 'UWEFlix.User'

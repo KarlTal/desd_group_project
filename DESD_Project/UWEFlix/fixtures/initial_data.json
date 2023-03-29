@@ -93,7 +93,10 @@
     "fields": {
       "film": 1,
       "screen": 2,
-      "time": "2023-03-28T00:45:40Z"
+      "time": "2023-03-28T00:45:40Z",
+      "child_cost": 7.99,
+      "adult_cost": 13.99,
+      "student_cost": 11.99
     }
   },
   {
@@ -103,7 +106,7 @@
       "user_obj": 1,
       "club": null,
       "date_of_birth": "2023-03-27",
-      "credits": 1000
+      "credits": 100
     }
   }
 ]

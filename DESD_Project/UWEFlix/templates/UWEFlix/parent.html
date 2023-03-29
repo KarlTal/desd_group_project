@@ -77,7 +77,7 @@
             {% endif %}
 
             <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
-            <li style="float:right"><a>Total Credits: {% get_credits request.user %}</a></li>
+            <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
 
         {% endif %}
     </ul>

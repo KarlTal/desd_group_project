@@ -109,7 +109,7 @@ class Screen(models.Model):
     capacity = models.IntegerField()
 
     def __str__(self):
-        return "Screen " + str(self.screen_id) + " (Capacity: " + str(self.capacity) + ")"
+        return "Screen " + str(self.screen_id)
 
 
 # The database class for the Showings at UWEFlix
@@ -117,25 +117,31 @@ class Showing(models.Model):
     film = models.ForeignKey(Film, null=True, on_delete=models.SET_NULL)
     screen = models.ForeignKey(Screen, null=True, on_delete=models.SET_NULL)
     time = models.DateTimeField(default=timezone.now)
+
+    child_cost = models.DecimalField(default=7.99, max_digits=4, decimal_places=2)
+    adult_cost = models.DecimalField(default=13.99, max_digits=4, decimal_places=2)
+    student_cost = models.DecimalField(default=11.99, max_digits=4, decimal_places=2)
+
     seats_taken = models.IntegerField(default=0)
 
 
 # The database class for Ticket Bookings at UWEFlix.
 class Booking(models.Model):
-    # user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    user_email= models.EmailField(null=True)
+    user_email = models.EmailField(null=True)
     club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
     showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(default=timezone.now)
     total_price = models.IntegerField(default=0)
     ticket_count = models.IntegerField(default=0)
 
+    def __str__(self):
+        return str(self.user_email) + "'s Booking (" + str(self.film.title) + ")"
+
 
 # The database class for the Tickets at UWEFlix.
 class Ticket(models.Model):
     TYPES = (('Adult', 'Adult'), ('Child', 'Child'), ('Student', 'Student'))
 
-    # seat = models.IntegerField()
     booking = models.ForeignKey(Booking, null=True, on_delete=models.SET_NULL)
     ticket_type = models.CharField(max_length=10, default='Adult', choices=TYPES)
     price = models.FloatField()
