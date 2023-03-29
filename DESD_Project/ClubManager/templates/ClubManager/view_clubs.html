@@ -29,9 +29,12 @@
             <th>Mobile</th>
             <th>Discount</th>
             <th>Email</th>
+            <th>Club Rep ID</th>
             <th>Edit</th>
+            <th>Add</th>
         </tr>
-        {% for club in clubs %}
+
+        {% for club in clubs_with_no_club_reps %}
         <tr>
             <td>{{club.id}}</td>
             <td>{{club.name}}</td>
@@ -43,9 +46,33 @@
             <td>{{club.mobile}}</td>
             <td>{{club.discount}}</td>
             <td>{{club.email}}</td>
+            <td>None</td>
             <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
+            <td><input type="submit" class="button" onclick="window.location.href='/clubs/add_rep/{{club.id}}';" value="Add a club rep"/></td>
+            {% endfor %}
         </tr>
+        {% for club in clubs %}
+            {% for clubt in club_reps %}
+            {% if clubt.club_id == club.id %}
+        <tr>
+            <td>{{club.id}}</td>
+            <td>{{club.name}}</td>
+            <td>{{club.street_number}}</td>
+            <td>{{club.street_name}}</td>
+            <td>{{club.city}}</td>
+            <td>{{club.postcode}}</td>
+            <td>{{club.landline}}</td>
+            <td>{{club.mobile}}</td>
+            <td>{{club.discount}}</td>
+            <td>{{club.email}}</td>
+            <td>{{clubt.clubID_id}}</td>
+            <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
+            <td>Already allocated</td>
+        </tr>
+        {% endif %}
+            {% endfor %}
         {% endfor %}
+
     </table>
 
     <br>

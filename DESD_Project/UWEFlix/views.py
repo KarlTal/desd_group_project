@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from CinemaManager.views import cinema_dashboard
+from ClubManager.views import rep_dashboard
 from UWEFlix.models import *
 from .decorators import *
 from .forms import *
@@ -14,6 +15,7 @@ def home(request):
     return render(request, 'UWEFlix/home.html', {'films': films})
 
 
+# View handling for viewing available Films at UWEFlix.
 def film(request, film_id):
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
@@ -57,6 +59,8 @@ def login_user(request):
                     error = "Your student account has not yet been approved!"
                 else:
                     return redirect(home)
+            elif 'ClubRepresentative' in group:
+                return redirect(rep_dashboard)
             else:
                 return redirect(home)
         else:

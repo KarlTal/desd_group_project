@@ -73,7 +73,7 @@
             {% elif request.user|has_group:"ClubRepresentative" %}
 
             <!--TODO-->
-
+            <li><a href = "{% url 'View Club Transactions' %}">View All Transactions</a></li>
             {% endif %}
 
             <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
