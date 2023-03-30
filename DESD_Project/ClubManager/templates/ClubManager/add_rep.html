@@ -1,5 +1,6 @@
 {% extends 'ClubManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
 
 <h1>Register</h1>
@@ -27,8 +28,7 @@
     {{club_rep_form.credits.label}}
     {{club_rep_form.credits}}
     <br>
-    <label>Club</label>
-    {{club_rep_form.club}}
+    {% render_field club_rep_form.club.as_hidden%}
     <br>
     <button class="button">Send for approval</button>
 </form>

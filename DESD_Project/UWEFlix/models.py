@@ -153,7 +153,7 @@ class Ticket(models.Model):
 # The database class for the club representative
 class UserProfile(models.Model):
     user_obj = models.OneToOneField(User, on_delete=models.CASCADE)
-    club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE)
+    club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE,blank=True)
     date_of_birth = models.DateField(default=timezone.now, auto_now_add=False, auto_now=False, blank=False)
     credits = models.PositiveIntegerField(default=0)
 
