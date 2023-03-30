@@ -82,7 +82,7 @@ class Club(models.Model):
     postcode = models.CharField(max_length=255)
     landline = models.CharField(max_length=255)
     mobile = models.CharField(max_length=255)
-    discount = models.FloatField()
+    discount = models.IntegerField()
     email = models.EmailField()
 
     def __str__(self):
@@ -154,7 +154,7 @@ class Ticket(models.Model):
 class UserProfile(models.Model):
     user_obj = models.OneToOneField(User, on_delete=models.CASCADE)
     club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE)
-    date_of_birth = models.DateField(default=timezone.now,auto_now_add=False, auto_now=False, blank=False)
+    date_of_birth = models.DateField(default=timezone.now, auto_now_add=False, auto_now=False, blank=False)
     credits = models.PositiveIntegerField(default=0)
 
     def __str__(self):

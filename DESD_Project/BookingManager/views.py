@@ -16,12 +16,21 @@ def book_film(request, film_id, showing_id):
 
         lookup = Film.objects.get(id=film_id)
         showing = Showing.objects.get(id=showing_id)
+        club = None
+
+        if request.user.is_authenticated:
+            profile = UserProfile.objects.get(user_obj=request.user)
+            club = profile.club
+
         remaining_seats = showing.screen.capacity - showing.seats_taken
 
         if request.POST:
             student_price = showing.student_cost
             adult_price = showing.adult_cost
             child_price = showing.child_cost
+
+            if club is not None:
+                student_price = student_price * (1 - (club.discount / 100))
 
             if request.user.is_authenticated:
                 user_email = request.user.email
@@ -36,7 +45,7 @@ def book_film(request, film_id, showing_id):
             if total_quantity <= 0:
                 error_message = "You must book at least 1 seat!"
             elif remaining_seats < total_quantity:
-                error_message = "Not enough available seats!"
+                error_message = "There are not enough seats available for this many tickets!"
             else:
                 total_price = float((adult_quantity * adult_price) + (child_quantity * child_price) + (
                         student_quantity * student_price))
@@ -57,7 +66,8 @@ def book_film(request, film_id, showing_id):
                 return redirect(home)
 
         return render(request, 'BookingManager/book_film.html',
-                      {'film': lookup, 'showing': showing, 'remaining_seats': remaining_seats, 'error': error_message})
+                      {'film': lookup, 'club': club, 'showing': showing, 'remaining_seats': remaining_seats,
+                       'error': error_message})
 
     # Redirect back to the homepage.
     return redirect(home)

@@ -1,11 +1,27 @@
 {% extends 'BookingManager/parent.html' %}
 
+{% load customtags %}
+
 {% block page %}
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
     <script>
+         $(document).ready(function(){
+            let error = "{{error}}";
+            if (error != '') {
+                showError(error);
+            }
+
+            if (isClubBooking()) {
+                document.getElementById("adult_form").style.display = "none";
+                document.getElementById("child_form").style.display = "none";
+                document.getElementById("student_tick_quantity").value = 10;
+                calculateAmount();
+            }
+        });
+
          jQuery(document).ready(($) => {
             $('.quantity').on('click', '.plus', function(e) {
                 let $input = $(this).prev('input.qty');
@@ -17,11 +33,19 @@
                 function(e) {
                 let $input = $(this).next('input.qty');
                 var val = parseInt($input.val());
-                if (val > 0) {
+                if (val > (isClubBooking() ? 10 : 0)) {
                     $input.val( val-1 ).change();
                 }
             });
         });
+
+        function showError(message) {
+            var overlay = document.getElementById("alert");
+            overlay.style.display = "block";
+
+            var error = document.getElementById("error_message");
+            error.innerHTML = message;
+        }
 
         function calculateAmount() {
             var total_price = document.getElementById("total_price");
@@ -29,6 +53,11 @@
             var child_cost = document.getElementById("child_tick_quantity").value * "{{showing.child_cost}}"
             var adult_cost = document.getElementById("adult_tick_quantity").value * "{{showing.adult_cost}}"
             var student_cost = document.getElementById("student_tick_quantity").value * "{{showing.student_cost}}"
+
+            if (isClubBooking()) {
+                var discount = "{{club.discount}}";
+                student_cost = student_cost * (1 - (discount / 100));
+            }
 
             document.getElementById("child_total").innerHTML = "£" + child_cost.toFixed(2)
             document.getElementById("adult_total").innerHTML = "£" + adult_cost.toFixed(2)
@@ -43,12 +72,19 @@
             var student_total = document.getElementById("student_tick_quantity").value;
 
             if (adult_total == 0 && child_total == 0 && student_total == 0) {
-                alert("I am an alert box!");
+                showError('You must book at least one seat!');
+                return;
+            }
+
+            var remaining_seats = "{{showing.screen.capacity}}" - "{{showing.seats_taken}}"
+
+            if (adult_total + child_total + student_total > remaining_seats) {
+                showError("There are not enough seats available for this many tickets!");
                 return;
             }
 
             if (adult_total > 0) {
-                document.getElementById("final_adult").innerHTML = "Adult Tickets: " + adult_total + "x";
+                document.getElementById("final_adult").innerHTML = "Adult Tickets: " + remaining_seats + "x";
             }
 
             if (child_total > 0) {
@@ -70,16 +106,15 @@
             overlay.style.display = "none";
         }
 
-
-
-
+        function isClubBooking() {
+            return "{{club}}" != null;
+        }
     </script>
 
     <style>
         #booking_form {
             text-align: center;
             padding: 5px;
-            border: 1px dotted #ccc;
             margin: 2%;
         }
 
@@ -155,20 +190,37 @@
             cursor: pointer;
         }
 
-
-
+        .alert {
+            text-align: center;
+            display: none;
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
 
     </style>
 
 </head>
 
-{% if error %}
-<h1 style="text-align: center;">{{error}}</h1>
-{% endif %}
+<div id="alert" class="alert">
+    <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong style="margin:0; display:inline; float:center;">Error!</strong>
+    <p style="margin:0; display:inline; float:center;" id="error_message">Empty</p>
+</div>
+
+<br>
 
 <div class="container">
 
     <div class="item">
+
+        {% if request.user|has_group:"ClubRepresentative" %}
+
+        <h1><u>{{club.name}} Club Booking</u></h1>
+        <p>Your Discount: {{club.discount}}%</p>
+        <br>
+
+        {% endif %}
 
         <h1>{{film.title}} ({{film.age_rating}})</h1>
         <p>Runtime: {{film.duration}} mins</p>
@@ -187,7 +239,7 @@
         <form id='booking_form' method='POST' class='quantity' action='#' enctype="multipart/form-data">
             {% csrf_token %}
 
-            <div class="sub_container">
+            <div id="adult_form" class="sub_container">
                 <div class="item">
                     <h3>Adult</h3>
                 </div>
@@ -204,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="sub_container">
+            <div id="child_form" class="sub_container">
                 <div class="item">
                     <h3>Child</h3>
                 </div>
