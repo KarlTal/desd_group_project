@@ -1,0 +1,28 @@
+{% extends 'CinemaManager/parent.html' %}
+
+{% block page %}
+
+<h1>Update: {{club_rep.user.last_name}}</h1>
+
+<hr class="solid">
+
+{% if error %}
+<h3 style="color:red;">{{error}}</h3>
+{% endif %}
+
+<div class="container">
+    <form id="update" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{form.as_p}}
+    </form>
+</div>
+
+<br>
+
+<div>
+    <button class="button" form="update">Update</button>
+    <button class="button" onclick="window.location.href='/clubs/delete_rep/{{club_rep.id}}'">Delete Club Rep</button>
+</div>
+
+{% endblock %}

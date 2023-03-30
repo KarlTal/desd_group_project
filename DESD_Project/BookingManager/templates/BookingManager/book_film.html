@@ -1,0 +1,349 @@
+{% extends 'BookingManager/parent.html' %}
+
+{% load customtags %}
+
+{% block page %}
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+         $(document).ready(function(){
+            let error = "{{error}}";
+            if (error != '') {
+                showError(error);
+            }
+
+            if (isClubBooking()) {
+                document.getElementById("adult_form").style.display = "none";
+                document.getElementById("child_form").style.display = "none";
+                document.getElementById("student_tick_quantity").value = 10;
+                calculateAmount();
+            }
+        });
+
+         jQuery(document).ready(($) => {
+            $('.quantity').on('click', '.plus', function(e) {
+                let $input = $(this).prev('input.qty');
+                let val = parseInt($input.val());
+                $input.val( val+1 ).change();
+            });
+
+            $('.quantity').on('click', '.minus',
+                function(e) {
+                let $input = $(this).next('input.qty');
+                var val = parseInt($input.val());
+                if (val > (isClubBooking() ? 10 : 0)) {
+                    $input.val( val-1 ).change();
+                }
+            });
+        });
+
+        function showError(message) {
+            var overlay = document.getElementById("alert");
+            overlay.style.display = "block";
+
+            var error = document.getElementById("error_message");
+            error.innerHTML = message;
+        }
+
+        function calculateAmount() {
+            var total_price = document.getElementById("total_price");
+
+            var child_cost = document.getElementById("child_tick_quantity").value * "{{showing.child_cost}}"
+            var adult_cost = document.getElementById("adult_tick_quantity").value * "{{showing.adult_cost}}"
+            var student_cost = document.getElementById("student_tick_quantity").value * "{{showing.student_cost}}"
+
+            if (isClubBooking()) {
+                var discount = "{{club.discount}}";
+                student_cost = student_cost * (1 - (discount / 100));
+            }
+
+            document.getElementById("child_total").innerHTML = "£" + child_cost.toFixed(2)
+            document.getElementById("adult_total").innerHTML = "£" + adult_cost.toFixed(2)
+            document.getElementById("student_total").innerHTML = "£" + student_cost.toFixed(2)
+
+            total_price.innerHTML = "£" + (child_cost + adult_cost + student_cost).toFixed(2);
+        }
+
+        function showOverlay() {
+            var adult_total = document.getElementById("adult_tick_quantity").value;
+            var child_total = document.getElementById("child_tick_quantity").value;
+            var student_total = document.getElementById("student_tick_quantity").value;
+
+            if (adult_total == 0 && child_total == 0 && student_total == 0) {
+                showError('You must book at least one seat!');
+                return;
+            }
+
+            var remaining_seats = "{{showing.screen.capacity}}" - "{{showing.seats_taken}}"
+
+            if (adult_total + child_total + student_total > remaining_seats) {
+                showError("There are not enough seats available for this many tickets!");
+                return;
+            }
+
+            if (adult_total > 0) {
+                document.getElementById("final_adult").innerHTML = "Adult Tickets: " + remaining_seats + "x";
+            }
+
+            if (child_total > 0) {
+                document.getElementById("final_child").innerHTML = "Child Tickets: " + child_total + "x";
+            }
+
+            if (student_total > 0) {
+                document.getElementById("final_student").innerHTML = "Student Tickets: " + student_total + "x";
+            }
+
+            document.getElementById("final_total").innerHTML = "Total Cost: " + document.getElementById("total_price").innerHTML;
+
+            var overlay = document.getElementById("main_overlay");
+            overlay.style.display = "block";
+        }
+
+        function hideOverlay() {
+            var overlay = document.getElementById("main_overlay");
+            overlay.style.display = "none";
+        }
+
+        function isClubBooking() {
+            return "{{club}}" != null;
+        }
+    </script>
+
+    <style>
+        #booking_form {
+            text-align: center;
+            padding: 5px;
+            margin: 2%;
+        }
+
+        .qty {
+            width: 40px;
+            height: 25px;
+            text-align: center;
+        }
+
+        input.qtyplus {
+            width:25px;
+            height:25px;
+        }
+
+        input.qtyminus {
+            width:25px;
+            height:25px;
+        }
+
+        .container {
+          display: grid;
+          grid-template-columns: auto auto;
+          border: 1px solid rgba(0, 0, 0, 0.8);
+        }
+
+        .sub_container {
+          display: grid;
+          grid-template-columns: auto auto auto;
+          padding: 10px;
+        }
+
+        .item {
+          border: 1px solid rgba(0, 0, 0, 0.8);
+          padding: 20px;
+          font-size: 30px;
+          text-align: center;
+        }
+
+        .overlay {
+            text-align: center;
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .overlay-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .alert {
+            text-align: center;
+            display: none;
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+<div id="alert" class="alert">
+    <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong style="margin:0; display:inline; float:center;">Error!</strong>
+    <p style="margin:0; display:inline; float:center;" id="error_message">Empty</p>
+</div>
+
+<br>
+
+<div class="container">
+
+    <div class="item">
+
+        {% if request.user|has_group:"ClubRepresentative" %}
+
+        <h1><u>{{club.name}} Club Booking</u></h1>
+        <p>Your Discount: {{club.discount}}%</p>
+        <br>
+
+        {% endif %}
+
+        <h1>{{film.title}} ({{film.age_rating}})</h1>
+        <p>Runtime: {{film.duration}} mins</p>
+        <p>{{film.description}}</p>
+
+        <br>
+
+        <h1>{{showing.screen}}</h1>
+        <p>{{showing.time}}</p>
+        <p>Remaining Seats: {{remaining_seats}}</p>
+
+    </div>
+
+    <div class="item">
+
+        <form id='booking_form' method='POST' class='quantity' action='#' enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div id="adult_form" class="sub_container">
+                <div class="item">
+                    <h3>Adult</h3>
+                </div>
+
+                <div class="item">
+                    <input type='button' value='-' class='qtyminus minus'/>
+                    <input type='text' name='adult_quantity' value='0' class='qty' id="adult_tick_quantity"
+                           onchange="calculateAmount()"/>
+                    <input type='button' value='+' class='qtyplus plus'/>
+                </div>
+
+                <div class="item">
+                    <p id="adult_total">£0.00</p>
+                </div>
+            </div>
+
+            <div id="child_form" class="sub_container">
+                <div class="item">
+                    <h3>Child</h3>
+                </div>
+
+                <div class="item">
+                    <input type='button' value='-' class='qtyminus minus'/>
+                    <input type='text' name='child_quantity' value='0' class='qty' id="child_tick_quantity"
+                           onchange="calculateAmount()"/>
+                    <input type='button' value='+' class='qtyplus plus'/>
+                </div>
+
+                <div class="item">
+                    <p id="child_total">£0.00</p>
+                </div>
+            </div>
+
+            <div class="sub_container">
+                <div class="item">
+                    <h3>Student</h3>
+                </div>
+
+                <div class="item">
+                    <input type='button' value='-' class='qtyminus minus'/>
+                    <input type='text' name='student_quantity' value='0' class='qty' id="student_tick_quantity"
+                           onchange="calculateAmount()"/>
+                    <input type='button' value='+' class='qtyplus plus'/>
+                </div>
+
+                <div class="item">
+                    <p id="student_total">£0.00</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <h3>Total:</h3>
+                <p id="total_price">£0.00</p>
+            </div>
+
+            {% if request.user.is_anonymous %}
+
+            <div class="item">
+                <h4>Please Enter your Email</h4>
+                <input type="email" name="user_email">
+            </div>
+
+            {% endif %}
+        </form>
+
+        <button class="button" onclick="showOverlay()">Book</button>
+
+    </div>
+
+</div>
+
+<div id="main_overlay" class="overlay">
+
+    <div class="overlay-content">
+        <span class="close" onclick="hideOverlay()">&times;</span>
+        <h1>Finalise Booking</h1>
+
+        <div class="sub_container">
+            <div class="item">
+                <h3>{{film.title}} ({{film.age_rating}})</h3>
+                <p>Runtime: {{film.duration}} mins</p>
+                <p>{{film.description}}</p>
+            </div>
+
+            <div class="item">
+                <h3>{{showing.screen}}</h3>
+                <p>{{showing.time}}</p>
+                <p>Remaining Seats: {{remaining_seats}}</p>
+            </div>
+
+            <div class="item">
+                <p id="final_adult"></p>
+                <p id="final_child"></p>
+                <p id="final_student"></p>
+                <h4 id="final_total"></h4>
+            </div>
+        </div>
+
+        <br>
+
+        <button class="button" onclick="hideOverlay()">Cancel</button>
+        <button class="button" form="booking_form">Confirm Booking</button>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'UWEFlix/parent.html' %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'ClubManager/main.css' %}">
+
+
+{% block page %}
+
+<h1>View all club transactions </h1>
+
+<hr class="solid">
+
+<div>
+
+    {% if request.user.is_anonymous %}
+
+    <h2>No Permissions</h2>
+
+    {% else %}
+
+    <h2>All club transactions</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>Booking ID</th>
+            <th>Showing ID</th>
+            <th>Film Title</th>
+            <th>Showing Time</th>
+            <th>Showing Date</th>
+            <th>Booking Date</th>
+            <th>Total Price</th>
+            <th>Ticket Count</th>
+        </tr>
+        {% for transactions in club_transactions %}
+        <tr>
+            <td>{{transactions.id}}</td>
+            <td>{{transactions.showing.id}}</td>
+            <td>{{transactions.showing.film.title}}</td>
+            <td>{{transactions.showing.time}}</td>
+            <td>{{transactions.showing.time}}</td>
+            <td>{{transactions.date}}</td>
+            <td>{{transactions.total_price}}</td>
+            <td>{{transactions.ticket_count}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+</div>
+
+
+<hr class="solid">
+
+{% endif %}
+
+{% endblock %}

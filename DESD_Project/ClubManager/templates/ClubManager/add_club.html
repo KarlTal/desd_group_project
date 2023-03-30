@@ -1,0 +1,42 @@
+{% extends 'ClubManager/parent.html' %}
+
+{% block page %}
+
+<h1>Create a club </h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{club_form.name.label}}
+    {{club_form.name}}
+    <br>
+    {{club_form.street_number.label}}
+    {{club_form.street_number}}
+    <br>
+    {{club_form.street_name.label}}
+    {{club_form.street_name}}
+    <br>
+    {{club_form.city.label}}
+    {{club_form.city}}
+    <br>
+    {{club_form.postcode.label}}
+    {{club_form.postcode}}
+    <br>
+    {{club_form.landline.label}}
+    {{club_form.landline}}
+    <br>
+    {{club_form.mobile.label}}
+    {{club_form.mobile}}
+    <br>
+    {{club_form.discount.label}}
+    {{club_form.discount}}%
+    <br>
+    {{club_form.email.label}}
+    {{club_form.email}}
+    <br>
+   
+    <button class="button">Submit</button>
+</form>
+
+{{form.errors}}
+
+{% endblock %}

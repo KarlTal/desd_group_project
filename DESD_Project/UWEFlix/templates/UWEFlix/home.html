@@ -4,6 +4,26 @@
 
 <h1>Homepage</h1>
 
-<h2>Some text here</h2>
+<h2>Current Films</h2>
+
+<table style="width:100%">
+    <tr>
+        <th>Title</th>
+        <th>Age Rating</th>
+        <th>Description</th>
+        <th>Poster</th>
+        <th>Edit</th>
+    </tr>
+    {% for film in films %}
+    <tr>
+        <td>{{film.title}}</td>
+        <td>{{film.age_rating}}</td>
+        <td>{{film.description}}</td>
+        <td><img src = "{{film.image.url}}" style="width:100px; height:100px;"></td>
+        <td><a href="/view_film/{{film.id}}">View</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
 
 {% endblock %}

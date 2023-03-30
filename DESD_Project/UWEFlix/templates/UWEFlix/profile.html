@@ -1,0 +1,30 @@
+{% extends 'UWEFlix/parent.html' %}
+
+{% block page %}
+
+<h1>My Profile</h1>
+
+<p>Total Credit: £{{profile.credits}}</p>
+
+<h3>My Bookings</h3>
+
+<table style="width:100%">
+    <tr>
+        <th>Showing</th>
+        <th>Date</th>
+        <th>Total Price</th>
+        <th>Ticket Count</th>
+        <th>Edit</th>
+    </tr>
+    {% for booking in bookings %}
+    <tr>
+        <td>{{booking.showing.film}}</td>
+        <td>{{booking.date}}</td>
+        <td>£{{booking.total_price}}</td>
+        <td>{{booking.ticket_count}}</td>
+        <td><a href="/booking/delete_booking/{{booking.id}}">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
