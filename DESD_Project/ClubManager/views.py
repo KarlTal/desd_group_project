@@ -127,20 +127,18 @@ def add_club_rep(request, club_id):
     lookup = Club.objects.get(id=club_id)
     club_rep_form = CreateClubRepForm()
     user_form = CreateUserForm()
-
+    club_rep_form.id=club_id 
     if request.method == 'POST':
         user_form = CreateUserForm(request.POST)
         user_form.username = 'clubRepRandom'
-
         club_rep_form = CreateClubRepForm(request.POST)
         club_rep_form.fields['club'].initial = club_id
-
         if user_form.is_valid() and club_rep_form.is_valid():
             user = user_form.save()
             user.is_active = True  # Makes the account active
 
             club_rep = club_rep_form.save(commit=False)
-            club_rep.clubID = lookup
+            club_rep.club = lookup
             club_rep.user_obj = user
             club_rep.save()
 
@@ -149,5 +147,8 @@ def add_club_rep(request, club_id):
             set_user_group(user, 'ClubRepresentative')
 
             return redirect(view_club_reps)
+        
+        else:
+            print("not valid")
 
     return render(request, 'ClubManager/add_rep.html', {'user_form': user_form, 'club_rep_form': club_rep_form})

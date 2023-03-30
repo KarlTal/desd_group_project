@@ -52,8 +52,8 @@
             {% endfor %}
         </tr>
         {% for club in clubs %}
-            {% for clubt in club_reps %}
-            {% if clubt.club_id == club.id %}
+            {% for rep in club_reps %}
+            {% if rep.club_id == club.id %}
         <tr>
             <td>{{club.id}}</td>
             <td>{{club.name}}</td>
@@ -65,7 +65,7 @@
             <td>{{club.mobile}}</td>
             <td>{{club.discount}}%</td>
             <td>{{club.email}}</td>
-            <td>{{clubt.clubID_id}}</td>
+            <td>{{rep.id}}</td>
             <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
             <td>Already allocated</td>
         </tr>
