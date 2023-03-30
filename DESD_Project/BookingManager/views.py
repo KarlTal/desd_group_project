@@ -1,3 +1,4 @@
+import decimal
 from datetime import date
 
 from django.shortcuts import render, redirect
@@ -30,7 +31,7 @@ def book_film(request, film_id, showing_id):
             child_price = showing.child_cost
 
             if club is not None:
-                student_price = student_price * (1 - (club.discount / 100))
+                student_price = student_price * decimal.Decimal((1 - (club.discount / 100)))
 
             if request.user.is_authenticated:
                 user_email = request.user.email
