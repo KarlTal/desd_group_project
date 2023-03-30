@@ -123,7 +123,7 @@ def delete_club_rep(request, rep_id):
 # View handling for registering a new club representative
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
-def register_club_rep(request, club_id):
+def add_club_rep(request, club_id):
     lookup = Club.objects.get(id=club_id)
     club_rep_form = CreateClubRepForm()
     user_form = CreateUserForm()
@@ -138,14 +138,16 @@ def register_club_rep(request, club_id):
         if user_form.is_valid() and club_rep_form.is_valid():
             user = user_form.save()
             user.is_active = True  # Makes the account active
+
             club_rep = club_rep_form.save(commit=False)
             club_rep.clubID = lookup
             club_rep.user_obj = user
             club_rep.save()
+
             user.username = int(club_rep.id) + 1000
             user = user_form.save()
-            group = Group.objects.get(name='ClubRepresentative')
-            user.groups.add(group)
+            set_user_group(user, 'ClubRepresentative')
+
             return redirect(view_club_reps)
 
     return render(request, 'ClubManager/add_rep.html', {'user_form': user_form, 'club_rep_form': club_rep_form})

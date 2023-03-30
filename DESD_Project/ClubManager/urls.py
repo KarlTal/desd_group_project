@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Club representative related URLs.
     path('view_reps/', views.view_club_reps, name="View Reps"),
-    # path('add_rep/', views.register_club_rep, name="Add Club Rep"),
+    path('add_rep/<club_id>', views.add_club_rep, name="Add Club Rep"),
     path('update_rep/<rep_id>', views.update_club_rep, name='Update Club Rep'),
     path('delete_rep/<rep_id>', views.delete_club_rep, name='Delete Club Rep'),
 ]

@@ -32,7 +32,9 @@ def film(request, film_id):
 # View handling for user profile.
 @login_required(login_url='/login')
 def profile(request):
-    return render(request, 'UWEFlix/profile.html', {})
+    user_profile = UserProfile.objects.get(user_obj=request.user)
+    lookup = Booking.objects.filter(user_email=request.user.email)
+    return render(request, 'UWEFlix/profile.html', {'profile': user_profile, 'bookings': lookup})
 
 
 # View handling for user logins.

@@ -124,6 +124,9 @@ class Showing(models.Model):
 
     seats_taken = models.IntegerField(default=0)
 
+    def __str__(self):
+        return "Showing (" + str(self.film.title) + ")"
+
 
 # The database class for Ticket Bookings at UWEFlix.
 class Booking(models.Model):
@@ -135,7 +138,7 @@ class Booking(models.Model):
     ticket_count = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.user_email) + "'s Booking (" + str(self.film.title) + ")"
+        return "Booking (" + str(self.showing.film.title) + ")"
 
 
 # The database class for the Tickets at UWEFlix.

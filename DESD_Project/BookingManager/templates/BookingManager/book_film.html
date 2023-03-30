@@ -30,12 +30,49 @@
             var adult_cost = document.getElementById("adult_tick_quantity").value * "{{showing.adult_cost}}"
             var student_cost = document.getElementById("student_tick_quantity").value * "{{showing.student_cost}}"
 
-            document.getElementById("child_total").value = child_cost.toFixed(2)
-            document.getElementById("adult_total").value = adult_cost.toFixed(2)
-            document.getElementById("student_total").value = student_cost.toFixed(2)
+            document.getElementById("child_total").innerHTML = "£" + child_cost.toFixed(2)
+            document.getElementById("adult_total").innerHTML = "£" + adult_cost.toFixed(2)
+            document.getElementById("student_total").innerHTML = "£" + student_cost.toFixed(2)
 
-            total_price.value = (child_cost + adult_cost + student_cost).toFixed(2);
+            total_price.innerHTML = "£" + (child_cost + adult_cost + student_cost).toFixed(2);
         }
+
+        function showOverlay() {
+            var adult_total = document.getElementById("adult_tick_quantity").value;
+            var child_total = document.getElementById("child_tick_quantity").value;
+            var student_total = document.getElementById("student_tick_quantity").value;
+
+            if (adult_total == 0 && child_total == 0 && student_total == 0) {
+                alert("I am an alert box!");
+                return;
+            }
+
+            if (adult_total > 0) {
+                document.getElementById("final_adult").innerHTML = "Adult Tickets: " + adult_total + "x";
+            }
+
+            if (child_total > 0) {
+                document.getElementById("final_child").innerHTML = "Child Tickets: " + child_total + "x";
+            }
+
+            if (student_total > 0) {
+                document.getElementById("final_student").innerHTML = "Student Tickets: " + student_total + "x";
+            }
+
+            document.getElementById("final_total").innerHTML = "Total Cost: " + document.getElementById("total_price").innerHTML;
+
+            var overlay = document.getElementById("main_overlay");
+            overlay.style.display = "block";
+        }
+
+        function hideOverlay() {
+            var overlay = document.getElementById("main_overlay");
+            overlay.style.display = "none";
+        }
+
+
+
+
     </script>
 
     <style>
@@ -80,6 +117,47 @@
           font-size: 30px;
           text-align: center;
         }
+
+        .overlay {
+            text-align: center;
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .overlay-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+
+
     </style>
 
 </head>
@@ -122,7 +200,7 @@
                 </div>
 
                 <div class="item">
-                    £ <input type="text" id="adult_total" readonly class="individual_totals" value="0.00">
+                    <p id="adult_total">£0.00</p>
                 </div>
             </div>
 
@@ -139,7 +217,7 @@
                 </div>
 
                 <div class="item">
-                    £ <input type="text" id="child_total" readonly class="individual_totals" value="0.00">
+                    <p id="child_total">£0.00</p>
                 </div>
             </div>
 
@@ -156,13 +234,13 @@
                 </div>
 
                 <div class="item">
-                    £ <input type="text" id="student_total" readonly class="individual_totals" value="0.00">
+                    <p id="student_total">£0.00</p>
                 </div>
             </div>
 
             <div class="item">
                 <h3>Total:</h3>
-                £ <input type="text" id="total_price" readonly class="individual_totals" value="0.00">
+                <p id="total_price">£0.00</p>
             </div>
 
             {% if request.user.is_anonymous %}
@@ -173,11 +251,45 @@
             </div>
 
             {% endif %}
-
-            <button class="button" form="booking_form">Submit</button>
-
         </form>
 
+        <button class="button" onclick="showOverlay()">Book</button>
+
+    </div>
+
+</div>
+
+<div id="main_overlay" class="overlay">
+
+    <div class="overlay-content">
+        <span class="close" onclick="hideOverlay()">&times;</span>
+        <h1>Finalise Booking</h1>
+
+        <div class="sub_container">
+            <div class="item">
+                <h3>{{film.title}} ({{film.age_rating}})</h3>
+                <p>Runtime: {{film.duration}} mins</p>
+                <p>{{film.description}}</p>
+            </div>
+
+            <div class="item">
+                <h3>{{showing.screen}}</h3>
+                <p>{{showing.time}}</p>
+                <p>Remaining Seats: {{remaining_seats}}</p>
+            </div>
+
+            <div class="item">
+                <p id="final_adult"></p>
+                <p id="final_child"></p>
+                <p id="final_student"></p>
+                <h4 id="final_total"></h4>
+            </div>
+        </div>
+
+        <br>
+
+        <button class="button" onclick="hideOverlay()">Cancel</button>
+        <button class="button" form="booking_form">Confirm Booking</button>
     </div>
 
 </div>
