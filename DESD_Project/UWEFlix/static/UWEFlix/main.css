@@ -30,7 +30,7 @@ tr:nth-child(even) {
     font-size: 20px;
     text-align: center;
     padding: 0px 0px 0px 0px;
-    background-color: black;
+    background-color: #243447 ;
     color: white;
 }
 
@@ -40,3 +40,83 @@ tr:nth-child(even) {
     display: flex;
     flex-direction: column;
 }
+
+body{
+  margin: 0;
+  padding: 0;
+  background: #141d26;
+}
+
+.slidershow{
+  width: 700px;
+  height: 500px;
+  overflow: hidden;
+}
+
+.middle{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.navigation{
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translate(-50%);
+  display: flex;
+}
+
+.bar{
+  width: 50px;
+  height: 10px;
+  border: 2px solid black;
+  margin: 6px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.bar:hover{
+  background: white;
+}
+
+input[name="r"]{
+  position: absolute;
+  visibility: hidden;
+}
+
+.slides{
+  width: 500%;
+  height: 100%;
+  display: flex;
+}
+
+.slide{
+  width: 20%;
+  transition: 0.6s;
+}
+
+.slide img{
+  width: 100%;
+  height: 100%
+}
+
+#r1:checked ~ .s1{
+  margin-left: 0;
+}
+
+#r2:checked ~ .s1{
+  margin-left: -20%;
+}
+
+#r3:checked ~ .s1{
+  margin-left: -40%;
+}
+
+#r4:checked ~ .s1{
+  margin-left: -60%;
+}
+
+
+

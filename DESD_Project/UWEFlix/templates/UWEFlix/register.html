@@ -2,31 +2,73 @@
 
 {% block page %}
 
-<h1>Register</h1>
+<style>
+    .div{
+        text-align: center;
+        background-color:#243447;
+        border-radius: 5%;
+    }
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+    .form{
+        float: center;
+    }
+    
+    .headers {
+      padding-top: 20px;
+      text-align: center;
+      color: white;
+      font-family: Tahoma;
+    }
 
-    {{form.first_name.label}}
-    {{form.first_name}}
-    <br>
-    {{form.last_name.label}}
-    {{form.last_name}}
-    <br>
-    {{form.email.label}}
-    {{form.email}}
-    <br>
-    {{form.password1.label}}
-    {{form.password1}}
-    <br>
-    {{form.password2.label}}
-    {{form.password2}}
-    <br>
-    <button class="button">Submit</button>
-</form>
+    .text {
+        text-align: center;
+        color: white;
+        font-family: Tahoma;
+    }
+    
+    .hyperlinks{
+        color: white;
+    }
+</style>
 
-{{form.errors}}
+<div>
+    <div class="div">
+        <h1 class="headers">Register</h1>
+        <form class="form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    
+        <label class="text">{{form.first_name.label}}</label>
+        <br>
+        {{form.first_name}}
+        <br>
+        <label class="text">{{form.last_name.label}}</label>
+        <br>
+        {{form.last_name}}
+        <br>
+        <label class="text">{{form.email.label}}</label>
+        <br>
+        {{form.email}}
+        <br>
+        <label class="text">{{form.password1.label}}</label>
+        <br>
+        {{form.password1}}
+        <br>
+        <label class="text">{{form.password2.label}}</label>
+        <br>
+        {{form.password2}}
+        <br>
+        <button class="button">Submit</button>
+    </form>
 
-<p>Already have an account? <a href="{% url 'Login' %}">Login</a></p>
+    {{form.errors}}
+
+    <p class="text">Already have an account? <a href="{% url 'Login' %}" class="hyperlinks">Login</a></p>
+    <br>
+
+</div>
+
+</div>
+
+
 
 {% endblock %}

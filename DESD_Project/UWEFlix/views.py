@@ -90,3 +90,9 @@ def register(request):
             return redirect(login_user)
 
     return render(request, 'UWEFlix/register.html', {'form': form})
+
+def about(request):
+    return render(request, 'UWEFlix/about.html')
+
+def slideshow(request):
+    return render(request, 'UWEFlix/slideshow.html')

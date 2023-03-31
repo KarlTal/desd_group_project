@@ -9,18 +9,19 @@
     <title>UWEFlix</title>
 
     <style>
+
     ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #333;
+      background-color:#243447 ;
     }
 
     li {
       float: left;
-      border-left:1px solid #bbb;
-      border-right:1px solid #bbb;
+      border-left:1px solid #141d26;
+      border-right:1px solid #141d26;
     }
 
     li:last-child {
@@ -36,7 +37,7 @@
     }
 
     li a:hover:not(.active) {
-      background-color: #111;
+      background-color:#141d26;
     }
 
     .active {
@@ -46,17 +47,17 @@
     </style>
 </head>
 
-<body>
+<body style="background-color: #141d26;">
 
 <div class="top_bar">
 
     <ul>
         <li><a class="active" href="/">Home</a></li>
+        <li><a href="{% url 'Register' %}">Register</a></li>
+        <li><a href="{% url 'About' %}">About</a></li>
 
         {% if request.user.is_anonymous %}
-
-        <li style="float:right"><a href="{% url 'Login' %}">Login</a></li>
-
+          <li style="float:left"><a href="{% url 'Login' %}">Login</a></li>
         {% else %}
 
             {% if request.user|has_group:"AccountManager" %}

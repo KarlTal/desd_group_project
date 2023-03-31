@@ -2,27 +2,62 @@
 
 {% block page %}
 
-<h1>Login</h1>
+<style>
+    .div{
+        text-align: center;
+        background-color:#243447;
+        border-radius: 5%;
+    }
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+    .form{
+        float: center;
+    }
+    
+    .headers {
+      padding-top: 20px;
+      text-align: center;
+      color: white;
+      font-family: Tahoma;
+    }
 
-    <label for="username">Email/Username</label>
-    <input type="text" id="username" name="username" required/>
+    .text {
+        text-align: center;
+        color: white;
+        font-family: Tahoma;
+    }
+    
+    .hyperlinks{
+        color: white;
+    }
 
-    <br>
+</style>
 
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required/>
+<div>
+    <div class="div">
+        <h1 class="headers">Login</h1>
 
-    <br>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-    <button class="button">Login</button>
-</form>
+            <label class="text" for="username">Email/Username</label>
+            <br>
+            <input type="text" id="username" name="username" required/>
+            <br>
+            <label class="text"for="password">Password</label>
+            <br>
+            <input type="password" id="password" name="password" required/>
+            <br>
+            <button class="button">Login</button>
+        </form>
 
-{% if error %}
-    {{error}}
-{% endif %}
+        {% if error %}
+            {{error}}
+        {% endif %}
 
-<p>Don't have an account? <a href="{% url 'Register' %}">Register</a></p>
+        <p class="text">Don't have an account? <a href="{% url 'Register' %}" class="hyperlinks">Register</a></p>
+        <br>
+    </div>
+</div>
+
+
 {% endblock %}
