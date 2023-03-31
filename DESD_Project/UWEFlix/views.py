@@ -86,7 +86,7 @@ def register(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            set_user_group(form.save(), 'Student')
+            setup_user(form.save(), 'Student')
             return redirect(login_user)
 
     return render(request, 'UWEFlix/register.html', {'form': form})

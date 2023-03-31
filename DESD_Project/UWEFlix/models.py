@@ -14,8 +14,6 @@ class CustomUserManager(UserManager):
         user.set_password(password)
         user.save(using=self._db)
 
-        UserProfile.objects.get_or_create(user=user)
-
         return user
 
     def create_user(self, email=None, password=None, **extra_fields):
@@ -23,7 +21,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_superuser', False)
 
         user = self._create_user(email, password, **extra_fields)
-        set_user_group(user, 'Student')
+        setup_user(user, 'Student')
 
         return user
 
@@ -33,7 +31,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_active', True)
 
         user = self._create_user(email, password, **extra_fields)
-        set_user_group(user, 'AccountManager')
+        setup_user(user, 'AccountManager')
 
         return user
 
@@ -169,7 +167,13 @@ def setup_groups():
     Group.objects.get_or_create(name='Student')
 
 
-def set_user_group(user, group_key):
+def setup_user(user, group_key):
+    # Ensure that the websites groups have been created.
     setup_groups()
+
+    # Assign the user to their designated group.
     group = Group.objects.get(name=group_key)
     user.groups.add(group)
+
+    # Create the users profile.
+    UserProfile.objects.get_or_create(user_obj=user)
