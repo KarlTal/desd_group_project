@@ -144,7 +144,7 @@ def add_club_rep(request, club_id):
 
             user.username = int(club_rep.id) + 1000
             user = user_form.save()
-            set_user_group(user, 'ClubRepresentative')
+            setup_user(user, 'ClubRepresentative')
 
             return redirect(view_club_reps)
         
