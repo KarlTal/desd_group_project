@@ -49,10 +49,9 @@
 
         function calculateAmount() {
             var total_price = document.getElementById("total_price");
-
-            var child_cost = document.getElementById("child_tick_quantity").value * "{{showing.child_cost}}"
-            var adult_cost = document.getElementById("adult_tick_quantity").value * "{{showing.adult_cost}}"
-            var student_cost = document.getElementById("student_tick_quantity").value * "{{showing.student_cost}}"
+            var child_cost = document.getElementById("child_tick_quantity").value * "{{child_ticket.price}}"
+            var adult_cost = document.getElementById("adult_tick_quantity").value * "{{adult_ticket.price}}"
+            var student_cost = document.getElementById("student_tick_quantity").value * "{{student_ticket.price}}"
 
             if (isClubBooking()) {
                 var discount = "{{club.discount}}";

@@ -115,11 +115,6 @@ class Showing(models.Model):
     film = models.ForeignKey(Film, null=True, on_delete=models.SET_NULL)
     screen = models.ForeignKey(Screen, null=True, on_delete=models.SET_NULL)
     time = models.DateTimeField(default=timezone.now)
-
-    child_cost = models.DecimalField(default=7.99, max_digits=4, decimal_places=2)
-    adult_cost = models.DecimalField(default=13.99, max_digits=4, decimal_places=2)
-    student_cost = models.DecimalField(default=11.99, max_digits=4, decimal_places=2)
-
     seats_taken = models.IntegerField(default=0)
 
     def __str__(self):
@@ -140,12 +135,15 @@ class Booking(models.Model):
 
 
 # The database class for the Tickets at UWEFlix.
-class Ticket(models.Model):
+class TicketType(models.Model):
     TYPES = (('Adult', 'Adult'), ('Child', 'Child'), ('Student', 'Student'))
+    ticketType = models.CharField(max_length=7, choices=TYPES,blank=True)
+    price = models.DecimalField(max_digits=4, decimal_places=2)
 
+class Ticket(models.Model):
     booking = models.ForeignKey(Booking, null=True, on_delete=models.SET_NULL)
-    ticket_type = models.CharField(max_length=10, default='Adult', choices=TYPES)
-    price = models.FloatField()
+    type=models.ForeignKey(TicketType,on_delete=models.CASCADE)
+
 
 
 # The database class for the club representative
