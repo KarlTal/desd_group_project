@@ -7,7 +7,7 @@ from ClubManager.views import rep_dashboard
 from UWEFlix.models import *
 from .decorators import *
 from .forms import *
-
+from ClubManager.forms import *
 
 # View handling for the UWEFlix homepage.
 def home(request):
@@ -85,8 +85,20 @@ def register(request):
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
-        if form.is_valid():
+        student_form = CreateStudentForm(request.POST)
+
+        if form.is_valid() and student_form.is_valid():
             set_user_group(form.save(), 'Student')
+            user=form.save()
+            student = student_form.save(commit=False)
+            student.user_obj=user
+            student.save()
+            return redirect(login_user)
+        else:
+            print("not valid")
+            print(student_form.errors.as_data())
+            print(form.errors.as_data())
+            
             return redirect(login_user)
 
     return render(request, 'UWEFlix/register.html', {'form': form})

@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.forms import UserCreationForm
-
+from UWEFlix.models import UserProfile
 from .models import User
-
+from django import forms
 
 # Form responsible for handling the creation of UWEFlix users.
 class CreateUserForm(UserCreationForm):
@@ -11,6 +11,10 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
 
+class CreateStudentForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = []
 
 class UWEFlixBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):

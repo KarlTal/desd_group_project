@@ -22,14 +22,14 @@ def book_film(request, film_id, showing_id):
         # Wrap with try catch as if the user is not logged in (e.g. a Customer) then this will error.
         try:
             profile = UserProfile.objects.get(user_obj=request.user)
-        except SomeModel.DoesNotExist:
+        except UserProfile.DoesNotExist:
             profile = None
 
         if profile is not None:
             club = profile.club
 
         remaining_seats = showing.screen.capacity - showing.seats_taken
-
+        
         if request.POST:
 
             if request.user.is_anonymous:
