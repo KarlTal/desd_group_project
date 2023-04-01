@@ -93,10 +93,7 @@
     "fields": {
       "film": 1,
       "screen": 2,
-      "time": "2023-03-28T00:45:40Z",
-      "child_cost": 7.99,
-      "adult_cost": 13.99,
-      "student_cost": 11.99
+      "time": "2023-03-28T00:45:40Z"
     }
   },
   {
@@ -108,5 +105,29 @@
       "date_of_birth": "2023-03-27",
       "credits": 100
     }
+  },
+  {
+    "model": "UWEFlix.tickettype",
+    "pk": 1,
+    "fields": {
+        "ticket_name": "Adult",
+        "price": 7.99
+    }
+  },
+  {
+      "model": "UWEFlix.tickettype",
+      "pk": 2,
+      "fields": {
+          "ticket_name": "Child",
+          "price": 4.99
+      }
+  },
+  {
+      "model": "UWEFlix.tickettype",
+      "pk": 3,
+      "fields": {
+          "ticket_name": "Student",
+          "price": 5.99
+      }
   }
 ]

@@ -17,13 +17,18 @@ def book_film(request, film_id, showing_id):
 
         lookup = Film.objects.get(id=film_id)
         showing = Showing.objects.get(id=showing_id)
-        club = None
+
+        adult_ticket = TicketType.objects.get(id=1)
+        child_ticket = TicketType.objects.get(id=2)
+        student_ticket = TicketType.objects.get(id=3)
 
         # Wrap with try catch as if the user is not logged in (e.g. a Customer) then this will error.
         try:
             profile = UserProfile.objects.get(user_obj=request.user)
         except UserProfile.DoesNotExist:
             profile = None
+
+        club = None
 
         if profile is not None:
             club = profile.club
@@ -36,9 +41,9 @@ def book_film(request, film_id, showing_id):
                 # TODO: Add 'payment processing' page for Customers
                 return redirect('/')
 
-            student_price = showing.student_cost
-            adult_price = showing.adult_cost
-            child_price = showing.child_cost
+            student_price = student_ticket.price
+            adult_price = adult_ticket.price
+            child_price = child_ticket.price
 
             if club is not None:
                 student_price = student_price * decimal.Decimal((1 - (club.discount / 100)))
@@ -63,15 +68,16 @@ def book_film(request, film_id, showing_id):
                     profile.credits = profile.credits - total_price
                     profile.save()
 
-                    new_booking = Booking.objects.create(user_email=request.user.email, showing=showing, date=date.today(),
+                    new_booking = Booking.objects.create(user_email=request.user.email, showing=showing,
+                                                         date=date.today(),
                                                          total_price=total_price, ticket_count=total_quantity)
 
                     for i in range(adult_quantity):
-                        Ticket.objects.create(booking=new_booking, ticket_type="Adult", price=adult_price)
+                        Ticket.objects.create(booking=new_booking, ticket_type=adult_ticket)
                     for i in range(child_quantity):
-                        Ticket.objects.create(booking=new_booking, ticket_type="Child", price=child_price)
+                        Ticket.objects.create(booking=new_booking, ticket_type=child_ticket)
                     for i in range(student_quantity):
-                        Ticket.objects.create(booking=new_booking, ticket_type="Student", price=student_price)
+                        Ticket.objects.create(booking=new_booking, ticket_type=student_ticket)
 
                     showing.seats_taken += total_quantity
                     showing.save()
@@ -80,6 +86,7 @@ def book_film(request, film_id, showing_id):
 
         return render(request, 'BookingManager/book_film.html',
                       {'film': lookup, 'club': club, 'showing': showing, 'remaining_seats': remaining_seats,
+                       "adult_ticket": adult_ticket, "child_ticket": child_ticket, "student_ticket": student_ticket,
                        'error': error_message})
 
     # Redirect back to the homepage.
