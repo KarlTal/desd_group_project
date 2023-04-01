@@ -13,6 +13,8 @@ urlpatterns = [
     path('register/', views.register, name='Register'),
     path('about/', views.about, name='About'),
     path('slideshow/', views.slideshow, name='Slideshow'),
+    path('grid/', views.grid, name='Grid'),
+    path('grid2/', views.grid2, name='Grid2'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

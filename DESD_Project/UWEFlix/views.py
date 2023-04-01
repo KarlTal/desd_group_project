@@ -96,3 +96,9 @@ def about(request):
 
 def slideshow(request):
     return render(request, 'UWEFlix/slideshow.html')
+
+def grid(request):
+    return render(request, 'UWEFlix/grid.html')
+
+def grid2(request):
+    return render(request, 'UWEFlix/grid2.html')

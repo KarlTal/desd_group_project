@@ -4,20 +4,9 @@
 {% block page %}
 
 <style>
-    
-    .headers {
-      color: white;
-      font-family: Tahoma;
-    }
-
-    .text {
-        color: white;
-        font-family: Tahoma;
-    }
-
     .grid-container {
       display: grid;
-      grid-template-columns: auto auto auto auto;
+      grid-template-columns: auto auto auto;
       background-color: #243447;
       border-radius: 15px;
       padding: 10px;
@@ -26,10 +15,10 @@
       justify-content: center;
     }
     .grid-item {
-      background-color: #485a6d;
+      background-color: rgba(255, 255, 255, 0.8);
       border: 1px solid rgba(0, 0, 0, 0.8);
       border-radius: 15px;
-      margin: 10px;
+
       padding: 20px;
       font-size: 30px;
       text-align: center;
@@ -44,67 +33,7 @@
     .headers{
         margin-top: 5px;
     }
-
 </style>
-
-<h2 class="headers">Top Titles</h2>
-
-<div class="slidershow middle">
-
-    <div class="slides">
-        <input type="radio" name="r" id="r1" checked>
-        <input type="radio" name="r" id="r2">
-        <input type="radio" name="r" id="r3">
-        <input type="radio" name="r" id="r4">
-        <div class="slide">
-            <img src="{% static 'UWEFlix/images/Avatar2022.png' %}">
-        </div>
-
-        <div class="slide s1">
-            <img src="{% static 'UWEFlix/images/Avengers.jpg' %}">
-        </div>
-
-        <div class="slide">
-            <img src="{% static 'UWEFlix/images/Spider-Man.jpg' %}">
-        </div>
-
-        <div class="slide">
-            <img src="{% static 'UWEFlix/images/Shrek.jpg' %}">
-        </div>
-    </div>
-
-    <div class="navigation">
-        <label for="r1" class="bar"></label>
-        <label for="r2" class="bar"></label>
-        <label for="r3" class="bar"></label>
-        <label for="r4" class="bar"></label>
-    </div>
-
-</div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<h2 class="headers">Showings</h2>
 
 <div class="grid-container">
     <div class="grid-item">
@@ -137,7 +66,5 @@
         <h6 class = "headers">Top Gun: Maverick</h6>
       </div>  
 </div>
-
-<br>
 
 {% endblock %}

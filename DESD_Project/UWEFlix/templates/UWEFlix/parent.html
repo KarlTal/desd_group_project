@@ -52,12 +52,12 @@
 <div class="top_bar">
 
     <ul>
-        <li><a class="active" href="/">Home</a></li>
-        <li><a href="{% url 'Register' %}">Register</a></li>
-        <li><a href="{% url 'About' %}">About</a></li>
+        <li {% block home_active %}{% endblock %}><a href="/">Home</a></li>
+        <li {% block about_active %}{% endblock %}><a href="{% url 'About' %}">About</a></li>
 
         {% if request.user.is_anonymous %}
-          <li style="float:left"><a href="{% url 'Login' %}">Login</a></li>
+          <li {% block register_active %}{% if request.resolver_match.url_name == 'Register' %}class="active"{% endif %}{% endblock %}><a href="{% url 'Register' %}">Register</a></li>
+          <li {% block login_active %}{% if request.resolver_match.url_name == 'Login' %}class="active"{% endif %}{% endblock %} style="float:left"><a href="{% url 'Login' %}">Login</a></li>
         {% else %}
 
             {% if request.user|has_group:"AccountManager" %}
