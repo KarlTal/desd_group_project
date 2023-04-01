@@ -6,7 +6,7 @@ from UWEFlix.decorators import *
 from UWEFlix.forms import *
 from UWEFlix.models import *
 from .forms import *
-
+from django.utils import timezone
 
 # The handler for the homepage of the website.
 @login_required(login_url='/login')
@@ -17,10 +17,21 @@ def rep_dashboard(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles="ClubRepresentative")
-def view_transactions(request):
-    # Gets all the bookings associated with the user's email
-    club_transactions = Booking.objects.get(user_email=request.user.email)
-    return render(request, 'ClubManager/view_transactions.html', {'club_transactions': club_transactions})
+def view_transactions(request,user_id):
+    # Gets all the bookings associated with the user's 
+    if user_id:
+        return redirect()
+    current_month_transactions = Booking.objects.filter(user_email=request.user.email,date__gte=timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0))
+    print(current_month_transactions)
+
+    all_transactions = Booking.objects.filter(user_email=request.user.email).order_by('date')
+    
+    context = {
+        "current_month_transactions":current_month_transactions,
+        "all_transactions":all_transactions,
+
+    }
+    return render(request, 'ClubManager/view_transactions.html', context)
 
 
 @login_required(login_url='/login')
