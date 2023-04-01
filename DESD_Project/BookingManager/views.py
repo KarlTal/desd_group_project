@@ -74,7 +74,9 @@ def book_film(request, film_id, showing_id):
                     profile.credits = profile.credits - total_price
                     profile.save()
 
-                    new_booking = Booking.objects.create(user_email=request.user.email, unique_key=uuid.uuid4(),
+                    unique_key = uuid.uuid4()
+
+                    new_booking = Booking.objects.create(user_email=request.user.email, unique_key=unique_key,
                                                          showing=showing, date=date.today(),
                                                          total_price=total_price, ticket_count=total_quantity)
 
@@ -88,7 +90,7 @@ def book_film(request, film_id, showing_id):
                     showing.seats_taken += total_quantity
                     showing.save()
 
-                    return redirect(home)
+                    return redirect(confirmation, booking_id=new_booking.id, unique_key=unique_key)
 
         return render(request, 'BookingManager/book_film.html',
                       {'film': lookup, 'club': club, 'showing': showing, 'remaining_seats': remaining_seats,
@@ -151,5 +153,10 @@ def cancel_booking(request, booking_id):
 
     if request.user.email == booking.user_email:
         booking.delete()
+
+        # Reduce the number of seats taken.
+        showing = booking.showing
+        showing.seats_taken = showing.seats_taken - booking.ticket_count
+        showing.save()
 
     return redirect(profile)
