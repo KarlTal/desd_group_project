@@ -110,7 +110,7 @@
     "model": "UWEFlix.tickettype",
     "pk": 1,
     "fields": {
-        "ticketType": "Adult",
+        "ticket_name": "Adult",
         "price": 7.99
     }
   },
@@ -118,7 +118,7 @@
       "model": "UWEFlix.tickettype",
       "pk": 2,
       "fields": {
-          "ticketType": "Child",
+          "ticket_name": "Child",
           "price": 4.99
       }
   },
@@ -126,7 +126,7 @@
       "model": "UWEFlix.tickettype",
       "pk": 3,
       "fields": {
-          "ticketType": "Student",
+          "ticket_name": "Student",
           "price": 5.99
       }
   }

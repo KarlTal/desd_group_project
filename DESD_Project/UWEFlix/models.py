@@ -134,22 +134,25 @@ class Booking(models.Model):
         return "Booking (" + str(self.showing.film.title) + ")"
 
 
-# The database class for the Tickets at UWEFlix.
+# The database model of ticket types at UWEFlix.
 class TicketType(models.Model):
-    TYPES = (('Adult', 'Adult'), ('Child', 'Child'), ('Student', 'Student'))
-    ticketType = models.CharField(max_length=7, choices=TYPES,blank=True)
+    ticket_name = models.CharField(max_length=7, null=True, blank=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
 
+    def __str__(self):
+        return self.ticket_name + " Ticket"
+
+
+# The database class for the Tickets at UWEFlix.
 class Ticket(models.Model):
     booking = models.ForeignKey(Booking, null=True, on_delete=models.SET_NULL)
-    type=models.ForeignKey(TicketType,on_delete=models.CASCADE)
+    ticket_type = models.ForeignKey(TicketType, null=True, on_delete=models.CASCADE)
 
 
-
-# The database class for the club representative
+# The database class for user profiles at UWEFlix.
 class UserProfile(models.Model):
     user_obj = models.OneToOneField(User, on_delete=models.CASCADE)
-    club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE,blank=True)
+    club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE, blank=True)
     date_of_birth = models.DateField(default=timezone.now, auto_now_add=False, auto_now=False, blank=False)
     credits = models.PositiveIntegerField(default=0)
 
