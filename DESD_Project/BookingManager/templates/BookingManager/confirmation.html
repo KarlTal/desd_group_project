@@ -1,0 +1,22 @@
+{% extends 'BookingManager/parent.html' %}
+
+{% block page %}
+
+<h1>Booking Confirmed!</h1>
+<p>Your booking details have been sent to your email!</p>
+
+<div>
+    <h3>Email: {{booking.user_email}}</h3>
+    <h3>Tickets: {{booking.ticket_count}}</h3>
+    <h3>Cost: £{{booking.total_price}}</h3>
+    <h3>Time: {{booking.date}}</h3>
+    <h3>Screen: {{booking.showing.screen}}</h3>
+
+    <br>
+
+    <h3>Film: {{booking.showing.film}} ({{booking.showing.film.age_rating}})</h3>
+    <h3>Duration: {{booking.showing.film.duration}} mins</h3>
+    <h3>Description: {{booking.showing.film.description}}</h3>
+</div>
+
+{% endblock %}

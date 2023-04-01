@@ -47,7 +47,8 @@ def profile(request):
             user_profile.applied_discount = discount
             user_profile.save()
 
-    return render(request, 'UWEFlix/profile.html', {'profile': user_profile, 'bookings': lookup, 'error': error_message})
+    return render(request, 'UWEFlix/profile.html',
+                  {'profile': user_profile, 'bookings': lookup, 'error': error_message})
 
 
 # View handling for user logins.

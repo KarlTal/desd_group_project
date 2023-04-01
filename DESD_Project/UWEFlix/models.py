@@ -124,10 +124,11 @@ class Showing(models.Model):
 # The database class for Ticket Bookings at UWEFlix.
 class Booking(models.Model):
     user_email = models.EmailField(null=True)
-    club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
+    unique_key = models.UUIDField(null=True)
+    club = models.ForeignKey(Club, null=True, blank=True, on_delete=models.SET_NULL)
     showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(default=timezone.now)
-    total_price = models.IntegerField(default=0)
+    total_price = models.FloatField(default=0)
     ticket_count = models.IntegerField(default=0)
 
     def __str__(self):

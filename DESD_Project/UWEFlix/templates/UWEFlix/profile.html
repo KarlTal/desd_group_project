@@ -51,7 +51,8 @@
             <th>Date</th>
             <th>Total Price</th>
             <th>Ticket Count</th>
-            <th>Edit</th>
+            <th>View</th>
+            <th>Modify</th>
         </tr>
         {% for booking in bookings %}
         <tr>
@@ -59,7 +60,8 @@
             <td>{{booking.date}}</td>
             <td>£{{booking.total_price}}</td>
             <td>{{booking.ticket_count}}</td>
-            <td><a href="/booking/delete_booking/{{booking.id}}">Delete</a></td>
+            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
+            <td><a href="/booking/cancel_booking/{{booking.id}}">Cancel</a></td>
         </tr>
         {% endfor %}
     </table>

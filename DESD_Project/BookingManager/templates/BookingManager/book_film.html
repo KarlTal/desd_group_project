@@ -53,9 +53,9 @@
         }
 
         function showOverlay() {
-            var adult_total = document.getElementById("adult_tick_quantity").value;
-            var child_total = document.getElementById("child_tick_quantity").value;
-            var student_total = document.getElementById("student_tick_quantity").value;
+            var adult_total = parseInt(document.getElementById("adult_tick_quantity").value);
+            var child_total = parseInt(document.getElementById("child_tick_quantity").value);
+            var student_total = parseInt(document.getElementById("student_tick_quantity").value);
 
             if (adult_total == 0 && child_total == 0 && student_total == 0) {
                 showError('You must book at least one seat!');
@@ -64,13 +64,13 @@
 
             var remaining_seats = "{{showing.screen.capacity}}" - "{{showing.seats_taken}}"
 
-            if (adult_total + child_total + student_total > remaining_seats) {
-                showError("There are not enough seats available for this many tickets!");
+            if ((adult_total + child_total + student_total) > remaining_seats) {
+                showError("There are not enough seats available for this many tickets! (2)");
                 return;
             }
 
             if (adult_total > 0) {
-                document.getElementById("final_adult").innerHTML = "Adult Tickets: " + remaining_seats + "x";
+                document.getElementById("final_adult").innerHTML = "Adult Tickets: " + adult_total + "x";
             }
 
             if (child_total > 0) {
@@ -267,15 +267,6 @@
                 ({{discount}}% off!)
                 {% endif %}
             </div>
-
-            {% if request.user.is_anonymous %}
-
-            <div class="item">
-                <h4>Please Enter your Email</h4>
-                <input type="email" name="user_email">
-            </div>
-
-            {% endif %}
         </form>
 
         <button class="button" onclick="showOverlay()">Book</button>
