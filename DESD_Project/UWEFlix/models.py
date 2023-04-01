@@ -127,7 +127,7 @@ class Booking(models.Model):
     club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
     showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(default=timezone.now)
-    total_price = models.IntegerField(default=0)
+    total_price = models.DecimalField(default=0,decimal_places=2,max_digits=9)
     ticket_count = models.IntegerField(default=0)
 
     def __str__(self):

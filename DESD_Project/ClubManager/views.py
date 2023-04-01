@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
+from django.contrib.auth import logout
 from CinemaManager.views import cinema_dashboard
 from UWEFlix.decorators import *
 from UWEFlix.forms import *
@@ -17,22 +17,30 @@ def rep_dashboard(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles="ClubRepresentative")
-def view_transactions(request,user_id):
-    # Gets all the bookings associated with the user's 
-    if user_id:
-        return redirect()
-    current_month_transactions = Booking.objects.filter(user_email=request.user.email,date__gte=timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0))
-    print(current_month_transactions)
+def view_transactions(request):
+    if request.method=='POST':
+        if request.user.username == request.POST['username']:
+            request.session["club_rep_login_attempts"] = 0
+            # Gets all the bookings associated with the user's email
+            current_month_transactions = Booking.objects.filter(user_email=request.user.email,date__gte=timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0))
+            all_transactions = Booking.objects.filter(user_email=request.user.email).order_by('date')
+            context = {
+                "current_month_transactions":current_month_transactions,
+                "all_transactions":all_transactions,
 
-    all_transactions = Booking.objects.filter(user_email=request.user.email).order_by('date')
-    
-    context = {
-        "current_month_transactions":current_month_transactions,
-        "all_transactions":all_transactions,
-
-    }
-    return render(request, 'ClubManager/view_transactions.html', context)
-
+            }
+            return render(request, 'ClubManager/view_transactions.html', context)
+        else:
+            if request.session["club_rep_login_attempts"] <5:
+                error_message = "Incorrect, " + "you have " +str(5 - int(request.session["club_rep_login_attempts"])) + " attempts"
+                request.session["club_rep_login_attempts"] +=1
+                return render(request,'ClubManager/club_rep_verify.html',{'error_message':error_message})
+            elif request.session["club_rep_login_attempts"] == 5:
+                logout(request)
+                films = Film.objects.all()
+                return render(request, 'UWEFlix/home.html', {'films': films})
+    else:
+        return render(request,'ClubManager/club_rep_verify.html',)
 
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')

@@ -62,6 +62,7 @@ def login_user(request):
                 else:
                     return redirect(home)
             elif 'ClubRepresentative' in group:
+                request.session["club_rep_login_attempts"] = 0
                 return redirect(rep_dashboard)
             else:
                 return redirect(home)
