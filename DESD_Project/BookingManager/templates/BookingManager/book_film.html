@@ -9,16 +9,13 @@
 
     <script>
          $(document).ready(function(){
-            let error = "{{error}}";
-            if (error != '') {
-                showError(error);
-            }
-
             if (isClubBooking()) {
                 document.getElementById("adult_form").style.display = "none";
                 document.getElementById("child_form").style.display = "none";
                 document.getElementById("student_tick_quantity").value = 10;
                 calculateAmount();
+            } else if (isCustomerBooking()) {
+                document.getElementById("student_form").style.display = "none";
             }
         });
 
@@ -39,30 +36,20 @@
             });
         });
 
-        function showError(message) {
-            var overlay = document.getElementById("alert");
-            overlay.style.display = "block";
-
-            var error = document.getElementById("error_message");
-            error.innerHTML = message;
-        }
-
         function calculateAmount() {
             var total_price = document.getElementById("total_price");
             var child_cost = document.getElementById("child_tick_quantity").value * "{{child_ticket.price}}"
             var adult_cost = document.getElementById("adult_tick_quantity").value * "{{adult_ticket.price}}"
             var student_cost = document.getElementById("student_tick_quantity").value * "{{student_ticket.price}}"
 
-            if (isClubBooking()) {
-                var discount = "{{club.discount}}";
-                student_cost = student_cost * (1 - (discount / 100));
-            }
+            var discount = "{{discount}}";
+            var price = ((child_cost + adult_cost + student_cost) * (1 - (discount / 100))).toFixed(2);
 
             document.getElementById("child_total").innerHTML = "£" + child_cost.toFixed(2)
             document.getElementById("adult_total").innerHTML = "£" + adult_cost.toFixed(2)
             document.getElementById("student_total").innerHTML = "£" + student_cost.toFixed(2)
 
-            total_price.innerHTML = "£" + (child_cost + adult_cost + student_cost).toFixed(2);
+            total_price.innerHTML = "£" + price;
         }
 
         function showOverlay() {
@@ -106,7 +93,11 @@
         }
 
         function isClubBooking() {
-            return "{{club}}" != null;
+            return "{{club}}" !== "None";
+        }
+
+        function isCustomerBooking() {
+            return "{{request.user}}" == "AnonymousUser";
         }
     </script>
 
@@ -174,52 +165,31 @@
             border: 1px solid #888;
             width: 80%;
         }
-
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .alert {
-            text-align: center;
-            display: none;
-            padding: 20px;
-            background-color: #f44336;
-            color: white;
-        }
-
     </style>
 
 </head>
-
-<div id="alert" class="alert">
-    <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
-    <strong style="margin:0; display:inline; float:center;">Error!</strong>
-    <p style="margin:0; display:inline; float:center;" id="error_message">Empty</p>
-</div>
-
-<br>
 
 <div class="container">
 
     <div class="item">
 
-        {% if request.user|has_group:"ClubRepresentative" %}
+        {% if request.user|has_group_exact:"ClubRepresentative" %}
 
         <h1><u>{{club.name}} Club Booking</u></h1>
-        <p>Your Discount: {{club.discount}}%</p>
-        <br>
+
+        {% else %}
+
+        <h1><u>Film Booking</u></h1>
 
         {% endif %}
+
+        {% if discount > 0 %}
+
+        <p>Your Discount: {{discount}}%</p>
+
+        {% endif %}
+
+        <br>
 
         <h1>{{film.title}} ({{film.age_rating}})</h1>
         <p>Runtime: {{film.duration}} mins</p>
@@ -272,7 +242,7 @@
                 </div>
             </div>
 
-            <div class="sub_container">
+            <div id="student_form" class="sub_container">
                 <div class="item">
                     <h3>Student</h3>
                 </div>
@@ -292,6 +262,10 @@
             <div class="item">
                 <h3>Total:</h3>
                 <p id="total_price">£0.00</p>
+
+                {% if discount > 0 %}
+                ({{discount}}% off!)
+                {% endif %}
             </div>
 
             {% if request.user.is_anonymous %}

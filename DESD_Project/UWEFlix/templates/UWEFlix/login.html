@@ -20,9 +20,5 @@
     <button class="button">Login</button>
 </form>
 
-{% if error %}
-    {{error}}
-{% endif %}
-
 <p>Don't have an account? <a href="{% url 'Register' %}">Register</a></p>
 {% endblock %}

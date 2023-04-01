@@ -152,15 +152,41 @@ def delete_showing(request, showing_id):
 @allowed_users(allowed_roles='CinemaManager')
 def view_students(request):
     students = User.objects.filter(groups__name='Student').filter(is_active=False)
-    # Render the page.
     return render(request, 'CinemaManager/view_students.html', {'students': students})
 
 
-# Approval
+# Approve student accounts
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
-def approve_student(request, id):
-    student = User.objects.get(id=id)
+def approve_student(request, student_id):
+    student = User.objects.get(id=student_id)
+
+    # Set the student account to active. This is false by default and prevents the user from being able to log in.
     student.is_active = True
     student.save()
+
     return redirect(view_students)
+
+
+# Approve discount rates
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def view_discounts(request):
+    discounts = UserProfile.objects.exclude(applied_discount=0)
+    return render(request, 'CinemaManager/view_discounts.html', {'discounts': discounts})
+
+
+# Approve student accounts
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_discount(request, user_id, outcome):
+    user = User.objects.get(id=user_id)
+    profile = UserProfile.objects.get(user_obj=user)
+
+    if outcome == '1':
+        profile.discount = profile.applied_discount
+
+    profile.applied_discount = 0
+    profile.save()
+
+    return redirect(view_discounts)

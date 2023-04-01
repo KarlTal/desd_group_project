@@ -21,22 +21,31 @@ def book_film(request, film_id, showing_id):
         adult_ticket = TicketType.objects.get(id=1)
         child_ticket = TicketType.objects.get(id=2)
         student_ticket = TicketType.objects.get(id=3)
+        discount = 0
 
         # Wrap with try catch as if the user is not logged in (e.g. a Customer) then this will error.
         try:
             profile = UserProfile.objects.get(user_obj=request.user)
-        except UserProfile.DoesNotExist:
+        except:
             profile = None
 
         club = None
 
+        # If the user profile exists (e.g. logged in), then fetch the club and the users discount rate (if they have one).
         if profile is not None:
             club = profile.club
+            discount = profile.discount
+
+        # If the club exists, set the current discount to the club discount if it is bigger than the current user discount.
+        if club is not None:
+            if club.discount > discount:
+                discount = club.discount
 
         remaining_seats = showing.screen.capacity - showing.seats_taken
 
         if request.POST:
 
+            # If the current user is not logged in (e.g. they are a customer) then send them to the payment processing page.
             if request.user.is_anonymous:
                 # TODO: Add 'payment processing' page for Customers
                 return redirect('/')
@@ -44,9 +53,6 @@ def book_film(request, film_id, showing_id):
             student_price = student_ticket.price
             adult_price = adult_ticket.price
             child_price = child_ticket.price
-
-            if club is not None:
-                student_price = student_price * decimal.Decimal((1 - (club.discount / 100)))
 
             student_quantity = int(request.POST["student_quantity"])
             adult_quantity = int(request.POST["adult_quantity"])
@@ -59,7 +65,7 @@ def book_film(request, film_id, showing_id):
                 error_message = "There are not enough seats available for this many tickets!"
             else:
                 total_price = float((adult_quantity * adult_price) + (child_quantity * child_price) + (
-                        student_quantity * student_price))
+                        student_quantity * student_price)) * (1 - (discount / 100))
 
                 if total_price > profile.credits:
                     error_message = "You do not have sufficient credit for this purchase!"
@@ -87,7 +93,7 @@ def book_film(request, film_id, showing_id):
         return render(request, 'BookingManager/book_film.html',
                       {'film': lookup, 'club': club, 'showing': showing, 'remaining_seats': remaining_seats,
                        "adult_ticket": adult_ticket, "child_ticket": child_ticket, "student_ticket": student_ticket,
-                       'error': error_message})
+                       'discount': discount, 'error': error_message})
 
     # Redirect back to the homepage.
     return redirect(home)

@@ -6,10 +6,6 @@
 
 <hr class="solid">
 
-{% if error %}
-<h3 style="color:red;">{{error}}</h3>
-{% endif %}
-
 <div class="container">
     <form id="update" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
