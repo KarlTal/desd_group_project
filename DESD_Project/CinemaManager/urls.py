@@ -6,7 +6,6 @@ from . import views
 urlpatterns = [
     # Generic URLs.
     path('', views.cinema_dashboard, name='Dashboard'),
-    path('view_students/', views.view_students, name="View Unapproved Students"),
 
     # Film related URLs.
     path('add_film/', views.add_film, name='Add New Film'),
@@ -23,7 +22,10 @@ urlpatterns = [
     path('delete_showing/<showing_id>', views.delete_showing, name='Delete Showing'),
 
     # Approval of accounts
-    path('approve_student/<id>', views.approve_student, name='Approve Student'),
+    path('view_students/', views.view_students, name="View Unapproved Students"),
+    path('approve_student/<student_id>', views.approve_student, name='Approve Student'),
+    path('view_discounts/', views.view_discounts, name="View Unapproved Discounts"),
+    path('approve_discount/<user_id>:<outcome>', views.approve_discount, name='Approve Discount'),
 
 ]
 

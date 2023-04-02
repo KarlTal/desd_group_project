@@ -3,17 +3,9 @@
 {% block page %}
 
 
-<h1>Approve students</h1>
-
-<hr class="solid">
+<h1>Approve Students</h1>
 
 <div>
-
-    {% if request.user.is_anonymous %}
-
-    <h2>No Permissions</h2>
-
-    {% else %}
 
     <h2>All Unapproved Students </h2>
 
@@ -21,7 +13,7 @@
         <tr>
             <th>ID</th>
             <th>First Name</th>
-            <th>Surname </th>
+            <th>Surname</th>
             <th>Username</th>
             <th>Email</th>
             <th>Approve</th>
@@ -41,9 +33,5 @@
     <br>
 </div>
 
-
-<hr class="solid">
-
-{% endif %}
 
 {% endblock %}

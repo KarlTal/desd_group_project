@@ -6,7 +6,6 @@ DESD Group Project based on the UWEFLIX case study. </br>
 
 ### Authors
 
-~~<b> Fatima Al-Sharshani - ```19045566```</b>~~<br/>
 <b> Daniel Hill - ```19014767```</b> <br/>
 <b> Adrian Mitrea - ```20000146```</b> <br/>
 <b> Alex Roussel-Smith - ```20019006``` </b><br/>

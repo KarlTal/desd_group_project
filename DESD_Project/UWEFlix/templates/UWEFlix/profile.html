@@ -4,27 +4,67 @@
 
 <h1>My Profile</h1>
 
-<p>Total Credit: £{{profile.credits}}</p>
+<div>
+    <h3>Your Details</h3>
 
-<h3>My Bookings</h3>
+    <p>Name: {{user.first_name}} {{user.last_name}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>Date of Birth: {{profile.date_of_birth}}</p>
+    <p>Total Credit: £{{profile.credits}}</p>
+</div>
 
-<table style="width:100%">
-    <tr>
-        <th>Showing</th>
-        <th>Date</th>
-        <th>Total Price</th>
-        <th>Ticket Count</th>
-        <th>Edit</th>
-    </tr>
-    {% for booking in bookings %}
-    <tr>
-        <td>{{booking.showing.film}}</td>
-        <td>{{booking.date}}</td>
-        <td>£{{booking.total_price}}</td>
-        <td>{{booking.ticket_count}}</td>
-        <td><a href="/booking/delete_booking/{{booking.id}}">Delete</a></td>
-    </tr>
-    {% endfor %}
-</table>
+<br>
+
+<div>
+    <h3>Discounts</h3>
+
+    <p>Current Discount Rate: {{profile.discount}}%</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="discount">Apply for Discount:</label>
+        <input type="number" id="discount" name="discount" required/>
+
+        <button class="button">Submit</button>
+    </form>
+
+    {% if profile.applied_discount > 0 %}
+
+    <p>Discount application status: Waiting on approval ({{profile.applied_discount}}%)</p>
+
+    {% else %}
+
+    <p>Discount application status: Not Applied</p>
+
+    {% endif %}
+</div>
+
+<br>
+
+<div>
+    <h3>My Bookings</h3>
+
+    <table style="width:100%">
+        <tr>
+            <th>Showing</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Ticket Count</th>
+            <th>View</th>
+            <th>Modify</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{booking.showing.film}}</td>
+            <td>{{booking.date}}</td>
+            <td>£{{booking.total_price}}</td>
+            <td>{{booking.ticket_count}}</td>
+            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
+            <td><a href="/booking/cancel_booking/{{booking.id}}">Cancel</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 
 {% endblock %}

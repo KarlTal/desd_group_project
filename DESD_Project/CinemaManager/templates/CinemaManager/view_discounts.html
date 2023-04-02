@@ -1,0 +1,35 @@
+{% extends 'ClubManager/parent.html' %}
+
+{% block page %}
+
+
+<h1>Approve Discounts</h1>
+
+<div>
+
+    <h2>All Unapproved Discounts</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>User</th>
+            <th>Club</th>
+            <th>Current</th>
+            <th>Applied</th>
+            <th>Approve</th>
+        </tr>
+        {% for discount in discounts %}
+        <tr>
+            <td>{{discount.user_obj}}</td>
+            <td>{{discount.club}}</td>
+            <td>{{discount.discount}}%</td>
+            <td>{{discount.applied_discount}}%</td>
+            <td><a href="/manager/approve_discount/{{discount.user_obj.id}}:1">Approve</a> / <a href="/manager/approve_discount/{{discount.user_obj.id}}:0">Reject</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+</div>
+
+
+{% endblock %}
