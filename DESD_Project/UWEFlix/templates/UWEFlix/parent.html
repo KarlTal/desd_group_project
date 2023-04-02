@@ -8,41 +8,84 @@
     <meta charset="UTF-8">
     <title>UWEFlix</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            let error = "{{error}}";
+            if (error != '') {
+                showError(error);
+            }
+        });
+
+        function showError(message) {
+            var overlay = document.getElementById("alert");
+            overlay.style.display = "block";
+
+            var error = document.getElementById("error_message");
+            error.innerHTML = message;
+        }
+
+
+
+    </script>
+
     <style>
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #333;
-    }
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
 
-    li {
-      float: left;
-      border-left:1px solid #bbb;
-      border-right:1px solid #bbb;
-    }
+        li {
+          float: left;
+          border-left:1px solid #bbb;
+          border-right:1px solid #bbb;
+        }
 
-    li:last-child {
-      border-right: none;
-    }
+        li:last-child {
+          border-right: none;
+        }
 
-    li a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 25px 30px;
-      text-decoration: none;
-    }
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 25px 30px;
+          text-decoration: none;
+        }
 
-    li a:hover:not(.active) {
-      background-color: #111;
-    }
+        li a:hover:not(.active) {
+          background-color: #111;
+        }
 
-    .active {
-      background-color: #04AA6D;
-    }
+        .active {
+          background-color: #04AA6D;
+        }
 
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .alert {
+            text-align: center;
+            display: none;
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
     </style>
 </head>
 
@@ -59,25 +102,30 @@
 
         {% else %}
 
-            {% if request.user|has_group:"AccountManager" %}
+        {% if request.user|has_group:"AccountManager" %}
 
-            <!--TODO-->
+        <!--TODO-->
 
-            {% elif request.user|has_group:"CinemaManager" %}
+        {% endif %}
 
-            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
-            <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-            <li><a href="{% url 'View Reps' %}">Reps</a></li>
-            <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
+        {% if request.user|has_group:"CinemaManager" %}
 
-            {% elif request.user|has_group:"ClubRepresentative" %}
+        <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+        <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
+        <li><a href="{% url 'View Reps' %}">Reps</a></li>
+        <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
+        <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
 
-            <!--TODO-->
-            <li><a href = "{% url 'View Club Transactions' %}">View All Transactions</a></li>
-            {% endif %}
+        {% endif %}
 
-            <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
-            <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
+        {% if request.user|has_group:"ClubRepresentative" %}
+
+        <li><a href="{% url 'View Club Transactions' %}">View All Transactions</a></li>
+
+        {% endif %}
+
+        <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
+        <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
 
         {% endif %}
     </ul>
@@ -85,10 +133,18 @@
 </div>
 
 <div class="main">
+
+    <div id="alert" class="alert">
+        <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong style="margin:0; display:inline; float:center;">Error!</strong>
+        <p style="margin:0; display:inline; float:center;" id="error_message">Empty</p>
+    </div>
+
+    <br>
+
     {% block page %}
 
     {% endblock %}
-
 </div>
 
 <div class="foot">

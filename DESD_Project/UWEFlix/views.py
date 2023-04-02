@@ -34,13 +34,27 @@ def film(request, film_id):
 def profile(request):
     user_profile = UserProfile.objects.get(user_obj=request.user)
     lookup = Booking.objects.filter(user_email=request.user.email)
-    return render(request, 'UWEFlix/profile.html', {'profile': user_profile, 'bookings': lookup})
+    error_message = ''
+
+    if request.POST:
+        discount = int(request.POST.get('discount'))
+
+        if discount < 0 or discount > 100:
+            error_message = 'This discount value is invalid! Must be between 0-100!'
+        elif discount < user_profile.discount:
+            error_message = 'You cannot apply for a lower discount!'
+        else:
+            user_profile.applied_discount = discount
+            user_profile.save()
+
+    return render(request, 'UWEFlix/profile.html',
+                  {'profile': user_profile, 'bookings': lookup, 'error': error_message})
 
 
 # View handling for user logins.
 @unauthenticated_user
 def login_user(request):
-    error = None
+    error = ''
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -51,7 +65,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
 
-            group = request.user.groups.all()[0].name
+            group = get_group(user)
 
             if "CinemaManager" in group:
                 return redirect(cinema_dashboard)

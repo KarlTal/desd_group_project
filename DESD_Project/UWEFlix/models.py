@@ -31,7 +31,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_active', True)
 
         user = self._create_user(email, password, **extra_fields)
-        setup_user(user, 'AccountManager')
+        setup_user(user, 'Administrator')
 
         return user
 
@@ -124,10 +124,11 @@ class Showing(models.Model):
 # The database class for Ticket Bookings at UWEFlix.
 class Booking(models.Model):
     user_email = models.EmailField(null=True)
-    club = models.ForeignKey(Club, null=True, on_delete=models.SET_NULL)
+    unique_key = models.UUIDField(null=True)
+    club = models.ForeignKey(Club, null=True, blank=True, on_delete=models.SET_NULL)
     showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(default=timezone.now)
-    total_price = models.IntegerField(default=0)
+    total_price = models.FloatField(default=0)
     ticket_count = models.IntegerField(default=0)
 
     def __str__(self):
@@ -154,7 +155,10 @@ class UserProfile(models.Model):
     user_obj = models.OneToOneField(User, on_delete=models.CASCADE)
     club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE, blank=True)
     date_of_birth = models.DateField(default=timezone.now, auto_now_add=False, auto_now=False, blank=False)
-    credits = models.PositiveIntegerField(default=0)
+
+    credits = models.FloatField(default=0)
+    discount = models.IntegerField(null=True, blank=True, default=0)
+    applied_discount = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return self.user_obj.email + "'s Profile"
@@ -166,6 +170,7 @@ def setup_groups():
     Group.objects.get_or_create(name='CinemaManager')
     Group.objects.get_or_create(name='ClubRepresentative')
     Group.objects.get_or_create(name='Student')
+    Group.objects.get_or_create(name='Administrator')
 
 
 def setup_user(user, group_key):
@@ -178,3 +183,7 @@ def setup_user(user, group_key):
 
     # Create the users profile.
     UserProfile.objects.get_or_create(user_obj=user)
+
+
+def get_group(user):
+    return user.groups.all()[0].name
