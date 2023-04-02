@@ -56,8 +56,8 @@
         <li {% block about_active %}{% endblock %}><a href="{% url 'About' %}">About</a></li>
 
         {% if request.user.is_anonymous %}
-          <li {% block register_active %}{% if request.resolver_match.url_name == 'Register' %}class="active"{% endif %}{% endblock %}><a href="{% url 'Register' %}">Register</a></li>
-          <li {% block login_active %}{% if request.resolver_match.url_name == 'Login' %}class="active"{% endif %}{% endblock %} style="float:left"><a href="{% url 'Login' %}">Login</a></li>
+          <li {% block register_active %}{% if request.resolver_match.url_name == 'Register' %}class="active"{% endif %}{% endblock %} style="float:right"><a href="{% url 'Register' %}">Register</a></li>
+          <li {% block login_active %}{% if request.resolver_match.url_name == 'Login' %}class="active"{% endif %}{% endblock %} style="float:right"><a href="{% url 'Login' %}">Login</a></li>
         {% else %}
 
             {% if request.user|has_group:"AccountManager" %}
@@ -66,10 +66,10 @@
 
             {% elif request.user|has_group:"CinemaManager" %}
 
-            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
-            <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-            <li><a href="{% url 'View Reps' %}">Reps</a></li>
-            <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
+            <li {% block cmdashboard_active %}{% endblock %}><a href="{% url 'Dashboard' %}">Manage</a></li>
+            <li {% block cmclubs_active %}{% endblock %}><a href="{% url 'View Clubs' %}">Clubs</a></li>
+            <li {% block cmreps_active %}{% endblock %}><a href="{% url 'View Reps' %}">Reps</a></li>
+            <li {% block cdmapprove_active %}{% endblock %}><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
 
             {% elif request.user|has_group:"ClubRepresentative" %}
 
@@ -77,8 +77,9 @@
             <li><a href = "{% url 'View Club Transactions' %}">View All Transactions</a></li>
             {% endif %}
 
-            <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
-            <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
+
+            <li {% block logout_active %}{% if request.resolver_match.url_name == 'Logout' %}class="active"{% endif %}{% endblock %} style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
+            <li {% block profile_active %}{% if request.resolver_match.url_name == 'My Profile' %}class="active"{% endif %}{% endblock %} style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
 
         {% endif %}
     </ul>
