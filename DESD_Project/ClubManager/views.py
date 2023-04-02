@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
@@ -12,21 +13,51 @@ from .forms import *
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='ClubRepresentative')
 def rep_dashboard(request):
+    request.session["club_rep_login_attempts"] = 0
     return render(request, 'ClubManager/home.html', {})
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles='ClubRepresentative')
 def view_transactions(request):
-    # Gets all the bookings associated with the user's email
+    error_message = ''
     group = get_group(request.user)
 
+    # If the current user is an administrator, just display all the transactions.
     if group == 'Administrator':
-        club_transactions = Booking.objects.all()
-    else:
-        club_transactions = Booking.objects.filter(user_email=request.user.email)
+        month_transactions = Booking.objects.filter(
+            date__gte=timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0))
+        all_transactions = Booking.objects.all().order_by('date')
 
-    return render(request, 'ClubManager/view_transactions.html', {'club_transactions': club_transactions})
+        return render(request, 'ClubManager/view_transactions.html', {"month_transactions": month_transactions,
+                                                                      "all_transactions": all_transactions})
+    else:
+        # Otherwise, only display the current club reps translations if they input their rep id correctly.
+        if request.method == 'POST':
+            if request.user.username == request.POST['username']:
+                request.session["club_rep_login_attempts"] = 0
+
+                # Gets all the bookings associated with the user's email
+                month_transactions = Booking.objects.filter(
+                    user_email=request.user.email,
+                    date__gte=timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+                )
+
+                all_transactions = Booking.objects.filter(user_email=request.user.email).order_by('date')
+
+                return render(request, 'ClubManager/view_transactions.html', {"month_transactions": month_transactions,
+                                                                              "all_transactions": all_transactions})
+            else:
+                if request.session["club_rep_login_attempts"] >= 5:
+                    logout(request)
+                    return redirect('/')
+
+                error_message = 'Invalid Rep ID, ' + str(5 - int(request.session["club_rep_login_attempts"])) \
+                                + " attempts remaining."
+
+                request.session["club_rep_login_attempts"] += 1
+
+        return render(request, 'ClubManager/club_rep_verify.html', {'error': error_message})
 
 
 @login_required(login_url='/login')
