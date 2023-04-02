@@ -8,20 +8,12 @@
 
 <h1>View transactions </h1>
 
-<hr class="solid">
-
 <div>
 
-    {% if request.user.is_anonymous %}
-
-    <h2>No Permissions</h2>
-
-    {% else %}
-
-    <div class = 'control-container'>
+    <div class='control-container'>
         <div>
             <select name="tableViewer" id="tableViewer" onclick="myFunction()">
-                <option value="current_month_transactions">View Current Month</option>
+                <option value="month_transactions">View Current Month</option>
                 <option value="all_transactions">View All Transactions</option>
             </select>
         </div>
@@ -32,7 +24,7 @@
                 var viewer = document.getElementById("tableViewer");
                 var currentMonthView = document.getElementById("current_month-table");
                 var allView = document.getElementById("all_transactions-table");
-                if (viewer.value == "current_month_transactions"){
+                if (viewer.value == "month_transactions"){
                     currentMonthView.style.display = "block";
                 } else {
                     currentMonthView.style.display = "none";
@@ -46,9 +38,9 @@
         </script>
     </div>
 
-    <div class = 'table-container'>
+    <div class='table-container'>
 
-        <div class = 'current_month-table' id="current_month-table">
+        <div class='current_month-table' id="current_month-table">
             <h2>Current Month's Transactions</h2>
             <table style="width:100%">
                 <tr>
@@ -61,7 +53,7 @@
                     <th>Total Price</th>
                     <th>Ticket Count</th>
                 </tr>
-                {% for transactions in current_month_transactions %}
+                {% for transactions in month_transactions %}
                 <tr>
                     <td>{{transactions.id}}</td>
                     <td>{{transactions.showing.id}}</td>
@@ -76,7 +68,7 @@
             </table>
         </div>
 
-        <div class = 'all_transactions-table' id="all_transactions-table" style="display: none;" >
+        <div class='all_transactions-table' id="all_transactions-table" style="display: none;">
             <h2>All Club Transactions</h2>
             <table style="width:100%">
                 <tr>
@@ -109,10 +101,5 @@
     <br>
 
 </div>
-
-
-<hr class="solid">
-
-{% endif %}
 
 {% endblock %}

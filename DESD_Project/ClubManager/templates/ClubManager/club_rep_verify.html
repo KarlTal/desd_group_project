@@ -3,15 +3,13 @@
 {% block page %}
 
 <h1>Verify Rep Number</h1>
-{% if error_message %}
-    {{error_message}}
-{% endif %}
+
 <br>
+
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <label for="username">Rep ID</label>
     <input type="text" id="username" name="username" required/>
-    <br>
     <button class="button">View Transactions</button>
 </form>
 
