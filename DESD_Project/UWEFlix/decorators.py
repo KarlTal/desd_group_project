@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import redirect
 
 
@@ -25,7 +24,7 @@ def allowed_users(allowed_roles=None):
             if group == 'Administrator' or group in allowed_roles:
                 return view_func(request, *args, **kwargs)
             else:
-                return HttpResponse("You are not allowed to view this page")
+                return redirect('Homepage')
 
         return wrapper_func
 

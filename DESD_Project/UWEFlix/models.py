@@ -149,6 +149,7 @@ class Ticket(models.Model):
     booking = models.ForeignKey(Booking, null=True, on_delete=models.SET_NULL)
     ticket_type = models.ForeignKey(TicketType, null=True, on_delete=models.CASCADE)
 
+
 # The database class for user profiles at UWEFlix.
 class UserProfile(models.Model):
     user_obj = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
+from UWEFlix.forms import DateTimeLocalField
 from UWEFlix.models import *
 
 
@@ -29,7 +30,7 @@ class ScreenForm(ModelForm):
 
 # The Form used to add and modify Screenings of Films.
 class ShowingForm(ModelForm):
-    time = forms.DateTimeInput()
+    time = DateTimeLocalField()
 
     # Specify the Meta so Django knows what fields we're modifying.
     class Meta:

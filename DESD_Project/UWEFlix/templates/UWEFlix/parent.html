@@ -104,7 +104,8 @@
 
         {% if request.user|has_group:"AccountManager" %}
 
-        <!--TODO-->
+        <li><a href="{% url 'View Reps' %}">Reps</a></li>
+        <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
 
         {% endif %}
 
@@ -114,7 +115,6 @@
         <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
         <li><a href="{% url 'View Reps' %}">Reps</a></li>
         <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
-        <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
 
         {% endif %}
 

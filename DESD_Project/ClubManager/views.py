@@ -168,7 +168,8 @@ def add_club_rep(request, club_id):
 
     if request.method == 'POST':
         user_form = CreateUserForm(request.POST)
-        user_form.username = 'clubRepRandom'
+        user_form.username = 'ClubRep'
+
         club_rep_form = CreateClubRepForm(request.POST)
         club_rep_form.fields['club'].initial = club_id
 

@@ -9,12 +9,6 @@
 
 <div>
 
-    {% if request.user.is_anonymous %}
-
-    <h2>No Permissions</h2>
-
-    {% else %}
-
     <h2>All clubs</h2>
 
     <table style="width:100%">
@@ -48,12 +42,13 @@
             <td>{{club.email}}</td>
             <td>None</td>
             <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
-            <td><input type="submit" class="button" onclick="window.location.href='/clubs/add_rep/{{club.id}}';" value="Add a club rep"/></td>
+            <td><input type="submit" class="button" onclick="window.location.href='/clubs/add_rep/{{club.id}}';"
+                       value="Add a club rep"/></td>
             {% endfor %}
         </tr>
         {% for club in clubs %}
-            {% for rep in club_reps %}
-            {% if rep.club_id == club.id %}
+        {% for rep in club_reps %}
+        {% if rep.club_id == club.id %}
         <tr>
             <td>{{club.id}}</td>
             <td>{{club.name}}</td>
@@ -65,12 +60,12 @@
             <td>{{club.mobile}}</td>
             <td>{{club.discount}}%</td>
             <td>{{club.email}}</td>
-            <td>{{rep.id}}</td>
+            <td>{{rep.user_obj.username}}</td>
             <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
             <td>Already allocated</td>
         </tr>
         {% endif %}
-            {% endfor %}
+        {% endfor %}
         {% endfor %}
 
     </table>
@@ -82,7 +77,5 @@
 
 
 <hr class="solid">
-
-{% endif %}
 
 {% endblock %}
