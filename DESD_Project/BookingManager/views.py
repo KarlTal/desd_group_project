@@ -152,11 +152,7 @@ def cancel_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
 
     if request.user.email == booking.user_email:
-        booking.delete()
-
-        # Reduce the number of seats taken.
-        showing = booking.showing
-        showing.seats_taken = showing.seats_taken - booking.ticket_count
-        showing.save()
+        booking.pending_cancel = True
+        booking.save()
 
     return redirect(profile)

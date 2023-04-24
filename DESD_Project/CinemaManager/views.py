@@ -150,33 +150,15 @@ def delete_showing(request, showing_id):
 # View students
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
-def view_students(request):
+def approvals(request):
     students = User.objects.filter(groups__name='Student').filter(is_active=False)
-    return render(request, 'CinemaManager/view_students.html', {'students': students})
-
-
-# Approve student accounts
-@login_required(login_url='/login')
-@allowed_users(allowed_roles='CinemaManager')
-def approve_student(request, student_id):
-    student = User.objects.get(id=student_id)
-
-    # Set the student account to active. This is false by default and prevents the user from being able to log in.
-    student.is_active = True
-    student.save()
-
-    return redirect(view_students)
-
-
-# Approve discount rates
-@login_required(login_url='/login')
-@allowed_users(allowed_roles='CinemaManager')
-def view_discounts(request):
+    bookings = Booking.objects.filter(pending_cancel=True)
     discounts = UserProfile.objects.exclude(applied_discount=0)
-    return render(request, 'CinemaManager/view_discounts.html', {'discounts': discounts})
+    return render(request, 'CinemaManager/approvals.html',
+                  {'students': students, 'bookings': bookings, 'discounts': discounts})
 
 
-# Approve student accounts
+# Approve student discounts
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_discount(request, user_id, outcome):
@@ -188,5 +170,35 @@ def approve_discount(request, user_id, outcome):
 
     profile.applied_discount = 0
     profile.save()
+
+    return redirect(view_discounts)
+
+
+# Approve booking cancellations
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_booking(request, booking_id):
+    booking = Booking.objects.filter(id=booking_id)
+
+    booking.delete()
+
+    # Reduce the number of seats taken.
+    showing = booking.showing
+    showing.seats_taken = showing.seats_taken - booking.ticket_count
+    showing.save()
+
+    return redirect(approvals)
+
+
+# Approve student accounts
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_student(request, student_id):
+    student = User.objects.get(id=student_id)
+
+    # Set the student account to active. This is false by default and prevents the
+    # user from being able to log in.
+    student.is_active = True
+    student.save()
 
     return redirect(view_discounts)

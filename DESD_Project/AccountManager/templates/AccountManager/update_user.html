@@ -1,0 +1,28 @@
+{% extends 'AccountManager/parent.html' %}
+
+{% block page %}
+
+<h1>Update: {{user.email}}</h1>
+
+<hr class="solid">
+
+<div class="container">
+    <form id="update" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{user_form.as_p}}
+
+        {% csrf_token %}
+
+        {{profile_form.as_p}}
+    </form>
+</div>
+
+<br>
+
+<div>
+    <button class="button" form="update">Update</button>
+    <button class="button" onclick="window.location.href='/accounts/delete_user/{{user.id}}'">Delete User</button>
+</div>
+
+{% endblock %}

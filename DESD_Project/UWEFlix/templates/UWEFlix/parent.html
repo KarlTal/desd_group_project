@@ -104,7 +104,7 @@
 
         {% if request.user|has_group:"AccountManager" %}
 
-        <li><a href="{% url 'View Reps' %}">Reps</a></li>
+        <li><a href="{% url 'View Reps' %}">Representatives</a></li>
         <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
 
         {% endif %}
@@ -113,14 +113,25 @@
 
         <li><a href="{% url 'Dashboard' %}">Manage</a></li>
         <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-        <li><a href="{% url 'View Reps' %}">Reps</a></li>
-        <li><a href="{% url 'View Unapproved Students' %}">Approve Students</a></li>
+        <li><a href="{% url 'View Reps' %}">Representatives</a></li>
+        <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
 
         {% endif %}
 
         {% if request.user|has_group:"ClubRepresentative" %}
 
-        <li><a href="{% url 'View Club Transactions' %}">View All Transactions</a></li>
+        <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
+
+        {% endif %}
+
+        {% if request.user|has_group:"Administrator" %}
+
+        <li><a href="{% url 'Account Dashboard' %}">Accounts</a></li>
+        <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+        <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
+        <li><a href="{% url 'View Reps' %}">Representatives</a></li>
+        <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
+        <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
 
         {% endif %}
 

@@ -130,6 +130,7 @@ class Booking(models.Model):
     date = models.DateTimeField(default=timezone.now)
     total_price = models.FloatField(default=0)
     ticket_count = models.IntegerField(default=0)
+    pending_cancel = models.BooleanField(default=False)
 
     def __str__(self):
         return "Booking (" + str(self.showing.film.title) + ")"

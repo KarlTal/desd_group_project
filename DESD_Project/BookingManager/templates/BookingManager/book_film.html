@@ -173,7 +173,7 @@
 
     <div class="item">
 
-        {% if request.user|has_group_exact:"ClubRepresentative" %}
+        {% if request.user|has_group:"ClubRepresentative" %}
 
         <h1><u>{{club.name}} Club Booking</u></h1>
 

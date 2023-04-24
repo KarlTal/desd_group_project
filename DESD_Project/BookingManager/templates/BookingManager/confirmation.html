@@ -19,4 +19,10 @@
     <h3>Description: {{booking.showing.film.description}}</h3>
 </div>
 
+{% if booking.pending_cancel %}
+    <h1>This booking is pending cancellation!</h1>
+{% else %}
+    <button class="button" onclick="window.location.href='/booking/cancel_booking/{{booking.id}}'">Cancel Booking</button>
+{% endif %}
+
 {% endblock %}

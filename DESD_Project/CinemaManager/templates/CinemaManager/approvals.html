@@ -1,0 +1,86 @@
+{% extends 'ClubManager/parent.html' %}
+
+{% block page %}
+
+
+<h1>Approvals</h1>
+
+<div>
+
+    <h2>Approve Student Accounts</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Surname</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Approve</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{student.id}}</td>
+            <td>{{student.first_name}}</td>
+            <td>{{student.last_name}}</td>
+            <td>{{student.username}}</td>
+            <td>{{student.email}}</td>
+            <td><a href="/manager/approve_student/{{student.id}}">Approve</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <h2>Approve Cancellations</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>Email</th>
+            <th>Club</th>
+            <th>Showing</th>
+            <th>Date</th>
+            <th>Tickets</th>
+            <th>Approve</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{booking.user_email}}</td>
+            <td>{{booking.club}}</td>
+            <td>{{booking.showing}}</td>
+            <td>{{booking.date}}</td>
+            <td>{{booking.ticket_count}}</td>
+            <td><a href="/manager/approve_booking/{{booking.id}}">Approve</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <h2>Approve Discounts</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>User</th>
+            <th>Club</th>
+            <th>Current</th>
+            <th>Applied</th>
+            <th>Approve</th>
+        </tr>
+        {% for discount in discounts %}
+        <tr>
+            <td>{{discount.user_obj}}</td>
+            <td>{{discount.club}}</td>
+            <td>{{discount.discount}}%</td>
+            <td>{{discount.applied_discount}}%</td>
+            <td><a href="/manager/approve_discount/{{discount.user_obj.id}}:1">Approve</a> / <a
+                    href="/manager/approve_discount/{{discount.user_obj.id}}:0">Reject</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+</div>
+
+
+{% endblock %}
