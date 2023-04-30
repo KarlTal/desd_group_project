@@ -16,6 +16,7 @@
             counter = 1;
         }
     }, 5000);
+
 </script>
 
 <div class="slider-body">
@@ -72,38 +73,10 @@
         {% for film in films %}
 
         <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
-        </div>
-
-        <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
-        </div>
-
-        <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
-        </div>
-
-        <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
-        </div>
-
-        <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
-        </div>
-
-         <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
-        </div>
-
-        <div class="film">
-            <img class="images" src="{{film.image}}" alt="{{film.title}}">
-            <h6 class="headers">{{film.title}}</h6>
+            <a href="/view_film/{{film.id}}">
+                <img class="images" src="{{film.image}}" alt="{{film.title}}">
+                <h6 class="headers">{{film.title}}</h6>
+            </a>
         </div>
 
         {% endfor %}
@@ -112,5 +85,7 @@
     </div>
 </div>
 
+<br>
+<br>
 
 {% endblock %}

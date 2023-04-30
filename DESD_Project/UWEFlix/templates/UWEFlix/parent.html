@@ -29,6 +29,7 @@
             var error = document.getElementById("error_message");
             error.innerHTML = message;
         }
+
     </script>
 </head>
 
@@ -38,12 +39,14 @@
     <div class="top_bar">
 
         <ul>
-            <li><img class="logo" src="/Assets/logo.png"/></li>
-            <li><a class="active" href="/">Home</a></li>
+            <a href="/">
+                <li><img class="logo" src="/Assets/logo.png"/></li>
+            </a>
 
             {% if request.user.is_anonymous %}
 
             <li style="float:right"><a href="{% url 'Login' %}">Login</a></li>
+            <li style="float:right"><a href="{% url 'Login' %}">About</a></li>
 
             {% else %}
 
