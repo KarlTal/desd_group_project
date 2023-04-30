@@ -1,25 +1,12 @@
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+* {
+    font-family: "Montserrat", sans-serif;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
-.top_bar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background-color: gray;
+.main {
+    font-size: 25px;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
 }
 
 .foot {
@@ -34,9 +21,24 @@ tr:nth-child(even) {
     color: white;
 }
 
-.main {
-    font-size: 25px;
-    padding: 70px;
-    display: flex;
-    flex-direction: column;
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.alert {
+    text-align: center;
+    display: none;
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
 }

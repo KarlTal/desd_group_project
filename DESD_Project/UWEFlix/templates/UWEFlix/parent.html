@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 {% load customtags %}
 {% load static %}
+
 <link rel="stylesheet" href="{% static 'UWEFlix/main.css' %}">
+<link rel="stylesheet" href="{% static 'UWEFlix/tables.css' %}">
+<link rel="stylesheet" href="{% static 'UWEFlix/navbar.css' %}">
 
 <head>
     <meta charset="UTF-8">
@@ -26,121 +30,64 @@
             error.innerHTML = message;
         }
 
-
-
     </script>
-
-    <style>
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          background-color: #333;
-        }
-
-        li {
-          float: left;
-          border-left:1px solid #bbb;
-          border-right:1px solid #bbb;
-        }
-
-        li:last-child {
-          border-right: none;
-        }
-
-        li a {
-          display: block;
-          color: white;
-          text-align: center;
-          padding: 25px 30px;
-          text-decoration: none;
-        }
-
-        li a:hover:not(.active) {
-          background-color: #111;
-        }
-
-        .active {
-          background-color: #04AA6D;
-        }
-
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .alert {
-            text-align: center;
-            display: none;
-            padding: 20px;
-            background-color: #f44336;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="top_bar">
+<div class="top_header">
+    <div class="top_bar">
 
-    <ul>
-        <li><a class="active" href="/">Home</a></li>
+        <ul>
+            <li><img class="logo" src="/Assets/logo.png"/></li>
+            <li><a class="active" href="/">Home</a></li>
 
-        {% if request.user.is_anonymous %}
+            {% if request.user.is_anonymous %}
 
-        <li style="float:right"><a href="{% url 'Login' %}">Login</a></li>
+            <li style="float:right"><a href="{% url 'Login' %}">Login</a></li>
 
-        {% else %}
+            {% else %}
 
-        {% if request.user|has_group:"AccountManager" %}
+            {% if request.user|has_group:"AccountManager" %}
 
-        <li><a href="{% url 'View Reps' %}">Representatives</a></li>
-        <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
+            <li><a href="{% url 'View Reps' %}">Representatives</a></li>
+            <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
 
-        {% endif %}
+            {% endif %}
 
-        {% if request.user|has_group:"CinemaManager" %}
+            {% if request.user|has_group:"CinemaManager" %}
 
-        <li><a href="{% url 'Dashboard' %}">Manage</a></li>
-        <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-        <li><a href="{% url 'View Reps' %}">Representatives</a></li>
-        <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
+            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+            <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
+            <li><a href="{% url 'View Reps' %}">Representatives</a></li>
+            <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
 
-        {% endif %}
+            {% endif %}
 
-        {% if request.user|has_group:"ClubRepresentative" %}
+            {% if request.user|has_group:"ClubRepresentative" %}
 
-        <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
+            <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
 
-        {% endif %}
+            {% endif %}
 
-        {% if request.user|has_group:"Administrator" %}
+            {% if request.user|has_group:"Administrator" %}
 
-        <li><a href="{% url 'Account Dashboard' %}">Accounts</a></li>
-        <li><a href="{% url 'Dashboard' %}">Manage</a></li>
-        <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-        <li><a href="{% url 'View Reps' %}">Representatives</a></li>
-        <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
-        <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
+            <li><a href="{% url 'Account Dashboard' %}">Accounts</a></li>
+            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+            <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
+            <li><a href="{% url 'View Reps' %}">Representatives</a></li>
+            <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
+            <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
 
-        {% endif %}
+            {% endif %}
 
-        <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
-        <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
+            <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
+            <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
 
-        {% endif %}
-    </ul>
+            {% endif %}
+        </ul>
 
+    </div>
 </div>
 
 <div class="main">
