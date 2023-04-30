@@ -171,7 +171,7 @@ def approve_discount(request, user_id, outcome):
     profile.applied_discount = 0
     profile.save()
 
-    return redirect(view_discounts)
+    return redirect(approvals)
 
 
 # Approve booking cancellations
@@ -180,12 +180,13 @@ def approve_discount(request, user_id, outcome):
 def approve_booking(request, booking_id):
     booking = Booking.objects.filter(id=booking_id)
 
-    booking.delete()
-
     # Reduce the number of seats taken.
     showing = booking.showing
     showing.seats_taken = showing.seats_taken - booking.ticket_count
     showing.save()
+
+    # Delete the booking.
+    booking.delete()
 
     return redirect(approvals)
 
@@ -201,4 +202,4 @@ def approve_student(request, student_id):
     student.is_active = True
     student.save()
 
-    return redirect(view_discounts)
+    return redirect(approvals)

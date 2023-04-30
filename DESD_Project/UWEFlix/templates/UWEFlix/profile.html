@@ -10,7 +10,32 @@
     <p>Name: {{user.first_name}} {{user.last_name}}</p>
     <p>Email: {{user.email}}</p>
     <p>Date of Birth: {{profile.date_of_birth}}</p>
-    <p>Total Credit: £{{profile.credits}}</p>
+    <p>Total Credit: £{{profile.credits|floatformat:2}}</p>
+</div>
+
+<br>
+
+<div>
+    <h3>My Bookings</h3>
+
+    <table style="width:100%">
+        <tr>
+            <th>Showing</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Ticket Count</th>
+            <th>View</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{booking.showing.film}}</td>
+            <td>{{booking.date}}</td>
+            <td>£{{booking.total_price}}</td>
+            <td>{{booking.ticket_count}}</td>
+            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
 <br>
@@ -41,28 +66,5 @@
 </div>
 
 <br>
-
-<div>
-    <h3>My Bookings</h3>
-
-    <table style="width:100%">
-        <tr>
-            <th>Showing</th>
-            <th>Date</th>
-            <th>Total Price</th>
-            <th>Ticket Count</th>
-            <th>View</th>
-        </tr>
-        {% for booking in bookings %}
-        <tr>
-            <td>{{booking.showing.film}}</td>
-            <td>{{booking.date}}</td>
-            <td>£{{booking.total_price}}</td>
-            <td>{{booking.ticket_count}}</td>
-            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
 
 {% endblock %}

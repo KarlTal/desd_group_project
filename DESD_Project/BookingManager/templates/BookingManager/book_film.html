@@ -41,15 +41,13 @@
             var child_cost = document.getElementById("child_tick_quantity").value * "{{child_ticket.price}}"
             var adult_cost = document.getElementById("adult_tick_quantity").value * "{{adult_ticket.price}}"
             var student_cost = document.getElementById("student_tick_quantity").value * "{{student_ticket.price}}"
-
             var discount = "{{discount}}";
-            var price = ((child_cost + adult_cost + student_cost) * (1 - (discount / 100))).toFixed(2);
 
             document.getElementById("child_total").innerHTML = "£" + child_cost.toFixed(2)
             document.getElementById("adult_total").innerHTML = "£" + adult_cost.toFixed(2)
             document.getElementById("student_total").innerHTML = "£" + student_cost.toFixed(2)
 
-            total_price.innerHTML = "£" + price;
+            total_price.innerHTML = "£" + getFinalPrice() + " (" + discount + "% off!)";
         }
 
         function showOverlay() {
@@ -83,8 +81,26 @@
 
             document.getElementById("final_total").innerHTML = "Total Cost: " + document.getElementById("total_price").innerHTML;
 
+            var credits = parseInt({{profile.credits}});
+            if (credits > 0) {
+                var final_price = getFinalPrice();
+                var consumed_credit = Math.min(credits, final_price);
+                document.getElementById("final_credits").innerHTML = "Will use £" + consumed_credit + " of credit.";
+                document.getElementById("final_cost").innerHTML = "Final Total: £" + (final_price - consumed_credit).toFixed(2);
+            }
+
             var overlay = document.getElementById("main_overlay");
             overlay.style.display = "block";
+        }
+
+        function getFinalPrice() {
+            var total_price = document.getElementById("total_price");
+            var child_cost = document.getElementById("child_tick_quantity").value * "{{child_ticket.price}}"
+            var adult_cost = document.getElementById("adult_tick_quantity").value * "{{adult_ticket.price}}"
+            var student_cost = document.getElementById("student_tick_quantity").value * "{{student_ticket.price}}"
+
+            var discount = "{{discount}}";
+            return ((child_cost + adult_cost + student_cost) * (1 - (discount / 100))).toFixed(2);
         }
 
         function hideOverlay() {
@@ -162,7 +178,7 @@
             background-color: #fefefe;
             margin: auto;
             padding: 20px;
-            border: 1px solid #888;
+            border-radius: 10px;
             width: 80%;
         }
     </style>
@@ -180,6 +196,12 @@
         {% else %}
 
         <h1><u>Film Booking</u></h1>
+
+        {% if profile.credits > 0 %}
+
+        <p>Your UWEFlix Credit: £{{profile.credits}}</p>
+
+        {% endif %}
 
         {% endif %}
 
@@ -262,10 +284,6 @@
             <div class="item">
                 <h3>Total:</h3>
                 <p id="total_price">£0.00</p>
-
-                {% if discount > 0 %}
-                ({{discount}}% off!)
-                {% endif %}
             </div>
         </form>
 
@@ -298,7 +316,10 @@
                 <p id="final_adult"></p>
                 <p id="final_child"></p>
                 <p id="final_student"></p>
+
                 <h4 id="final_total"></h4>
+                <h4 id="final_credits"></h4>
+                <h4 id="final_cost"></h4>
             </div>
         </div>
 
