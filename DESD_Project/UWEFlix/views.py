@@ -21,9 +21,16 @@ def film(request, film_id):
     if film_id:
         lookup = Film.objects.get(id=film_id)
         showings = Showing.objects.filter(film=lookup)
+        dates = []
+
+        for showing in showings:
+            key = showing.time.strftime("%A %d/%m/%y")
+
+            if key not in dates:
+                dates.append(key)
 
         # Render the page.
-        return render(request, 'UWEFlix/film.html', {'film': lookup, 'showings': showings})
+        return render(request, 'UWEFlix/film.html', {'film': lookup, 'showings': showings, 'dates': dates})
 
     # Redirect back to the homepage.
     return redirect(home)

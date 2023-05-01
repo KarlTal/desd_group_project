@@ -1,3 +1,6 @@
+import math
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
@@ -107,8 +110,18 @@ def delete_screen(request, screen_id):
 def add_showing(request):
     if request.POST:
         form = ShowingForm(request.POST)
+
         if form.is_valid():
-            form.save()
+            showing = form.save()
+
+            bulk_add = request.POST.get('bulk-add')
+            if bulk_add:
+                original_time = showing.time
+
+                for i in range(6):
+                    original_time = original_time + timedelta(minutes=(math.ceil(showing.film.duration / 30) * 30))
+                    Showing.objects.create(film=showing.film, screen=showing.screen, time=original_time, seats_taken=0)
+
         return redirect(cinema_dashboard)
 
     # Render the page.

@@ -95,7 +95,9 @@ class Film(models.Model):
     age_rating = models.CharField(max_length=5, choices=RATINGS)
     duration = models.IntegerField()
     description = models.CharField(max_length=255)
+
     image = models.ImageField(upload_to='Assets/', null=True)
+    trailer = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.title

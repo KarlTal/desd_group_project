@@ -4,13 +4,17 @@
 
 <h1>Add Showing</h1>
 
-<hr class="solid">
+
 
 <div class="container">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{form.as_p}}
+
+        <label for="bulk-add">Add Bulk?</label>
+        <input type="checkbox" id="bulk-add" name="bulk-add" value="bulk-add"><br>
+        <br>
 
         <button class="button">Submit</button>
     </form>

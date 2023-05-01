@@ -9,99 +9,117 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
     <script>
-        const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        function changePeriod(period) {
 
-        $(document).ready( function() {
-            updateDate(new Date());
-        });
-
-        function updateDate(date) {
-            var date_picker = document.getElementById("date_picker");
-            var value = date_picker.value;
-
-            var now = new Date(value.replaceAll('-', '/'));
-            if (date) now = date;
-
-            var month = (now.getMonth() + 1);
-            var day = now.getDate();
-
-            if (month < 10)
-                month = "0" + month;
-            if (day < 10)
-                day = "0" + day;
-            var today = now.getFullYear() + '-' + month + '-' + day;
-
-            $('#date_picker').val(today);
-            document.getElementById("current_date").innerHTML = "Selected Date: " + weekday[now.getDay()] + " " + today;
-
-            updateTable(now);
         }
 
-        function updateTable(check_date) {
-            table = document.getElementById("available_viewings");
-            rows = table.rows;
-
-            for (i = 1; i < rows.length; i++) {
-                var showing = rows[i];
-                var date = showing.cells[3];
-                var data = date.innerHTML.replaceAll(',', "").split(" ");
-                var parsed_date = new Date((month.indexOf(data[0]) + 1) + "/" + data[1] + "/" + data[2])
-
-                if (!isSameDay(check_date, parsed_date)) {
-                    showing.style.display = "none";
-                } else {
-                    showing.style.display = "";
-                }
-            }
-        }
-
-        function showAll() {
-            for (i = 1; i < rows.length; i++) {
-                var showing = rows[i];
-                showing.style.display = "";
-            }
-        }
-
-        function isSameDay(first, second) {
-            return first.getFullYear() === second.getFullYear() &&
-                first.getMonth() === second.getMonth() &&
-                first.getDate() === second.getDate();
-        }
     </script>
 </head>
 
-<h1>{{film.title}} ({{film.age_rating}})</h1>
-<p>Runtime: {{film.duration}} mins</p>
-<p>{{film.description}}</p>
+<div class="vertical">
+    <div class="horizontal">
+        <div class="film-details">
+            <img class="images" src="/{{film.image}}" alt="{{film.title}}">
 
-<h2>Current Showings</h2>
+            <div class="combination">
+                <iframe src="{{film.trailer}}" title="{{film.title}} Trailer"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
 
-<div>
-    <input type="date" id="date_picker" onchange="updateDate()">
-    <button onclick="showAll()">Show All</button>
-    <p id="current_date"></p>
+                <div class="film-info">
+                    <h1>{{film.title}} ({{film.age_rating}})</h1>
+                    <h6>Runtime: {{film.duration}} mins</h6>
+                    <p>{{film.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="horizontal">
+            <h2>Buy Tickets for {{film.title}}</h2>
+        </div>
+
+        <div class="date-options">
+            <a href="javascript:void(0)" onclick="changePeriod('all')">
+                <div class="date-option" id="all" style="background-color: #04AA6D;">
+                    <h5>All Films</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('today')">
+                <div class="date-option" id="today">
+                    <h5>Today</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('monday')">
+                <div class="date-option" id="monday">
+                    <h5>Monday</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('tuesday')">
+                <div class="date-option" id="tuesday">
+                    <h5>Tuesday</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('wednesday')">
+                <div class="date-option" id="wednesday">
+                    <h5>Wednesday</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('thursday')">
+                <div class="date-option" id="thursday">
+                    <h5>Thursday</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('friday')">
+                <div class="date-option" id="friday">
+                    <h5>Friday</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('saturday')">
+                <div class="date-option" id="saturday">
+                    <h5>Saturday</h5>
+                </div>
+            </a>
+            <a href="javascript:void(0)" onclick="changePeriod('sunday')">
+                <div class="date-option" id="sunday">
+                    <h5>Sunday</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="horizontal">
+            <div class="thin">
+                {% for date in dates %}
+                <hr>
+                <div class="horizontal" id="{{date}}">
+                    <div class="horizontal" style="width: 50%;">
+                        <h5 class="date">{{date}}</h5>
+                    </div>
+
+                    <div class="showings" style="width: 50%;">
+                        {% for showing in showings %}
+                        {% if showing.time|date:"l d/m/y" == date %}
+                        <a href="/booking/book_film/{{film.id}}:{{showing.id}}">
+                            <div class="showing">
+                                <h6 class="times">{{showing.time|date:"H:i"}}</h6>
+                            </div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
 </div>
 
 <br>
-
-<table style="width:100%" id="available_viewings">
-    <tr>
-        <th>ID</th>
-        <th>Film</th>
-        <th>Screen</th>
-        <th>Time</th>
-        <th>Edit</th>
-    </tr>
-    {% for showing in showings %}
-    <tr>
-        <td>{{showing.id}}</td>
-        <td>{{showing.film}}</td>
-        <td>{{showing.screen}}</td>
-        <td>{{showing.time}}</td>
-        <td><a href="/booking/book_film/{{film.id}}:{{showing.id}}">Book</a></td>
-    </tr>
-    {% endfor %}
-</table>
 
 {% endblock %}
