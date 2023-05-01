@@ -67,7 +67,7 @@
     width: 80px;
     height: 50px;
     background-color: #e52729;
-    margin: 20px 0px 0px 15px;
+    margin: 0px 0px 0px 15px;
     border-radius: 10px;
     color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -97,9 +97,17 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-.date-option:hover {
+.date-option.selected {
+    background-color: #04AA6D;
+}
+
+.date-option:not(.selected):hover {
   background-color: #525252;
   transition: 0.25s;
+}
+
+.hidden {
+  display: none;
 }
 
 .thin {
@@ -108,4 +116,11 @@
 
 a {
     text-decoration: none;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid white;
+    width: 75%;
+    height: 1px;
 }

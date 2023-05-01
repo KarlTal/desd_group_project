@@ -20,7 +20,8 @@ def film(request, film_id):
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
         lookup = Film.objects.get(id=film_id)
-        showings = Showing.objects.filter(film=lookup)
+
+        showings = Showing.objects.filter(time__gte=timezone.now()).filter(film=lookup)
         dates = []
 
         for showing in showings:
@@ -29,8 +30,11 @@ def film(request, film_id):
             if key not in dates:
                 dates.append(key)
 
+        weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
         # Render the page.
-        return render(request, 'UWEFlix/film.html', {'film': lookup, 'showings': showings, 'dates': dates})
+        return render(request, 'UWEFlix/film.html', {'film': lookup, 'showings': showings, 'dates': dates,
+                                                     'weekdays': weekdays})
 
     # Redirect back to the homepage.
     return redirect(home)

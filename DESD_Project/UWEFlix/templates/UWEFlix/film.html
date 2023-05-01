@@ -8,11 +8,104 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
-    <script>
-        function changePeriod(period) {
+    <script type="text/javascript">
+        previous = "all";
 
+        $(document).ready( function() {
+            const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+            const date = new Date();
+            const currentWeekdayIndex = (date.getDay() + 6) % 7;
+
+            // Loop through weekdays and hide elements with IDs up to and including the current day
+            for (let i = 0; i < weekdays.length; i++) {
+                const weekday = weekdays[i];
+
+                if (i <= currentWeekdayIndex) {
+                    document.getElementById(weekday).style.display = 'none';
+                } else {
+                    document.getElementById(weekday + "2").style.display = 'none';
+                }
+            }
+        });
+
+        function changePeriod(period) {
+            if (period == window.previous) {
+                return;
+            }
+
+            const element = document.getElementById(period);
+            const previous = document.getElementById(window.previous);
+
+            element.classList.add('selected');
+            previous.classList.remove('selected');
+
+            window.previous = period;
+
+            updateVisibility(period);
         }
 
+        function updateVisibility(period) {
+            const list = "{{dates}}";
+            let arr = list.replace(/['\[\]']/g, '').replace(/&#x27;/g, "").split(', ');
+
+            if (period == 'all') {
+                arr.forEach(function(date) {
+                    const element = document.getElementById(date);
+                    if (element) element.classList.remove("hidden");
+                });
+                return;
+            }
+
+            const date = new Date();
+            const nextWeek = period.includes('2');
+            let formatted = formatDate(date);
+
+            if (period != 'today') {
+                for (let i = 0; i < 7; i++) {
+                    const check = new Date(date);
+
+                    const value = i + (nextWeek ? 7 : 0);
+                    check.setDate(date.getDate() + value);
+
+                    if (getWeekday(check) == period.replace("2", "")) {
+                        formatted = formatDate(check);
+                        break;
+                    }
+                }
+            }
+
+            let value = "no";
+
+            for (let i = 0; i < arr.length; i++) {
+                const date = arr[i];
+                const element = document.getElementById(date);
+
+                if (element) {
+                    if (formatted == date) {
+                        element.classList.remove("hidden");
+                    } else {
+                        element.classList.add("hidden");
+                    }
+                }
+            }
+
+            document.getElementById('debug').innerHTML = typeof formatted + " - val=" + value + " - " + arr[0] + " - " + formatted;
+        }
+
+        function formatDate(date) {
+          const weekday = getWeekday(date);
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+          const year = date.getFullYear().toString().slice(2);
+
+          return `${weekday} ${day}/${month}/${year}`;
+        }
+
+        function getWeekday(date) {
+            const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return weekdays[date.getDay()];
+        }
     </script>
 </head>
 
@@ -43,71 +136,56 @@
 
         <div class="date-options">
             <a href="javascript:void(0)" onclick="changePeriod('all')">
-                <div class="date-option" id="all" style="background-color: #04AA6D;">
-                    <h5>All Films</h5>
+                <div class="date-option selected" id="all">
+                    <h5>All Showings</h5>
                 </div>
             </a>
+
             <a href="javascript:void(0)" onclick="changePeriod('today')">
                 <div class="date-option" id="today">
                     <h5>Today</h5>
                 </div>
             </a>
-            <a href="javascript:void(0)" onclick="changePeriod('monday')">
-                <div class="date-option" id="monday">
-                    <h5>Monday</h5>
+
+            {% for weekday in weekdays %}
+            <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}')">
+                <div class="date-option" id="{{weekday}}">
+                    <h5>{{weekday}}</h5>
                 </div>
             </a>
-            <a href="javascript:void(0)" onclick="changePeriod('tuesday')">
-                <div class="date-option" id="tuesday">
-                    <h5>Tuesday</h5>
+            {% endfor %}
+
+            {% for weekday in weekdays %}
+            <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}2')">
+                <div class="date-option" id="{{weekday}}2">
+                    <h5>{{weekday}}</h5>
                 </div>
             </a>
-            <a href="javascript:void(0)" onclick="changePeriod('wednesday')">
-                <div class="date-option" id="wednesday">
-                    <h5>Wednesday</h5>
-                </div>
-            </a>
-            <a href="javascript:void(0)" onclick="changePeriod('thursday')">
-                <div class="date-option" id="thursday">
-                    <h5>Thursday</h5>
-                </div>
-            </a>
-            <a href="javascript:void(0)" onclick="changePeriod('friday')">
-                <div class="date-option" id="friday">
-                    <h5>Friday</h5>
-                </div>
-            </a>
-            <a href="javascript:void(0)" onclick="changePeriod('saturday')">
-                <div class="date-option" id="saturday">
-                    <h5>Saturday</h5>
-                </div>
-            </a>
-            <a href="javascript:void(0)" onclick="changePeriod('sunday')">
-                <div class="date-option" id="sunday">
-                    <h5>Sunday</h5>
-                </div>
-            </a>
+            {% endfor %}
+
         </div>
 
         <div class="horizontal">
             <div class="thin">
                 {% for date in dates %}
-                <hr>
-                <div class="horizontal" id="{{date}}">
-                    <div class="horizontal" style="width: 50%;">
-                        <h5 class="date">{{date}}</h5>
-                    </div>
+                <div id="{{date}}-section">
+                    <hr>
+                    <div class="horizontal" id="{{date}}">
+                        <div class="horizontal" style="width: 50%;">
+                            <h5 class="date">{{date}}</h5>
+                        </div>
 
-                    <div class="showings" style="width: 50%;">
-                        {% for showing in showings %}
-                        {% if showing.time|date:"l d/m/y" == date %}
-                        <a href="/booking/book_film/{{film.id}}:{{showing.id}}">
-                            <div class="showing">
-                                <h6 class="times">{{showing.time|date:"H:i"}}</h6>
-                            </div>
-                        </a>
-                        {% endif %}
-                        {% endfor %}
+                        <div class="showings" style="width: 50%;">
+                            {% for showing in showings %}
+                            {% if showing.time|date:"l d/m/y" == date %}
+                            <a href="/booking/book_film/{{film.id}}:{{showing.id}}">
+                                <div class="showing">
+                                    <h6 class="times">{{showing.time|date:"H:i"}}</h6>
+                                </div>
+                            </a>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
