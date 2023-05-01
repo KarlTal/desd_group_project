@@ -213,30 +213,6 @@
     }
 },
 {
-    "model": "UWEFlix.tickettype",
-    "pk": 1,
-    "fields": {
-        "ticketType": "Adult",
-        "price": "7.99"
-    }
-},
-{
-    "model": "UWEFlix.tickettype",
-    "pk": 2,
-    "fields": {
-        "ticketType": "Child",
-        "price": "4.99"
-    }
-},
-{
-    "model": "UWEFlix.tickettype",
-    "pk": 3,
-    "fields": {
-        "ticketType": "Student",
-        "price": "5.99"
-    }
-},
-{
     "model": "UWEFlix.userprofile",
     "pk": 1,
     "fields": {
