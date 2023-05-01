@@ -190,3 +190,52 @@ def approve_discount(request, user_id, outcome):
     profile.save()
 
     return redirect(view_discounts)
+
+
+
+#Approve club rep applications
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_club_rep_application(request,student_id,outcome):
+    user = User.objects.get(id=student_id)
+    profile = UserProfile.objects.get(user_obj=user)
+
+    if outcome == '1':
+        #Set user's group to club rep
+        group = Group.objects.get(name="ClubRepresentative")
+        current_group = Group.objects.get(name="Student")
+        club = Club.objects.get(id=profile.club.id)
+        user.groups.add(group)
+        #Remove from student group
+        user.groups.remove(current_group)
+        #Generate club rep id
+        profile.applied_club_rep = False
+        user.username = int(profile.id) + 1000
+        user.save()
+        profile.save()
+        #Update club has_rep field
+        club.has_club_rep=True
+        # If they are other applications then deny all of them as there can only be one club rep per club
+        users_applying_to_the_same_club = UserProfile.objects.filter(club = profile.club)
+        for same_user in users_applying_to_the_same_club:
+            if same_user.id == profile.id:
+                pass
+            else:
+                same_user.club = None
+                same_user.applied_club_rep = False
+                same_user.save()
+    else:
+        profile.applied_club_rep = False
+        profile.club_id = None
+        profile.save()
+    return redirect(view_users_applications)
+
+# View for approving club reps applications
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def view_users_applications(request):
+    users = UserProfile.objects.exclude(applied_club_rep=0)
+    return render(request, 'CinemaManager/view_club_rep_applications.html', {'users': users})
+
+
+

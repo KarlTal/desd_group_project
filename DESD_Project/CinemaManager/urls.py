@@ -26,6 +26,8 @@ urlpatterns = [
     path('approve_student/<student_id>', views.approve_student, name='Approve Student'),
     path('view_discounts/', views.view_discounts, name="View Unapproved Discounts"),
     path('approve_discount/<user_id>:<outcome>', views.approve_discount, name='Approve Discount'),
+    path('view_club_reps_applications/',views.view_users_applications,name = "View Unapproved Club Rep Applications"),
+    path('approve_club_rep_application/<student_id>:<outcome>',views.approve_club_rep_application, name = "Approve Club Rep Application")
 
 ]
 

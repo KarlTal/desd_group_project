@@ -82,7 +82,7 @@ class Club(models.Model):
     mobile = models.CharField(max_length=255)
     discount = models.IntegerField()
     email = models.EmailField()
-
+    has_club_rep = models.BooleanField(blank=True, null=True,default=0)
     def __str__(self):
         return str(self.name)
 
@@ -152,7 +152,7 @@ class Ticket(models.Model):
 
 # The database class for user profiles at UWEFlix.
 class UserProfile(models.Model):
-    user_obj = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_obj = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE, blank=True)
     date_of_birth = models.DateField(default=timezone.now, auto_now_add=False, auto_now=False, blank=False)
 
@@ -160,6 +160,7 @@ class UserProfile(models.Model):
     discount = models.IntegerField(null=True, blank=True, default=0)
     applied_discount = models.IntegerField(null=True, blank=True, default=0)
 
+    applied_club_rep = models.BooleanField(null=True, blank=True, default=0)
     def __str__(self):
         return self.user_obj.email + "'s Profile"
 
