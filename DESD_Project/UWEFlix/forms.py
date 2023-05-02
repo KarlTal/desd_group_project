@@ -2,8 +2,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.forms import UserCreationForm
-
-from .models import User
+from django.forms import ModelForm
+from .models import *
+from UWEFlix.models import UserProfile
 
 
 # Form responsible for handling the creation of UWEFlix users.
@@ -15,6 +16,16 @@ class CreateUserForm(UserCreationForm):
 
 class DateTimeLocalInput(forms.DateTimeInput):
     input_type = "datetime-local"
+
+# Form responsible for allowing students to apply to become a club rep.
+class ApplicationToBeClubRepForm(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['club']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['club'].queryset = Club.objects.filter(has_club_rep=False)
 
 
 class DateTimeLocalField(forms.DateTimeField):

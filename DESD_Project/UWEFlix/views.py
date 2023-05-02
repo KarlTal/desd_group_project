@@ -47,19 +47,37 @@ def profile(request):
     lookup = Booking.objects.filter(user_email=request.user.email)
     error_message = ''
 
-    if request.POST:
-        discount = int(request.POST.get('discount'))
+    club_rep_form = ApplicationToBeClubRepForm(instance = user_profile)
+    group = get_group(request.user)
 
-        if discount < 0 or discount > 100:
-            error_message = 'This discount value is invalid! Must be between 0-100!'
-        elif discount < user_profile.discount:
-            error_message = 'You cannot apply for a lower discount!'
+    if request.POST:
+        club_rep_form = ApplicationToBeClubRepForm(request.POST, instance = user_profile)
+        if 'Student' in group and request.POST.get('ApplyClubRep') == 'ApplyClubRep':
+            print(club_rep_form.fields['club'])
+            if club_rep_form.is_valid():
+                club_rep_form.save()
+                user_profile_obj = UserProfile.objects.get(user_obj=request.user)
+                user_profile_obj.applied_club_rep=True
+                user_profile_obj.save()
+            else:
+                print("Something went wrong")
+
+            return redirect (profile)
+
         else:
-            user_profile.applied_discount = discount
-            user_profile.save()
+            discount = int(request.POST.get('discount'))
+
+            if discount < 0 or discount > 100:
+                error_message = 'This discount value is invalid! Must be between 0-100!'
+            elif discount < user_profile.discount:
+                error_message = 'You cannot apply for a lower discount!'
+            else:
+                user_profile.applied_discount = discount
+                user_profile.save()
+
 
     return render(request, 'UWEFlix/profile.html',
-                  {'profile': user_profile, 'bookings': lookup, 'error': error_message})
+                  {'profile': user_profile, 'bookings': lookup, 'error': error_message, 'club_rep_form':club_rep_form})
 
 
 # View handling for user logins.
@@ -115,3 +133,6 @@ def register(request):
             return redirect(login_user)
 
     return render(request, 'UWEFlix/register.html', {'form': form})
+
+
+    
