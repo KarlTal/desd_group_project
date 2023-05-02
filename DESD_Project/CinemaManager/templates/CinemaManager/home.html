@@ -1,35 +1,71 @@
 {% extends 'CinemaManager/parent.html' %}
 
 {% block page %}
+{% load static %}
 
-<h1>Manage Cinema</h1>
+<link rel="stylesheet" href="{% static 'CinemaManager/home.css' %}">
 
-<div>
+<div class="horizontal">
+    <h1>Manage Cinema</h1>
+</div>
 
-    <h2>Current Films</h2>
+<h2>Current Films</h2>
+
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Rating</th>
+        <th>Duration</th>
+        <th>Description</th>
+        <th>Poster</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    {% for film in films %}
+    <tbody>
+    <tr>
+        <td>{{film.id}}</td>
+        <td>{{film.title}}</td>
+        <td>{{film.age_rating}}</td>
+        <td>{{film.duration}} Minutes</td>
+        <td>{{film.description}}</td>
+        <td><img src="{{film.image.url}}" style="width:100px; height:100px;"></td>
+        <td><a href="/manager/update_film/{{film.id}}">Modify</a></td>
+    </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+<br>
+
+<div class="horizontal">
+    <input type="submit" class="button" onclick="window.location.href='/manager/add_film/'"
+           value="Add Film"/>
+</div>
+
+<br>
+<hr>
+<br>
+
+<div class="float-child">
+    <h2>Current Screens</h2>
 
     <table class="styled-table">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Rating</th>
-            <th>Duration</th>
-            <th>Description</th>
-            <th>Poster</th>
+            <th>Capacity</th>
             <th>Edit</th>
         </tr>
         </thead>
-        {% for film in films %}
+        {% for screen in screens %}
         <tbody>
         <tr>
-            <td>{{film.id}}</td>
-            <td>{{film.title}}</td>
-            <td>{{film.age_rating}}</td>
-            <td>{{film.duration}} Minutes</td>
-            <td>{{film.description}}</td>
-            <td><img src="{{film.image.url}}" style="width:100px; height:100px;"></td>
-            <td><a href="/manager/update_film/{{film.id}}">Modify</a></td>
+            <td>{{screen.screen_id}}</td>
+            <td>{{screen.capacity}}</td>
+            <td><a href="/manager/delete_screen/{{screen.screen_id}}">Delete</a></td>
         </tr>
         </tbody>
         {% endfor %}
@@ -37,71 +73,48 @@
 
     <br>
 
-    <input type="submit" class="button" onclick="window.location.href='/manager/add_film/'"
-           value="Add Film"/>
-</div>
-
-<br>
-
-<div class="float-container">
-    <div class="float-child">
-        <h2>Current Screens</h2>
-
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Capacity</th>
-                <th>Edit</th>
-            </tr>
-            </thead>
-            {% for screen in screens %}
-            <tbody>
-            <tr>
-                <td>{{screen.screen_id}}</td>
-                <td>{{screen.capacity}}</td>
-                <td><a href="/manager/delete_screen/{{screen.screen_id}}">Delete</a></td>
-            </tr>
-            </tbody>
-            {% endfor %}
-        </table>
-
-        <br>
-
+    <div class="horizontal">
         <input type="submit" class="button" onclick="window.location.href='/manager/add_screen/'"
                value="Add Screen"/>
     </div>
 
-    <div class="float-child">
-        <h2>Current Showings</h2>
+</div>
 
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Film</th>
-                <th>Screen</th>
-                <th>Time</th>
-                <th>Seats Taken</th>
-                <th>Edit</th>
-            </tr>
-            </thead>
-            {% for showing in showings %}
-            <tbody>
-            <tr>
-                <td>{{showing.id}}</td>
-                <td>{{showing.film}}</td>
-                <td>{{showing.screen}}</td>
-                <td>{{showing.time}}</td>
-                <td>{{showing.seats_taken}}</td>
-                <td><a href="/manager/update_showing/{{showing.id}}">Modify</a></td>
-            </tr>
-            </tbody>
-            {% endfor %}
-        </table>
+<br>
+<hr>
+<br>
 
-        <br>
+<div class="float-child">
+    <h2>Current Showings</h2>
 
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Film</th>
+            <th>Screen</th>
+            <th>Time</th>
+            <th>Seats Taken</th>
+            <th>Edit</th>
+        </tr>
+        </thead>
+        {% for showing in showings %}
+        <tbody>
+        <tr>
+            <td>{{showing.id}}</td>
+            <td>{{showing.film}}</td>
+            <td>{{showing.screen}}</td>
+            <td>{{showing.time}}</td>
+            <td>{{showing.seats_taken}}</td>
+            <td><a href="/manager/update_showing/{{showing.id}}">Modify</a></td>
+        </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <div class="horizontal">
         <input type="submit" class="button" onclick="window.location.href='/manager/add_showing/'"
                value="Add Showing"/>
     </div>

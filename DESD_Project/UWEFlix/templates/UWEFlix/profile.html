@@ -48,7 +48,7 @@
     <h3>Apply to become a club rep</h3>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="application">Apply to become a club rep:</label>
+        <label>Apply to become a club rep:</label>
         {{club_rep_form.club}}
         <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
     </form>

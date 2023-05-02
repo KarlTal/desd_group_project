@@ -2,12 +2,6 @@ body {
     color: white;
 }
 
-.horizontal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .button {
     display: flex;
     justify-content: center;
@@ -18,9 +12,26 @@ body {
     border-radius: 10px;
     color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    margin: 20px;
     outline: none;
     border: none;
-    font-weight: bold;
+}
+
+.horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.half {
+    width: 50%;
+    background-color: rgba(10, 28, 58, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.vertical {
+    margin: 0px 50px 50px 50px;
 }
 
 .button:hover {
