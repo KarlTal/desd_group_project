@@ -192,7 +192,6 @@ def approve_discount(request, user_id, outcome):
     return redirect(view_discounts)
 
 
-
 #Approve club rep applications
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
@@ -215,6 +214,8 @@ def approve_club_rep_application(request,student_id,outcome):
         profile.save()
         #Update club has_rep field
         club.has_club_rep=True
+        club.save()
+
         # If they are other applications then deny all of them as there can only be one club rep per club
         users_applying_to_the_same_club = UserProfile.objects.filter(club = profile.club)
         for same_user in users_applying_to_the_same_club:
