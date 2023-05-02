@@ -164,9 +164,10 @@ class UserProfile(models.Model):
 
     credits = models.FloatField(default=0)
     discount = models.IntegerField(null=True, blank=True, default=0)
-    applied_discount = models.IntegerField(null=True, blank=True, default=0)
 
-    applied_club_rep = models.BooleanField(null=True, blank=True, default=0)
+    applied_discount = models.IntegerField(null=True, default=0)
+    applied_for_rep = models.BooleanField(null=True, default=False)
+    
     def __str__(self):
         return self.user_obj.email + "'s Profile"
 

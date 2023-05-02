@@ -26,8 +26,7 @@ urlpatterns = [
     path('approve_booking/<booking_id>', views.approve_booking, name='Approve Booking'),
     path('approve_student/<student_id>', views.approve_student, name='Approve Student'),
     path('approve_discount/<user_id>:<outcome>', views.approve_discount, name='Approve Discount'),
-    path('view_club_reps_applications/',views.view_users_applications,name = "View Unapproved Club Rep Applications"),
-    path('approve_club_rep_application/<student_id>:<outcome>',views.approve_club_rep_application, name = "Approve Club Rep Application")
+    path('approve_rep/<student_id>:<outcome>', views.approve_rep, name="Approve Club Rep Application")
 
 ]
 

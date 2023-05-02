@@ -1,7 +1,9 @@
 {% extends 'ClubManager/parent.html' %}
 
 {% block page %}
+{% load static %}
 
+<link rel="stylesheet" href="{% static 'CinemaManager/approvals.css' %}">
 
 <h1>Approvals</h1>
 
@@ -9,7 +11,8 @@
 
     <h2>Approve Student Accounts</h2>
 
-    <table style="width:100%">
+    <table class="styled-table">
+        <thead>
         <tr>
             <th>ID</th>
             <th>First Name</th>
@@ -18,7 +21,9 @@
             <th>Email</th>
             <th>Approve</th>
         </tr>
+        </thead>
         {% for student in students %}
+        <tbody>
         <tr>
             <td>{{student.id}}</td>
             <td>{{student.first_name}}</td>
@@ -27,14 +32,18 @@
             <td>{{student.email}}</td>
             <td><a href="/manager/approve_student/{{student.id}}">Approve</a></td>
         </tr>
+        </tbody>
         {% endfor %}
     </table>
 
     <br>
+    <hr>
+    <br>
 
     <h2>Approve Cancellations</h2>
 
-    <table style="width:100%">
+    <table class="styled-table">
+        <thead>
         <tr>
             <th>Email</th>
             <th>Club</th>
@@ -43,7 +52,9 @@
             <th>Tickets</th>
             <th>Approve</th>
         </tr>
+        </thead>
         {% for booking in bookings %}
+        <tbody>
         <tr>
             <td>{{booking.user_email}}</td>
             <td>{{booking.club}}</td>
@@ -52,14 +63,18 @@
             <td>{{booking.ticket_count}}</td>
             <td><a href="/manager/approve_booking/{{booking.id}}">Approve</a></td>
         </tr>
+        </tbody>
         {% endfor %}
     </table>
 
     <br>
+    <hr>
+    <br>
 
     <h2>Approve Discounts</h2>
 
-    <table style="width:100%">
+    <table class="styled-table">
+        <thead>
         <tr>
             <th>User</th>
             <th>Club</th>
@@ -67,7 +82,9 @@
             <th>Applied</th>
             <th>Approve</th>
         </tr>
+        </thead>
         {% for discount in discounts %}
+        <tbody>
         <tr>
             <td>{{discount.user_obj}}</td>
             <td>{{discount.club}}</td>
@@ -76,6 +93,33 @@
             <td><a href="/manager/approve_discount/{{discount.user_obj.id}}:1">Approve</a> / <a
                     href="/manager/approve_discount/{{discount.user_obj.id}}:0">Reject</a></td>
         </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <br>
+    <hr>
+    <br>
+
+    <h2>All Unapproved Applications</h2>
+
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Club</th>
+            <th>Approve</th>
+        </tr>
+        </thead>
+        {% for user in rep_apps %}
+        <tbody>
+        <tr>
+            <td>{{user.user_obj}}</td>
+            <td>{{user.club}}</td>
+            <td><a href="/manager/approve_rep/{{user.user_obj.id}}:1">Approve</a> / <a
+                    href="/manager/approve_rep/{{user.user_obj.id}}:0">Reject</a></td>
+        </tr>
+        </tbody>
         {% endfor %}
     </table>
 

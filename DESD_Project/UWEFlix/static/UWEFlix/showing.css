@@ -117,10 +117,3 @@
 a {
     text-decoration: none;
 }
-
-hr {
-    border: none;
-    border-top: 1px solid white;
-    width: 75%;
-    height: 1px;
-}
