@@ -129,67 +129,65 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="horizontal">
-            <h2>Buy Tickets for {{film.title}}</h2>
-        </div>
+    <div class="horizontal">
+        <h2>Buy Tickets for {{film.title}}</h2>
+    </div>
 
-        <div class="date-options">
-            <a href="javascript:void(0)" onclick="changePeriod('all')">
-                <div class="date-option selected" id="all">
-                    <h5>All Showings</h5>
-                </div>
-            </a>
+    <div class="date-options">
+        <a href="javascript:void(0)" onclick="changePeriod('all')">
+            <div class="date-option selected" id="all">
+                <h5>All Showings</h5>
+            </div>
+        </a>
 
-            <a href="javascript:void(0)" onclick="changePeriod('today')">
-                <div class="date-option" id="today">
-                    <h5>Today</h5>
-                </div>
-            </a>
+        <a href="javascript:void(0)" onclick="changePeriod('today')">
+            <div class="date-option" id="today">
+                <h5>Today</h5>
+            </div>
+        </a>
 
-            {% for weekday in weekdays %}
-            <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}')">
-                <div class="date-option" id="{{weekday}}">
-                    <h5>{{weekday}}</h5>
-                </div>
-            </a>
-            {% endfor %}
+        {% for weekday in weekdays %}
+        <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}')">
+            <div class="date-option" id="{{weekday}}">
+                <h5>{{weekday}}</h5>
+            </div>
+        </a>
+        {% endfor %}
 
-            {% for weekday in weekdays %}
-            <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}2')">
-                <div class="date-option" id="{{weekday}}2">
-                    <h5>{{weekday}}</h5>
-                </div>
-            </a>
-            {% endfor %}
+        {% for weekday in weekdays %}
+        <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}2')">
+            <div class="date-option" id="{{weekday}}2">
+                <h5>{{weekday}}</h5>
+            </div>
+        </a>
+        {% endfor %}
 
-        </div>
+    </div>
 
-        <div class="horizontal">
-            <div class="thin">
-                {% for date in dates %}
-                <div id="{{date}}-section">
-                    <hr>
-                    <div class="horizontal" id="{{date}}">
-                        <div class="horizontal" style="width: 50%;">
-                            <h5 class="date">{{date}}</h5>
-                        </div>
+    <div class="horizontal">
+        <div class="thin">
+            {% for date in dates %}
+            <div id="{{date}}-section">
+                <hr>
+                <div class="horizontal" id="{{date}}">
+                    <div class="horizontal" style="width: 50%;">
+                        <h5 class="date">{{date}}</h5>
+                    </div>
 
-                        <div class="showings" style="width: 50%;">
-                            {% for showing in showings %}
-                            {% if showing.time|date:"l d/m/y" == date %}
-                            <a href="/booking/book_film/{{film.id}}:{{showing.id}}">
-                                <div class="showing">
-                                    <h6 class="times">{{showing.time|date:"H:i"}}</h6>
-                                </div>
-                            </a>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
+                    <div class="showings" style="width: 50%;">
+                        {% for showing in showings %}
+                        {% if showing.time|date:"l d/m/y" == date %}
+                        <a href="/booking/book_film/{{film.id}}:{{showing.id}}">
+                            <div class="showing">
+                                <h6 class="times">{{showing.time|date:"H:i"}}</h6>
+                            </div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
 
