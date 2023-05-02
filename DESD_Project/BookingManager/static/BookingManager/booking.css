@@ -1,0 +1,129 @@
+body {
+    color: white;
+}
+
+.film-details {
+    margin: 0;
+    padding: 50px 0px 50px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.images {
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    width: 400px;
+    height: 530px;
+    margin: 60px 0px 0px 0px;
+}
+
+.top-section {
+    display: grid;
+    grid-template-columns: 20% 45% 35%;
+    background-color: rgba(10, 28, 58, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    padding: 50px;
+}
+
+.horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical {
+    margin: 10px;
+}
+
+.film-info {
+    padding: 0px 80px 0px 80px;
+    flex-wrap: wrap;
+}
+
+.tickets {
+    padding: 0px 20px 20px 20px;
+    font-size: 30px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.qty {
+    width: 40px;
+    height: 25px;
+    text-align: center;
+}
+
+input.qtyplus {
+    width: 30px;
+    height: 30px;
+    margin: 10px;
+}
+
+input.qtyminus {
+    width: 30px;
+    height: 30px;
+    margin: 10px;
+}
+
+.item {
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.item h3 {
+  margin-right: 20px;
+}
+
+.ticket-select {
+  display: grid;
+  grid-template-columns: 34% 33% 33%;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 60px;
+    background-color: #e52729;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    outline: none;
+    border: none;
+}
+
+.button:hover {
+  background-color: #941213;
+  transition: 0.25s;
+}
+
+.overlay {
+    text-align: center;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.overlay-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+}

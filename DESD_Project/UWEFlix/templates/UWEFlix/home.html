@@ -1,29 +1,91 @@
 {% extends 'UWEFlix/parent.html' %}
 
 {% block page %}
+{% load static %}
 
-<h1>Homepage</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/home.css' %}">
+<link rel="stylesheet" href="{% static 'UWEFlix/slideshow.css' %}">
 
-<h2>Current Films</h2>
+<script type="text/javascript">
+    var counter = 2;
 
-<table style="width:100%">
-    <tr>
-        <th>Title</th>
-        <th>Age Rating</th>
-        <th>Description</th>
-        <th>Poster</th>
-        <th>Edit</th>
-    </tr>
-    {% for film in films %}
-    <tr>
-        <td>{{film.title}}</td>
-        <td>{{film.age_rating}}</td>
-        <td>{{film.description}}</td>
-        <td><img src = "{{film.image.url}}" style="width:100px; height:100px;"></td>
-        <td><a href="/view_film/{{film.id}}">View</a></td>
-    </tr>
-    {% endfor %}
-</table>
+    setInterval(function() {
+        document.getElementById('radio' + counter).checked = true;
+        counter++;
+        if (counter > 4) {
+            counter = 1;
+        }
+    }, 5000);
 
+</script>
+
+<div class="slider-body">
+    <div class="slider">
+        <div class="slides">
+            <input type="radio" name="radio-btn" id="radio1" checked>
+            <input type="radio" name="radio-btn" id="radio2">
+            <input type="radio" name="radio-btn" id="radio3">
+            <input type="radio" name="radio-btn" id="radio4">
+
+            <div class="slide first">
+                <img src="/Assets/1.jpg" alt=""/>
+            </div>
+            <div class="slide">
+                <img src="/Assets/2.jpg" alt=""/>
+            </div>
+            <div class="slide">
+                <img src="/Assets/3.jpg" alt=""/>
+            </div>
+            <div class="slide">
+                <img src="/Assets/4.jpg" alt=""/>
+            </div>
+
+            <div class="navigation-auto">
+                <div class="auto-btn1"></div>
+                <div class="auto-btn2"></div>
+                <div class="auto-btn3"></div>
+                <div class="auto-btn4"></div>
+            </div>
+        </div>
+
+        <div class="navigation-manual">
+            <label for="radio1" class="manual-btn"></label>
+            <label for="radio2" class="manual-btn"></label>
+            <label for="radio3" class="manual-btn"></label>
+            <label for="radio4" class="manual-btn"></label>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+
+<h3 class="headers">
+    NOW SHOWING
+</h3>
+
+<br>
+<br>
+
+<div class="film-body">
+    <div class="films">
+        {% for film in films %}
+
+        <div class="film">
+            <a href="/view_film/{{film.id}}">
+                <img class="images" src="{{film.image}}" alt="{{film.title}}">
+                <h6 class="headers">{{film.title}}</h6>
+            </a>
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+</div>
+
+<br>
+<br>
 
 {% endblock %}

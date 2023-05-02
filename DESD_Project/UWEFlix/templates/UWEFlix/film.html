@@ -1,104 +1,201 @@
 {% extends 'UWEFlix/parent.html' %}
 
 {% block page %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'UWEFlix/showing.css' %}">
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
-    <script>
-        const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    <script type="text/javascript">
+        previous = "all";
 
         $(document).ready( function() {
-            updateDate(new Date());
-        });
+            const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-        function updateDate(date) {
-            var date_picker = document.getElementById("date_picker");
-            var value = date_picker.value;
+            const date = new Date();
+            const currentWeekdayIndex = (date.getDay() + 6) % 7;
 
-            var now = new Date(value.replaceAll('-', '/'));
-            if (date) now = date;
+            // Loop through weekdays and hide elements with IDs up to and including the current day
+            for (let i = 0; i < weekdays.length; i++) {
+                const weekday = weekdays[i];
 
-            var month = (now.getMonth() + 1);
-            var day = now.getDate();
-
-            if (month < 10)
-                month = "0" + month;
-            if (day < 10)
-                day = "0" + day;
-            var today = now.getFullYear() + '-' + month + '-' + day;
-
-            $('#date_picker').val(today);
-            document.getElementById("current_date").innerHTML = "Selected Date: " + weekday[now.getDay()] + " " + today;
-
-            updateTable(now);
-        }
-
-        function updateTable(check_date) {
-            table = document.getElementById("available_viewings");
-            rows = table.rows;
-
-            for (i = 1; i < rows.length; i++) {
-                var showing = rows[i];
-                var date = showing.cells[3];
-                var data = date.innerHTML.replaceAll(',', "").split(" ");
-                var parsed_date = new Date((month.indexOf(data[0]) + 1) + "/" + data[1] + "/" + data[2])
-
-                if (!isSameDay(check_date, parsed_date)) {
-                    showing.style.display = "none";
+                if (i <= currentWeekdayIndex) {
+                    document.getElementById(weekday).style.display = 'none';
                 } else {
-                    showing.style.display = "";
+                    document.getElementById(weekday + "2").style.display = 'none';
                 }
             }
-        }
+        });
 
-        function showAll() {
-            for (i = 1; i < rows.length; i++) {
-                var showing = rows[i];
-                showing.style.display = "";
+        function changePeriod(period) {
+            if (period == window.previous) {
+                return;
             }
+
+            const element = document.getElementById(period);
+            const previous = document.getElementById(window.previous);
+
+            element.classList.add('selected');
+            previous.classList.remove('selected');
+
+            window.previous = period;
+
+            updateVisibility(period);
         }
 
-        function isSameDay(first, second) {
-            return first.getFullYear() === second.getFullYear() &&
-                first.getMonth() === second.getMonth() &&
-                first.getDate() === second.getDate();
+        function updateVisibility(period) {
+            const list = "{{dates}}";
+            let arr = list.replace(/['\[\]']/g, '').replace(/&#x27;/g, "").split(', ');
+
+            if (period == 'all') {
+                arr.forEach(function(date) {
+                    const element = document.getElementById(date);
+                    if (element) element.classList.remove("hidden");
+                });
+                return;
+            }
+
+            const date = new Date();
+            const nextWeek = period.includes('2');
+            let formatted = formatDate(date);
+
+            if (period != 'today') {
+                for (let i = 0; i < 7; i++) {
+                    const check = new Date(date);
+
+                    const value = i + (nextWeek ? 7 : 0);
+                    check.setDate(date.getDate() + value);
+
+                    if (getWeekday(check) == period.replace("2", "")) {
+                        formatted = formatDate(check);
+                        break;
+                    }
+                }
+            }
+
+            let value = "no";
+
+            for (let i = 0; i < arr.length; i++) {
+                const date = arr[i];
+                const element = document.getElementById(date);
+
+                if (element) {
+                    if (formatted == date) {
+                        element.classList.remove("hidden");
+                    } else {
+                        element.classList.add("hidden");
+                    }
+                }
+            }
+
+            document.getElementById('debug').innerHTML = typeof formatted + " - val=" + value + " - " + arr[0] + " - " + formatted;
+        }
+
+        function formatDate(date) {
+          const weekday = getWeekday(date);
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+          const year = date.getFullYear().toString().slice(2);
+
+          return `${weekday} ${day}/${month}/${year}`;
+        }
+
+        function getWeekday(date) {
+            const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return weekdays[date.getDay()];
         }
     </script>
 </head>
 
-<h1>{{film.title}} ({{film.age_rating}})</h1>
-<p>Runtime: {{film.duration}} mins</p>
-<p>{{film.description}}</p>
+<div class="vertical">
+    <div class="horizontal">
+        <div class="film-details">
+            <img class="images" src="/{{film.image}}" alt="{{film.title}}">
 
-<h2>Current Showings</h2>
+            <div class="combination">
+                <iframe src="{{film.trailer}}" title="{{film.title}} Trailer"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
 
-<div>
-    <input type="date" id="date_picker" onchange="updateDate()">
-    <button onclick="showAll()">Show All</button>
-    <p id="current_date"></p>
+                <div class="film-info">
+                    <h1>{{film.title}} ({{film.age_rating}})</h1>
+                    <h6>Runtime: {{film.duration}} mins</h6>
+                    <p>{{film.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="horizontal">
+        <h2>Buy Tickets for {{film.title}}</h2>
+    </div>
+
+    <div class="date-options">
+        <a href="javascript:void(0)" onclick="changePeriod('all')">
+            <div class="date-option selected" id="all">
+                <h5>All Showings</h5>
+            </div>
+        </a>
+
+        <a href="javascript:void(0)" onclick="changePeriod('today')">
+            <div class="date-option" id="today">
+                <h5>Today</h5>
+            </div>
+        </a>
+
+        {% for weekday in weekdays %}
+        <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}')">
+            <div class="date-option" id="{{weekday}}">
+                <h5>{{weekday}}</h5>
+            </div>
+        </a>
+        {% endfor %}
+
+        {% for weekday in weekdays %}
+        <a href="javascript:void(0)" onclick="changePeriod('{{weekday}}2')">
+            <div class="date-option" id="{{weekday}}2">
+                <h5>{{weekday}}</h5>
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+
+    <div class="horizontal">
+        <div class="thin">
+            {% for date in dates %}
+            <div id="{{date}}-section">
+                <hr>
+                <div class="horizontal" id="{{date}}">
+                    <div class="horizontal" style="width: 50%;">
+                        <h5 class="date">{{date}}</h5>
+                    </div>
+
+                    <div class="showings" style="width: 50%;">
+                        {% for showing in showings %}
+                        {% if showing.time|date:"l d/m/y" == date %}
+                        <a href="/booking/book_film/{{film.id}}:{{showing.id}}">
+                            <div class="showing">
+                                <h6 class="times">{{showing.time|date:"H:i"}}</h6>
+                            </div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <br>
+    <br>
+
 </div>
 
 <br>
-
-<table style="width:100%" id="available_viewings">
-    <tr>
-        <th>ID</th>
-        <th>Film</th>
-        <th>Screen</th>
-        <th>Time</th>
-        <th>Edit</th>
-    </tr>
-    {% for showing in showings %}
-    <tr>
-        <td>{{showing.id}}</td>
-        <td>{{showing.film}}</td>
-        <td>{{showing.screen}}</td>
-        <td>{{showing.time}}</td>
-        <td><a href="/booking/book_film/{{film.id}}:{{showing.id}}">Book</a></td>
-    </tr>
-    {% endfor %}
-</table>
 
 {% endblock %}

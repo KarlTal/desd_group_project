@@ -95,7 +95,9 @@ class Film(models.Model):
     age_rating = models.CharField(max_length=5, choices=RATINGS)
     duration = models.IntegerField()
     description = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='films/', null=True)
+
+    image = models.ImageField(upload_to='Assets/', null=True)
+    trailer = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.title
@@ -121,21 +123,25 @@ class Showing(models.Model):
         return "Showing (" + str(self.film.title) + ")"
 
 
-# The database class for Ticket Bookings at UWEFlix.
+# The database class for Ticket Bookings.
 class Booking(models.Model):
     user_email = models.EmailField(null=True)
     unique_key = models.UUIDField(null=True)
+
     club = models.ForeignKey(Club, null=True, blank=True, on_delete=models.SET_NULL)
     showing = models.ForeignKey(Showing, null=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(default=timezone.now)
+
     total_price = models.FloatField(default=0)
     ticket_count = models.IntegerField(default=0)
+    has_been_paid = models.BooleanField(default=False)
+    pending_cancel = models.BooleanField(default=False)
 
     def __str__(self):
         return "Booking (" + str(self.showing.film.title) + ")"
 
 
-# The database model of ticket types at UWEFlix.
+# The database model of ticket types.
 class TicketType(models.Model):
     ticket_name = models.CharField(max_length=7, null=True, blank=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
@@ -144,13 +150,13 @@ class TicketType(models.Model):
         return self.ticket_name + " Ticket"
 
 
-# The database class for the Tickets at UWEFlix.
+# The database class for the Tickets.
 class Ticket(models.Model):
     booking = models.ForeignKey(Booking, null=True, on_delete=models.SET_NULL)
     ticket_type = models.ForeignKey(TicketType, null=True, on_delete=models.CASCADE)
 
 
-# The database class for user profiles at UWEFlix.
+# The database class for user profiles.
 class UserProfile(models.Model):
     user_obj = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
     club = models.ForeignKey(Club, null=True, on_delete=models.CASCADE, blank=True)
@@ -158,11 +164,22 @@ class UserProfile(models.Model):
 
     credits = models.FloatField(default=0)
     discount = models.IntegerField(null=True, blank=True, default=0)
-    applied_discount = models.IntegerField(null=True, blank=True, default=0)
 
-    applied_club_rep = models.BooleanField(null=True, blank=True, default=0)
+    applied_discount = models.IntegerField(null=True, default=0)
+    applied_for_rep = models.BooleanField(null=True, default=False)
+    
     def __str__(self):
         return self.user_obj.email + "'s Profile"
+
+
+# The database class for users statements.
+class Transaction(models.Model):
+    TYPES = (('Debit', 'Debit'), ('Credit', 'Credit'))
+
+    user_email = models.EmailField(null=True)
+    type = models.CharField(max_length=6, choices=TYPES)
+    amount = models.FloatField(default=0)
+    date = models.DateTimeField(default=timezone.now)
 
 
 # Create the user groups.

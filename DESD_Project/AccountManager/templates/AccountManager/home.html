@@ -2,8 +2,46 @@
 
 {% block page %}
 
-<h1>Homepage</h1>
+<div>
+    <h2>Current Users</h2>
 
-<h2>???</h2>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Club</th>
+            <th>Date Of Birth</th>
+            <th>Credits</th>
+            <th>Discount</th>
+            <th>Pending Discount</th>
+            <th> -</th>
+        </tr>
+        </thead>
+
+        {% for user in users %}
+        {% if user.is_active %}
+        {% for profile in profiles %}
+        {% if profile.user_obj == user %}
+        <tbody>
+        <tr>
+            <td>{{user.email}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.first_name}} {{user.last_name}}</td>
+            <td>{{profile.club}}</td>
+            <td>{{profile.date_of_birth}}</td>
+            <td>{{profile.credits}}</td>
+            <td>{{profile.discount}}%</td>
+            <td>{{profile.applied_discount}}%</td>
+            <td><a href="/accounts/update_user/{{user.id}}">View Details</a></td>
+        </tr>
+        </tbody>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+    </table>
+</div>
 
 {% endblock %}

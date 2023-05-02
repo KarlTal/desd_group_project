@@ -1,3 +1,6 @@
+import math
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
@@ -107,8 +110,18 @@ def delete_screen(request, screen_id):
 def add_showing(request):
     if request.POST:
         form = ShowingForm(request.POST)
+
         if form.is_valid():
-            form.save()
+            showing = form.save()
+
+            bulk_add = request.POST.get('bulk-add')
+            if bulk_add:
+                original_time = showing.time
+
+                for i in range(6):
+                    original_time = original_time + timedelta(minutes=(math.ceil(showing.film.duration / 30) * 30))
+                    Showing.objects.create(film=showing.film, screen=showing.screen, time=original_time, seats_taken=0)
+
         return redirect(cinema_dashboard)
 
     # Render the page.
@@ -150,33 +163,17 @@ def delete_showing(request, showing_id):
 # View students
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
-def view_students(request):
+def approvals(request):
     students = User.objects.filter(groups__name='Student').filter(is_active=False)
-    return render(request, 'CinemaManager/view_students.html', {'students': students})
-
-
-# Approve student accounts
-@login_required(login_url='/login')
-@allowed_users(allowed_roles='CinemaManager')
-def approve_student(request, student_id):
-    student = User.objects.get(id=student_id)
-
-    # Set the student account to active. This is false by default and prevents the user from being able to log in.
-    student.is_active = True
-    student.save()
-
-    return redirect(view_students)
-
-
-# Approve discount rates
-@login_required(login_url='/login')
-@allowed_users(allowed_roles='CinemaManager')
-def view_discounts(request):
+    bookings = Booking.objects.filter(pending_cancel=True)
     discounts = UserProfile.objects.exclude(applied_discount=0)
-    return render(request, 'CinemaManager/view_discounts.html', {'discounts': discounts})
+    rep_apps = UserProfile.objects.exclude(applied_for_rep=0)
+
+    return render(request, 'CinemaManager/approvals.html',
+                  {'students': students, 'bookings': bookings, 'discounts': discounts, 'rep_apps': rep_apps})
 
 
-# Approve student accounts
+# Approve student discounts
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_discount(request, user_id, outcome):
@@ -189,54 +186,80 @@ def approve_discount(request, user_id, outcome):
     profile.applied_discount = 0
     profile.save()
 
-    return redirect(view_discounts)
+    return redirect(approvals)
 
 
-#Approve club rep applications
+# Approve booking cancellations
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
-def approve_club_rep_application(request,student_id,outcome):
+def approve_booking(request, booking_id):
+    booking = Booking.objects.filter(id=booking_id)
+
+    # Reduce the number of seats taken.
+    showing = booking.showing
+    showing.seats_taken = showing.seats_taken - booking.ticket_count
+    showing.save()
+
+    # Delete the booking.
+    booking.delete()
+
+    return redirect(approvals)
+
+
+# Approve student accounts
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_student(request, student_id):
+    student = User.objects.get(id=student_id)
+
+    # Set the student account to active. This is false by default and prevents the
+    # user from being able to log in.
+    student.is_active = True
+    student.save()
+
+    return redirect(approvals)
+
+
+# Approve club rep applications
+@login_required(login_url='/login')
+@allowed_users(allowed_roles='CinemaManager')
+def approve_rep(request, student_id, outcome):
     user = User.objects.get(id=student_id)
     profile = UserProfile.objects.get(user_obj=user)
 
     if outcome == '1':
-        #Set user's group to club rep
+        # Set user's group to club rep
         group = Group.objects.get(name="ClubRepresentative")
         current_group = Group.objects.get(name="Student")
         club = Club.objects.get(id=profile.club.id)
         user.groups.add(group)
-        #Remove from student group
+
+        # Remove from student group
         user.groups.remove(current_group)
-        #Generate club rep id
-        profile.applied_club_rep = False
+
+        # Generate club rep id
+        profile.applied_for_rep = False
         user.username = int(profile.id) + 1000
         user.save()
         profile.save()
-        #Update club has_rep field
-        club.has_club_rep=True
+
+        # Update club has_rep field
+        club.has_club_rep = True
         club.save()
 
         # If they are other applications then deny all of them as there can only be one club rep per club
-        users_applying_to_the_same_club = UserProfile.objects.filter(club = profile.club)
+        users_applying_to_the_same_club = UserProfile.objects.filter(club=profile.club)
         for same_user in users_applying_to_the_same_club:
             if same_user.id == profile.id:
                 pass
             else:
                 same_user.club = None
-                same_user.applied_club_rep = False
+                same_user.applied_for_rep = False
                 same_user.save()
+
     else:
-        profile.applied_club_rep = False
+        profile.applied_for_rep = False
         profile.club_id = None
         profile.save()
+
     return redirect(view_users_applications)
-
-# View for approving club reps applications
-@login_required(login_url='/login')
-@allowed_users(allowed_roles='CinemaManager')
-def view_users_applications(request):
-    users = UserProfile.objects.exclude(applied_club_rep=0)
-    return render(request, 'CinemaManager/view_club_rep_applications.html', {'users': users})
-
-
-

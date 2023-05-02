@@ -43,7 +43,7 @@
     "model": "UWEFlix.user",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$390000$fyuSjSdFR5Bn46wvWtVsBe$7TSLwPhFo/bmAGYp9gFdVg9YH3Dr0XiN7pL4nXTlaBY=",
+      "password": "pbkdf2_sha256$260000$cHUkVq6NAGSS9fjFoKMPCs$pXr0G1l30e0d65tEIM9O7U3U7Gq5HZDhnUu5WfQAu0A=",
       "email": "admin@main.com",
       "username": "Admin",
       "first_name": "Admin",
@@ -52,7 +52,7 @@
       "is_superuser": true,
       "is_staff": true,
       "date_joined": "2023-03-27T21:15:22.213Z",
-      "last_login": "2023-03-28T00:43:42.553Z",
+      "last_login": "2023-04-30T16:05:01.583Z",
       "groups": [
         5
       ],
@@ -63,22 +63,36 @@
     "model": "UWEFlix.film",
     "pk": 1,
     "fields": {
-      "title": "Movie 1",
-      "age_rating": "U",
+      "title": "Avatar: The Way of Water",
+      "age_rating": "12",
       "duration": 150,
-      "description": "The first movie.",
-      "image": "films/485685046.jpg"
+      "description": "Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their home.",
+      "image": "Assets/avatar2_dDHgIhU_cYr3Arh.png",
+      "trailer": "https://www.youtube.com/embed/d9MyW72ELq0"
     }
   },
   {
     "model": "UWEFlix.film",
     "pk": 2,
     "fields": {
-      "title": "Movie 2",
+      "title": "Avengers: Endgame",
       "age_rating": "12A",
       "duration": 165,
-      "description": "Highly anticipated sequel.",
-      "image": "films/jeffpacito.jpeg"
+      "description": "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
+      "image": "Assets/endgame_nmFJ9l0_KCNDi4h.png",
+      "trailer": "https://www.youtube.com/embed/TcMBFSGVi1c"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 3,
+    "fields": {
+      "title": "Shrek",
+      "age_rating": "U",
+      "duration": 100,
+      "description": "A mean lord exiles fairytale creatures to the swamp of a grumpy ogre, who must go on a quest and rescue a princess for the lord in order to get his land back.",
+      "image": "Assets/shrek_Ncrez9L_obDSeu8.png",
+      "trailer": "https://www.youtube.com/embed/CwXOrWvPBPk"
     }
   },
   {
@@ -101,7 +115,32 @@
     "fields": {
       "film": 1,
       "screen": 2,
-      "time": "2023-03-28T00:45:40Z"
+      "time": "2023-03-28T00:45:40Z",
+      "seats_taken": 0
+    }
+  },
+  {
+    "model": "UWEFlix.tickettype",
+    "pk": 1,
+    "fields": {
+      "ticket_name": "Adult",
+      "price": "7.99"
+    }
+  },
+  {
+    "model": "UWEFlix.tickettype",
+    "pk": 2,
+    "fields": {
+      "ticket_name": "Child",
+      "price": "4.99"
+    }
+  },
+  {
+    "model": "UWEFlix.tickettype",
+    "pk": 3,
+    "fields": {
+      "ticket_name": "Student",
+      "price": "5.99"
     }
   },
   {
@@ -111,31 +150,9 @@
       "user_obj": 1,
       "club": null,
       "date_of_birth": "2023-03-27",
-      "credits": 100
-    }
-  },
-  {
-    "model": "UWEFlix.tickettype",
-    "pk": 1,
-    "fields": {
-      "ticket_name": "Adult",
-      "price": 7.99
-    }
-  },
-  {
-    "model": "UWEFlix.tickettype",
-    "pk": 2,
-    "fields": {
-      "ticket_name": "Child",
-      "price": 4.99
-    }
-  },
-  {
-    "model": "UWEFlix.tickettype",
-    "pk": 3,
-    "fields": {
-      "ticket_name": "Student",
-      "price": 5.99
+      "credits": 100.0,
+      "discount": 0,
+      "applied_discount": 0
     }
   }
 ]

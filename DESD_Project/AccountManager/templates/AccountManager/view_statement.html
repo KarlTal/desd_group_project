@@ -1,0 +1,33 @@
+{% extends 'AccountManager/parent.html' %}
+
+{% block page %}
+
+<div>
+    <h1>Account Statement for {{email}}</h1>
+    <h3>{{period}}</h3>
+
+    <table style="width:100%">
+        <tr>
+            <th>Email</th>
+            <th>Transaction Type</th>
+            <th>Price</th>
+            <th>Date</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{transaction.user_email}}</td>
+            <td>{{transaction.type}}</td>
+            <td>£{{transaction.amount|floatformat:2}}</td>
+            <td>{{transaction.date}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<br>
+
+<div>
+    <button class="button" onclick="window.location.href='/accounts/download_statement/{{email}}:{{year}}:{{month}}'">Download Statement</button>
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'AccountManager/parent.html' %}
+
+{% block page %}
+
+<h1>{{user.first_name}} {{user.last_name}}'s Profile</h1>
+
+
+
+<div class="container">
+    <form id="update" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{user_form.as_p}}
+
+        {% csrf_token %}
+
+        {{profile_form.as_p}}
+    </form>
+</div>
+
+<br>
+
+<div>
+    <button class="button" form="update">Update</button>
+    <button class="button" onclick="window.location.href='/accounts/delete_user/{{user.id}}'">Delete User</button>
+</div>
+
+<br>
+
+<div>
+    <h2>Account Statements</h2>
+
+    <table style="width:100%">
+        <tr>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Total Transactions</th>
+            <th> - </th>
+        </tr>
+        {% for statement in statements %}
+        <tr>
+            <td>{{statement.year}}</td>
+            <td>{{statement.month}}</td>
+            <td>{{statement.transactions|length}}</td>
+            <td><a href="/accounts/view_statement/{{user.email}}:{{statement.year}}:{{statement.month}}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

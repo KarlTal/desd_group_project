@@ -15,7 +15,7 @@ class FilmForm(ModelForm):
     # Specify the Meta so Django knows what fields we're modifying.
     class Meta:
         model = Film
-        fields = ['title', 'age_rating', 'duration', 'description', 'image']
+        fields = ['title', 'age_rating', 'duration', 'description', 'image', 'trailer']
 
 
 # The Form used to add Screens available.

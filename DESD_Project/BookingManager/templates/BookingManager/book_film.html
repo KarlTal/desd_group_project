@@ -3,6 +3,9 @@
 {% load customtags %}
 
 {% block page %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'BookingManager/booking.css' %}">
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -37,19 +40,19 @@
         });
 
         function calculateAmount() {
+            document.getElementById("debug").innerHTML = "found";
+
             var total_price = document.getElementById("total_price");
             var child_cost = document.getElementById("child_tick_quantity").value * "{{child_ticket.price}}"
             var adult_cost = document.getElementById("adult_tick_quantity").value * "{{adult_ticket.price}}"
             var student_cost = document.getElementById("student_tick_quantity").value * "{{student_ticket.price}}"
-
             var discount = "{{discount}}";
-            var price = ((child_cost + adult_cost + student_cost) * (1 - (discount / 100))).toFixed(2);
 
             document.getElementById("child_total").innerHTML = "£" + child_cost.toFixed(2)
             document.getElementById("adult_total").innerHTML = "£" + adult_cost.toFixed(2)
             document.getElementById("student_total").innerHTML = "£" + student_cost.toFixed(2)
 
-            total_price.innerHTML = "£" + price;
+            total_price.innerHTML = "£" + getFinalPrice() + " (" + discount + "% off!)";
         }
 
         function showOverlay() {
@@ -83,8 +86,26 @@
 
             document.getElementById("final_total").innerHTML = "Total Cost: " + document.getElementById("total_price").innerHTML;
 
+            var credits = parseInt({{profile.credits}});
+            if (credits > 0) {
+                var final_price = getFinalPrice();
+                var consumed_credit = Math.min(credits, final_price);
+                document.getElementById("final_credits").innerHTML = "Will use £" + consumed_credit + " of credit.";
+                document.getElementById("final_cost").innerHTML = "Final Total: £" + (final_price - consumed_credit).toFixed(2);
+            }
+
             var overlay = document.getElementById("main_overlay");
             overlay.style.display = "block";
+        }
+
+        function getFinalPrice() {
+            var total_price = document.getElementById("total_price");
+            var child_cost = document.getElementById("child_tick_quantity").value * "{{child_ticket.price}}"
+            var adult_cost = document.getElementById("adult_tick_quantity").value * "{{adult_ticket.price}}"
+            var student_cost = document.getElementById("student_tick_quantity").value * "{{student_ticket.price}}"
+
+            var discount = "{{discount}}";
+            return ((child_cost + adult_cost + student_cost) * (1 - (discount / 100))).toFixed(2);
         }
 
         function hideOverlay() {
@@ -99,215 +120,278 @@
         function isCustomerBooking() {
             return "{{request.user}}" == "AnonymousUser";
         }
+
     </script>
-
-    <style>
-        #booking_form {
-            text-align: center;
-            padding: 5px;
-            margin: 2%;
-        }
-
-        .qty {
-            width: 40px;
-            height: 25px;
-            text-align: center;
-        }
-
-        input.qtyplus {
-            width:25px;
-            height:25px;
-        }
-
-        input.qtyminus {
-            width:25px;
-            height:25px;
-        }
-
-        .container {
-          display: grid;
-          grid-template-columns: auto auto;
-          border: 1px solid rgba(0, 0, 0, 0.8);
-        }
-
-        .sub_container {
-          display: grid;
-          grid-template-columns: auto auto auto;
-          padding: 10px;
-        }
-
-        .item {
-          border: 1px solid rgba(0, 0, 0, 0.8);
-          padding: 20px;
-          font-size: 30px;
-          text-align: center;
-        }
-
-        .overlay {
-            text-align: center;
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 100px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-        }
-
-        .overlay-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-    </style>
-
 </head>
 
-<div class="container">
+<div class="top-section">
 
-    <div class="item">
+    <img class="images" src="/{{film.image}}" alt="{{film.title}}">
 
-        {% if request.user|has_group_exact:"ClubRepresentative" %}
+    <div class="vertical">
 
-        <h1><u>{{club.name}} Club Booking</u></h1>
-
-        {% else %}
-
-        <h1><u>Film Booking</u></h1>
-
-        {% endif %}
-
-        {% if discount > 0 %}
-
-        <p>Your Discount: {{discount}}%</p>
-
-        {% endif %}
-
-        <br>
-
-        <h1>{{film.title}} ({{film.age_rating}})</h1>
-        <p>Runtime: {{film.duration}} mins</p>
-        <p>{{film.description}}</p>
-
-        <br>
-
-        <h1>{{showing.screen}}</h1>
-        <p>{{showing.time}}</p>
-        <p>Remaining Seats: {{remaining_seats}}</p>
-
-    </div>
-
-    <div class="item">
-
-        <form id='booking_form' method='POST' class='quantity' action='#' enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div id="adult_form" class="sub_container">
-                <div class="item">
-                    <h3>Adult</h3>
-                </div>
-
-                <div class="item">
-                    <input type='button' value='-' class='qtyminus minus'/>
-                    <input type='text' name='adult_quantity' value='0' class='qty' id="adult_tick_quantity"
-                           onchange="calculateAmount()"/>
-                    <input type='button' value='+' class='qtyplus plus'/>
-                </div>
-
-                <div class="item">
-                    <p id="adult_total">£0.00</p>
-                </div>
-            </div>
-
-            <div id="child_form" class="sub_container">
-                <div class="item">
-                    <h3>Child</h3>
-                </div>
-
-                <div class="item">
-                    <input type='button' value='-' class='qtyminus minus'/>
-                    <input type='text' name='child_quantity' value='0' class='qty' id="child_tick_quantity"
-                           onchange="calculateAmount()"/>
-                    <input type='button' value='+' class='qtyplus plus'/>
-                </div>
-
-                <div class="item">
-                    <p id="child_total">£0.00</p>
-                </div>
-            </div>
-
-            <div id="student_form" class="sub_container">
-                <div class="item">
-                    <h3>Student</h3>
-                </div>
-
-                <div class="item">
-                    <input type='button' value='-' class='qtyminus minus'/>
-                    <input type='text' name='student_quantity' value='0' class='qty' id="student_tick_quantity"
-                           onchange="calculateAmount()"/>
-                    <input type='button' value='+' class='qtyplus plus'/>
-                </div>
-
-                <div class="item">
-                    <p id="student_total">£0.00</p>
-                </div>
-            </div>
-
-            <div class="item">
-                <h3>Total:</h3>
-                <p id="total_price">£0.00</p>
-
-                {% if discount > 0 %}
-                ({{discount}}% off!)
-                {% endif %}
-            </div>
-        </form>
-
-        <button class="button" onclick="showOverlay()">Book</button>
-
-    </div>
-
-</div>
-
-<div id="main_overlay" class="overlay">
-
-    <div class="overlay-content">
-        <span class="close" onclick="hideOverlay()">&times;</span>
-        <h1>Finalise Booking</h1>
-
-        <div class="sub_container">
-            <div class="item">
-                <h3>{{film.title}} ({{film.age_rating}})</h3>
-                <p>Runtime: {{film.duration}} mins</p>
-                <p>{{film.description}}</p>
-            </div>
-
-            <div class="item">
-                <h3>{{showing.screen}}</h3>
-                <p>{{showing.time}}</p>
-                <p>Remaining Seats: {{remaining_seats}}</p>
-            </div>
-
-            <div class="item">
-                <p id="final_adult"></p>
-                <p id="final_child"></p>
-                <p id="final_student"></p>
-                <h4 id="final_total"></h4>
-            </div>
+        <div class="film-info">
+            <h1 id="debug">bingus</h1>
+            <h1>{{film.title}} ({{film.age_rating}})</h1>
+            <h6>Runtime: {{film.duration}} mins</h6>
+            <p>{{film.description}}</p>
         </div>
 
         <br>
+        <hr>
 
-        <button class="button" onclick="hideOverlay()">Cancel</button>
-        <button class="button" form="booking_form">Confirm Booking</button>
+        <div class="horizontal">
+            <div class="film-info">
+                {% if request.user|has_group:"ClubRepresentative" %}
+                <h1>{{club.name}} Club Booking</h1>
+                {% else %}
+                <h1>Film Booking</h1>
+
+                {% if profile.credits > 0 %}
+                <p>Your UWEFlix Credit: £{{profile.credits}}</p>
+                {% endif %}
+                {% endif %}
+
+                <p>Your Discount: {{discount}}%</p>
+            </div>
+
+            <div class="film-info">
+                <h1>{{showing.screen}}</h1>
+                <p>{{showing.time}}</p>
+                <p>Remaining Seats: {{remaining_seats}}</p>
+            </div>
+        </div>
     </div>
 
+    <div class="vertical">
+
+        <div class="tickets">
+            <h2>Select Tickets</h2>
+
+            <br>
+
+            <form id='booking_form' method='POST' class='quantity' action='#' enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!--Adult ticket selection-->
+
+                <div id="adult_form" class="ticket-select">
+                    <div class="item">
+                        <h3>Adult</h3>
+                    </div>
+
+                    <div class="item">
+                        <p id="adult_total">£0.00</p>
+                    </div>
+
+                    <div class="item">
+                        <input type='button' value='-' class='qtyminus minus'/>
+
+                        <input type='text' name='adult_quantity' value='0' class="qty"
+                               id="adult_tick_quantity"
+                               onchange="calculateAmount()"/>
+
+                        <input type='button' value='+' class='qtyplus plus'/>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!--Child ticket selection-->
+
+                <div id="child_form" class="ticket-select">
+                    <div class="item">
+                        <h3>Child</h3>
+                    </div>
+
+                    <div class="item">
+                        <p id="child_total">£0.00</p>
+                    </div>
+
+                    <div class="item">
+                        <input type='button' value='-' class='qtyminus minus'/>
+
+                        <input type='text' name='child_quantity' value='0' class="qty"
+                               id="child_tick_quantity"
+                               onchange="calculateAmount()"/>
+
+                        <input type='button' value='+' class='qtyplus plus'/>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!--Student ticket selection-->
+
+                <div id="student_form" class="ticket-select">
+                    <div class="item">
+                        <h3>Student</h3>
+                    </div>
+
+                    <div class="item">
+                        <p id="student_total">£0.00</p>
+                    </div>
+
+                    <div class="item">
+                        <input type='button' value='-' class='qtyminus minus'/>
+
+                        <input type='text' name='student_quantity' value='0' class="qty"
+                               id="student_tick_quantity"
+                               onchange="calculateAmount()"/>
+
+                        <input type='button' value='+' class='qtyplus plus'/>
+                    </div>
+                </div>
+
+                <br>
+                <br>
+
+                <div class="item">
+                    <h3>Total:</h3>
+                    <p id="total_price">£0.00</p>
+                </div>
+
+            </form>
+
+            <br>
+
+            <div class="horizontal">
+                <button class="button" onclick="showOverlay()"><h2>Make Booking</h2></button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!--    <div class="vertical">-->
+<!--        <div class="tickets">-->
+<!--            <form id='booking_form' method='POST' class='quantity' action='#' enctype="multipart/form-data">-->
+<!--                {% csrf_token %}-->
+
+<!--                &lt;!&ndash;Adult ticket selection&ndash;&gt;-->
+
+<!--                <div id="adult_form" class="ticket-select">-->
+<!--                    <div class="item">-->
+<!--                        <h3>Adult</h3>-->
+<!--                    </div>-->
+
+<!--                    <div class="item">-->
+<!--                        <p id="adult_total">£0.00</p>-->
+<!--                    </div>-->
+
+<!--                    <div class="item">-->
+<!--                        <input type='button' value='-' class='qtyminus minus'/>-->
+
+<!--                        <input type='text' name='adult_quantity' value='0' class="qty"-->
+<!--                               id="adult_tick_quantity"-->
+<!--                               onchange="calculateAmount()"/>-->
+
+<!--                        <input type='button' value='+' class='qtyplus plus'/>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <hr>-->
+
+<!--                &lt;!&ndash;Child ticket selection&ndash;&gt;-->
+
+<!--                <div id="child_form" class="ticket-select">-->
+<!--                    <div class="item">-->
+<!--                        <h3>Child</h3>-->
+<!--                    </div>-->
+
+<!--                    <div class="item">-->
+<!--                        <p id="child_total">£0.00</p>-->
+<!--                    </div>-->
+
+<!--                    <div class="item">-->
+<!--                        <input type='button' value='-' class='qtyminus minus'/>-->
+
+<!--                        <input type='text' name='child_quantity' value='0' class="qty"-->
+<!--                               id="child_tick_quantity"-->
+<!--                               onchange="calculateAmount()"/>-->
+
+<!--                        <input type='button' value='+' class='qtyplus plus'/>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <hr>-->
+
+<!--                &lt;!&ndash;Student ticket selection&ndash;&gt;-->
+
+<!--                <div id="student_form" class="ticket-select">-->
+<!--                    <div class="item">-->
+<!--                        <h3>Student</h3>-->
+<!--                    </div>-->
+
+<!--                    <div class="item">-->
+<!--                        <p id="student_total">£0.00</p>-->
+<!--                    </div>-->
+
+<!--                    <div class="item">-->
+<!--                        <input type='button' value='-' class='qtyminus minus'/>-->
+
+<!--                        <input type='text' name='student_quantity' value='0' class="qty"-->
+<!--                               id="student_tick_quantity"-->
+<!--                               onchange="calculateAmount()"/>-->
+
+<!--                        <input type='button' value='+' class='qtyplus plus'/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+
+<!--        <div class="horizontal">-->
+<!--            &lt;!&ndash;Total price&ndash;&gt;-->
+
+<!--            <div class="item">-->
+<!--                <h3>Total:</h3>-->
+<!--                <p id="total_price">£0.00</p>-->
+<!--            </div>-->
+
+<!--            <button class="button" onclick="showOverlay()">Book</button>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</div>-->
+
+<!--&lt;!&ndash;Confirmation overlay&ndash;&gt;-->
+
+<!--<div id="main_overlay" class="overlay">-->
+
+<!--    <div class="overlay-content">-->
+<!--        <span class="close" onclick="hideOverlay()">&times;</span>-->
+<!--        <h1>Finalise Booking</h1>-->
+
+<!--        <div class="ticket-select">-->
+<!--            <div class="item">-->
+<!--                <h3>{{film.title}} ({{film.age_rating}})</h3>-->
+<!--                <p>Runtime: {{film.duration}} mins</p>-->
+<!--                <p>{{film.description}}</p>-->
+<!--            </div>-->
+
+<!--            <div class="item">-->
+<!--                <h3>{{showing.screen}}</h3>-->
+<!--                <p>{{showing.time}}</p>-->
+<!--                <p>Remaining Seats: {{remaining_seats}}</p>-->
+<!--            </div>-->
+
+<!--            <div class="item">-->
+<!--                <p id="final_adult"></p>-->
+<!--                <p id="final_child"></p>-->
+<!--                <p id="final_student"></p>-->
+
+<!--                <h4 id="final_total"></h4>-->
+<!--                <h4 id="final_credits"></h4>-->
+<!--                <h4 id="final_cost"></h4>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <br>-->
+
+<!--        <button class="button" onclick="hideOverlay()">Cancel</button>-->
+<!--        <button class="button" form="booking_form">Confirm Booking</button>-->
+<!--    </div>-->
+
+<!--</div>-->
 
 {% endblock %}

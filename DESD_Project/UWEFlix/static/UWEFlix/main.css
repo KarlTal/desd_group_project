@@ -1,25 +1,28 @@
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+* {
+    font-family: NunitoSans, Helvetica, Arial, sans-serif;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
+hr {
+    border: none;
+    border-top: 1px solid white;
+    width: 75%;
+    height: 1px;
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
+body {
+    background-image: url('/Assets/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    margin: 0;
 }
 
-.top_bar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background-color: gray;
+.main {
+    font-size: 25px;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
 }
 
 .foot {
@@ -29,14 +32,30 @@ tr:nth-child(even) {
     width: 100%;
     font-size: 20px;
     text-align: center;
-    padding: 0px 0px 0px 0px;
+    padding: 0px;
     background-color: black;
     color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-.main {
-    font-size: 25px;
-    padding: 70px;
-    display: flex;
-    flex-direction: column;
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.alert {
+    text-align: center;
+    display: none;
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
 }

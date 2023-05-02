@@ -1,5 +1,6 @@
 {% extends 'UWEFlix/parent.html' %}
 
+{% load customtags %}
 {% block page %}
 
 <h1>My Profile</h1>
@@ -10,13 +11,38 @@
     <p>Name: {{user.first_name}} {{user.last_name}}</p>
     <p>Email: {{user.email}}</p>
     <p>Date of Birth: {{profile.date_of_birth}}</p>
-    <p>Total Credit: £{{profile.credits}}</p>
+    <p>Total Credit: £{{profile.credits|floatformat:2}}</p>
 </div>
 
 <br>
 
 <div>
-    {%if profile.applied_club_rep is True %}
+    <h3>My Bookings</h3>
+
+    <table style="width:100%">
+        <tr>
+            <th>Showing</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Ticket Count</th>
+            <th>View</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{booking.showing.film}}</td>
+            <td>{{booking.date}}</td>
+            <td>£{{booking.total_price}}</td>
+            <td>{{booking.ticket_count}}</td>
+            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<br>
+
+<div>
+    {%if profile.applied_for_rep is True %}
     <h3>Application to become a club rep has been sent</h3>
     {% else %}
     <h3>Apply to become a club rep</h3>
@@ -24,10 +50,9 @@
         {% csrf_token %}
         <label for="application">Apply to become a club rep:</label>
         {{club_rep_form.club}}
-        <button class="submit" name="ApplyClubRep", value="ApplyClubRep">Submit</button>
+        <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
     </form>
     {% endif %}
-
 </div>
 
 <br>
@@ -43,7 +68,7 @@
         <label for="discount">Apply for Discount:</label>
         <input type="number" id="discount" name="discount" required/>
 
-        <button class="button" name = "Discount" value="Discount">Submit</button>
+        <button class="button" name="Discount" value="Discount">Submit</button>
     </form>
 
     {% if profile.applied_discount > 0 %}
@@ -58,30 +83,5 @@
 </div>
 
 <br>
-
-<div>
-    <h3>My Bookings</h3>
-
-    <table style="width:100%">
-        <tr>
-            <th>Showing</th>
-            <th>Date</th>
-            <th>Total Price</th>
-            <th>Ticket Count</th>
-            <th>View</th>
-            <th>Modify</th>
-        </tr>
-        {% for booking in bookings %}
-        <tr>
-            <td>{{booking.showing.film}}</td>
-            <td>{{booking.date}}</td>
-            <td>£{{booking.total_price}}</td>
-            <td>{{booking.ticket_count}}</td>
-            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
-            <td><a href="/booking/cancel_booking/{{booking.id}}">Cancel</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
 
 {% endblock %}
