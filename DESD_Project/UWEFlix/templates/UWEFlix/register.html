@@ -1,32 +1,35 @@
 {% extends 'UWEFlix/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Register</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/login.css' %}">
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="horizontal">
+    <div class="login-body" style=" height: 820px;">
 
-    {{form.first_name.label}}
-    {{form.first_name}}
-    <br>
-    {{form.last_name.label}}
-    {{form.last_name}}
-    <br>
-    {{form.email.label}}
-    {{form.email}}
-    <br>
-    {{form.password1.label}}
-    {{form.password1}}
-    <br>
-    {{form.password2.label}}
-    {{form.password2}}
-    <br>
-    <button class="button">Submit</button>
-</form>
+        <p class="sign" align="center">Register</p>
 
-{{form.errors}}
+        <hr>
 
-<p>Already have an account? <a href="{% url 'Login' %}">Login</a></p>
+        <form method="POST" enctype="multipart/form-data" class="login-form" align="center">
+            {% csrf_token %}
+
+            {{ form.first_name|add_class:"text-field"|attr:"placeholder:First Name" }}
+            {{form.last_name|add_class:"text-field"|attr:"placeholder:Surname" }}
+            {{form.email|add_class:"text-field"|attr:"placeholder:Email" }}
+            {{form.password1|add_class:"text-field"|attr:"placeholder:Password" }}
+            {{form.password2|add_class:"text-field"|attr:"placeholder:Confirm Password" }}
+            <br>
+
+            <div class="horizontal">
+                <button class="button"><h2>Register</h2></button>
+            </div>
+
+            <a href="{% url 'Login' %}"><p class="no-account" align="center">Already have an account?</p></a>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

@@ -14,32 +14,13 @@
     font-size: 40px;
 }
 
-.username {
+.text-field {
     width: 60%;
     font-weight: 700;
     font-size: 14px;
     background: rgba(136, 126, 126, 0.2);
     padding: 10px 20px;
-    border: none;
     border-radius: 10px;
-    outline: none;
-    box-sizing: border-box;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 50px;
-    text-align: center;
-    margin-bottom: 27px;
-    color: white;
-}
-
-.pass {
-    width: 60%;
-    font-weight: 700;
-    font-size: 14px;
-    background: rgba(136, 126, 126, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    outline: none;
     box-sizing: border-box;
     border: 2px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 50px;
