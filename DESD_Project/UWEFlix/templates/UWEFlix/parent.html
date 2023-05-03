@@ -69,6 +69,7 @@
             {% if request.user|has_group:"ClubRepresentative" %}
 
             <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
+            <li><a href="{% url 'Settle Montly Transactions' %}">Settle Transactions</a></li>
 
             {% endif %}
 

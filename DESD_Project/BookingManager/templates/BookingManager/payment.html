@@ -23,7 +23,9 @@
 
                         <label for="fname"><i class="fa fa-user"></i> Full Name</label>
                         <input type="text" id="fname" name="firstname" placeholder="John M. Doe">
-
+                        {% if credits needed %}
+                        {{error}}    
+                        {% endif %}
                         <label for="email"><i class="fa fa-envelope"></i> Email</label>
                         <input type="email" id="email" name="email" placeholder="john@example.com" required>
 
@@ -38,7 +40,11 @@
                     </div>
 
                     <div class="col-50">
+                        {% if booking.to_pay%}
                         <h3>Payment of £{{booking.to_pay|floatformat:2}}</h3>
+                        {% elif credits_needed %}
+                        <h3>Top up amount : £{{credits_needed|floatformat:2}}</h3>
+                        {% endif %}
                         <label for="fname">Accepted Cards</label>
 
                         <div class="icon-container">

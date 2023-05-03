@@ -42,6 +42,7 @@
 <br>
 
 <div>
+    {% if request.user|has_group:"Student" %}
     {%if profile.applied_for_rep is True %}
     <h3>Application to become a club rep has been sent</h3>
     {% else %}
@@ -52,6 +53,7 @@
         {{club_rep_form.club}}
         <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
     </form>
+    {% endif %}
     {% endif %}
 </div>
 

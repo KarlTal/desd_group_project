@@ -52,6 +52,7 @@
                     <th>Booking Date</th>
                     <th>Total Price</th>
                     <th>Ticket Count</th>
+                    <th>Has been paid </th>
                 </tr>
                 {% for transactions in month_transactions %}
                 <tr>
@@ -63,6 +64,7 @@
                     <td>{{transactions.date}}</td>
                     <td>£ {{transactions.total_price}}</td>
                     <td>{{transactions.ticket_count}}</td>
+                    <td>{{transactions.has_been_paid}}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -80,6 +82,7 @@
                     <th>Booking Date</th>
                     <th>Total Price</th>
                     <th>Ticket Count</th>
+                    <th>Has been paid </th>
                 </tr>
                 {% for transaction in all_transactions %}
                 <tr>
@@ -91,6 +94,7 @@
                     <td>{{transaction.date}}</td>
                     <td>£ {{transaction.total_price}}</td>
                     <td>{{transaction.ticket_count}}</td>
+                    <td>{{transactions.has_been_paid}}</td>
                 </tr>
                 {% endfor %}
             </table>
