@@ -65,6 +65,8 @@ def view_transactions(request):
 
         return render(request, 'ClubManager/club_rep_verify.html', context)
 
+
+# The handler for settling the monthly transactions
 @login_required(login_url='login')
 @allowed_users(allowed_roles='ClubRepresentative')
 def settle_transactions_monthly(request):
@@ -188,28 +190,6 @@ def top_up_credits(request,type):
                     }
                     return render(request, 'BookingManager/payment.html', context)
         return render(request, 'BookingManager/payment.html', context)
-
-# The handler for topping up the club rep's credit by a specific amount
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles='ClubRepresentative')
-# def top_up(request):
-#     user = request.user
-#     club_rep = UserProfile.objects.get(user_obj=user)
-#     error_message = ''
-#     if request.POST:
-#             if request.POST.get('email') == user.email:
-#                 amount = request.POST.get('amount')
-#                 #Top up club rep credits
-#                 club_rep.credits += amount
-#                 club_rep.save()
-#                 return redirect(rep_dashboard)
-#             else:
-#                 error_message = 'Incorrect Email Address'
-#                 context = {
-#                     'error':error_message
-#                 }
-#                 return render(request, 'BookingManager/payment.html', context)
-#     return render(request, 'BookingManager/payment.html', context)
 
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')
