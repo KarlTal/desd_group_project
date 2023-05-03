@@ -144,6 +144,9 @@ def top_up_credits(request,club_rep_id):
             for booking in monthly_transactions:
                 booking.has_been_paid = True
                 booking.save()
+            #Top up club rep credits
+            club_rep.credits += credits_needed
+            club_rep.save()
             #Deduct from club rep's credits
             club_rep.credits -= total_transactions_price.get('total_price__sum')
             club_rep.save()
