@@ -20,7 +20,7 @@ urlpatterns = [
     path('update_rep/<rep_id>', views.update_club_rep, name='Update Club Rep'),
     path('delete_rep/<rep_id>', views.delete_club_rep, name='Delete Club Rep'),
     path('settle_transactions_monthly/',views.settle_transactions_monthly, name = "Settle Montly Transactions"),
-    path('top_up_credits/<club_rep_id>',views.top_up_credits,name = "Top Up Club Rep Credits"),
+    path('top_up_credits/<type>',views.top_up_credits,name = "Top Up Club Rep Credits"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
