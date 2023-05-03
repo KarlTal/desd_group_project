@@ -4,16 +4,17 @@
 
 {% if error %}
 
-    {% if top_up_credits is True%}
+{% if top_up_credits is True %}
 <div style="display:inline-block; margin:auto; text-align: center;">
-    <h3>Available credits: £ {{available_credits}}</h3> 
+    <h3>Available credits: £ {{available_credits}}</h3>
     <h3>Amount to settle: £ {{total_transactions_price}}</h3>
 </div>
 <br>
 <div style="margin:auto;">
-    <input type="submit" class="button" onclick="window.location.href='/clubs/top_up_credits/1';"value="Top up credits"/>
+    <input type="submit" class="button" onclick="window.location.href='/clubs/top_up_credits/1';"
+           value="Top up credits"/>
 </div>
-    {% endif %}
+{% endif %}
 
 {% elif success%}
 

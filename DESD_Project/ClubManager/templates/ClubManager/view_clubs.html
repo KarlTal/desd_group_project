@@ -1,81 +1,112 @@
 {% extends 'ClubManager/parent.html' %}
 
 {% block page %}
+{% load static %}
 
+<link rel="stylesheet" href="{% static 'ClubManager/clubs.css' %}">
 
-<h1>Manage Clubs</h1>
-
-
-
-<div>
-
-    <h2>All clubs</h2>
-
-    <table style="width:100%">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Street Number</th>
-            <th>Street Name</th>
-            <th>City</th>
-            <th>Postcode</th>
-            <th>Landline</th>
-            <th>Mobile</th>
-            <th>Discount</th>
-            <th>Email</th>
-            <th>Club Rep ID</th>
-            <th>Edit</th>
-            <th>Add</th>
-        </tr>
-
-        {% for club in clubs_with_no_club_reps %}
-        <tr>
-            <td>{{club.id}}</td>
-            <td>{{club.name}}</td>
-            <td>{{club.street_number}}</td>
-            <td>{{club.street_name}}</td>
-            <td>{{club.city}}</td>
-            <td>{{club.postcode}}</td>
-            <td>{{club.landline}}</td>
-            <td>{{club.mobile}}</td>
-            <td>{{club.discount}}%</td>
-            <td>{{club.email}}</td>
-            <td>None</td>
-            <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
-            <td><input type="submit" class="button" onclick="window.location.href='/clubs/add_rep/{{club.id}}';"
-                       value="Add a club rep"/></td>
-            {% endfor %}
-        </tr>
-        {% for club in clubs %}
-        {% for rep in club_reps %}
-        {% if rep.club_id == club.id %}
-        <tr>
-            <td>{{club.id}}</td>
-            <td>{{club.name}}</td>
-            <td>{{club.street_number}}</td>
-            <td>{{club.street_name}}</td>
-            <td>{{club.city}}</td>
-            <td>{{club.postcode}}</td>
-            <td>{{club.landline}}</td>
-            <td>{{club.mobile}}</td>
-            <td>{{club.discount}}%</td>
-            <td>{{club.email}}</td>
-            <td>{{rep.user_obj.username}}</td>
-            <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
-            <td>Already allocated</td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-        {% endfor %}
-
-    </table>
-
-    <br>
-
-    <input type="submit" class="button" onclick="window.location.href='/clubs/add_club/'" value="Add Club"/>
+<div class="horizontal">
+    <h1>Manage Clubs</h1>
 </div>
 
+<h2>All Clubs</h2>
 
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Landline</th>
+        <th>Mobile</th>
+        <th>Discount</th>
+        <th>Email</th>
+        <th>Club Rep</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
 
+    {% for club in clubs_no_rep %}
+    <tbody>
+    <tr>
+        <td>{{club.id}}</td>
+        <td>{{club.name}}</td>
+        <td>{{club.street_number}} {{club.street_name}}, {{club.city}} {{club.postcode}}</td>
+        <td>{{club.landline}}</td>
+        <td>{{club.mobile}}</td>
+        <td>{{club.discount}}%</td>
+        <td>{{club.email}}</td>
+        <td><input type="submit" class="button small" onclick="window.location.href='/clubs/add_rep/{{club.id}}';"
+                   value="Create Rep"/></td>
+        <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
+    </tr>
+    </tbody>
+    {% endfor %}
+
+    {% for club in clubs %}
+    {% for rep in club_reps %}
+    {% if rep.club_id == club.id %}
+    <tbody>
+    <tr>
+        <td>{{club.id}}</td>
+        <td>{{club.name}}</td>
+        <td>{{club.street_number}} {{club.street_name}}, {{club.city}} {{club.postcode}}</td>
+        <td>{{club.landline}}</td>
+        <td>{{club.mobile}}</td>
+        <td>{{club.discount}}%</td>
+        <td>{{club.email}}</td>
+        <td>{{rep.user_obj.username}}</td>
+        <td><a href="/clubs/update_club/{{club.id}}">Modify</a></td>
+    </tr>
+    </tbody>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+</table>
+
+<br>
+
+<div class="horizontal">
+    <input type="submit" class="button" onclick="window.location.href='/clubs/add_club/'"
+           value="Add Club"/>
+</div>
+
+<br>
+<hr>
+<br>
+
+<h2>All Representatives</h2>
+
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>Rep ID</th>
+        <th>First Name</th>
+        <th>Surname</th>
+        <th>DOB</th>
+        <th>Club Name</th>
+        <th>Credit Count</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    {% for rep in club_reps %}
+    <tbody>
+    <tr>
+        <td>{{rep.id}}</td>
+        <td>{{rep.user_obj.first_name}}</td>
+        <td>{{rep.user_obj.last_name}}</td>
+        <td>{{rep.date_of_birth}}</td>
+        <td>{{rep.club}}</td>
+        <td>{{rep.credits}}</td>
+        <td><a href="/clubs/update_rep/{{rep.id}}">Modify</a></td>
+    </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+<br>
+<hr>
+<br>
 
 {% endblock %}

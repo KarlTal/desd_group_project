@@ -13,7 +13,7 @@
     <p>Date of Birth: {{profile.date_of_birth}}</p>
     <p>Total Credit: £{{profile.credits|floatformat:2}}</p>
     {% if request.user|has_group:"ClubRepresentative" %}
-    <input type="submit"  name="TopUp" class="button" onclick="window.location.href='/clubs/top_up_credits/2';"value="Top up credits"/>
+    <input type="submit"  name="TopUp" class="button" onclick="window.location.href='/booking/purchase_credits/top_up';" value="Top Up Credits"/>
     {% endif %}
 </div>
 

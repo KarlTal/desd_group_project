@@ -1,109 +1,119 @@
-{% extends 'UWEFlix/parent.html' %}
-
-{% load static %}
-<link rel="stylesheet" href="{% static 'ClubManager/main.css' %}">
-
+{% extends 'ClubManager/parent.html' %}
 
 {% block page %}
+{% load static %}
 
-<h1>View transactions </h1>
+<link rel="stylesheet" href="{% static 'ClubManager/transactions.css' %}">
+
+<head>
+    <script>
+        function myFunction(){
+            var viewer = document.getElementById("tableViewer");
+            var currentMonthView = document.getElementById("current_month-table");
+            var allView = document.getElementById("all_transactions-table");
+
+            if (viewer.value == "month_transactions"){
+                currentMonthView.style.display = "block";
+            } else {
+                currentMonthView.style.display = "none";
+            }
+
+            if (viewer.value == "all_transactions"){
+                allView.style.display = "block";
+            } else {
+                allView.style.display = "none";
+            }
+        }
+    </script>
+</head>
+
+<div class="horizontal">
+    <h1>View Transactions</h1>
+</div>
 
 <div>
+    <select name="tableViewer" id="tableViewer" class="period-selector" onclick="myFunction()">
+        <option value="month_transactions">View Current Month</option>
+        <option value="all_transactions">View All Transactions</option>
+    </select>
+</div>
 
-    <div class='control-container'>
-        <div>
-            <select name="tableViewer" id="tableViewer" onclick="myFunction()">
-                <option value="month_transactions">View Current Month</option>
-                <option value="all_transactions">View All Transactions</option>
-            </select>
-        </div>
+<div class='current_month-table' id="current_month-table">
+    <h2>Current Month's Transactions</h2>
 
-        <script>
-            function myFunction() 
-            {
-                var viewer = document.getElementById("tableViewer");
-                var currentMonthView = document.getElementById("current_month-table");
-                var allView = document.getElementById("all_transactions-table");
-                if (viewer.value == "month_transactions"){
-                    currentMonthView.style.display = "block";
-                } else {
-                    currentMonthView.style.display = "none";
-                }
-                if (viewer.value == "all_transactions"){
-                    allView.style.display = "block";
-                } else {
-                    allView.style.display = "none";
-                }
-            }
-        </script>
-    </div>
+    <table style="width:100%" class="styled-table">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>User Email</th>
+            <th>Film Title</th>
+            <th>Showing Date</th>
+            <th>Transaction Time</th>
+            <th>Price</th>
+            <th>Tickets</th>
+            <th>Has been paid</th>
+        </tr>
+        </thead>
+        {% for transactions in month_transactions %}
+        <tbody>
+        <tr>
+            <td>{{transactions.type}}</td>
+            <td>{{transactions.user_email}}</td>
+            <td>{{transactions.showing.film.title}}</td>
+            <td>{{transactions.showing.time}}</td>
+            <td>{{transactions.date}}</td>
+            <td>£{{transactions.total_price}}</td>
+            <td>{{transactions.ticket_count}}</td>
+            <td>
+                {% if transactions.has_been_paid %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
 
-    <div class='table-container'>
+<div class='all_transactions-table' id="all_transactions-table" style="display: none;">
+    <h2>All Club Transactions</h2>
 
-        <div class='current_month-table' id="current_month-table">
-            <h2>Current Month's Transactions</h2>
-            <table style="width:100%">
-                <tr>
-                    <th>Booking ID</th>
-                    <th>Showing ID</th>
-                    <th>Film Title</th>
-                    <th>Showing Time</th>
-                    <th>Showing Date</th>
-                    <th>Booking Date</th>
-                    <th>Total Price</th>
-                    <th>Ticket Count</th>
-                    <th>Has been paid </th>
-                </tr>
-                {% for transactions in month_transactions %}
-                <tr>
-                    <td>{{transactions.id}}</td>
-                    <td>{{transactions.showing.id}}</td>
-                    <td>{{transactions.showing.film.title}}</td>
-                    <td>{{transactions.showing.time}}</td>
-                    <td>{{transactions.showing.time}}</td>
-                    <td>{{transactions.date}}</td>
-                    <td>£ {{transactions.total_price}}</td>
-                    <td>{{transactions.ticket_count}}</td>
-                    <td>{{transactions.has_been_paid}}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-        <div class='all_transactions-table' id="all_transactions-table" style="display: none;">
-            <h2>All Club Transactions</h2>
-            <table style="width:100%">
-                <tr>
-                    <th>Booking ID</th>
-                    <th>Showing ID</th>
-                    <th>Film Title</th>
-                    <th>Showing Time</th>
-                    <th>Showing Date</th>
-                    <th>Booking Date</th>
-                    <th>Total Price</th>
-                    <th>Ticket Count</th>
-                    <th>Has been paid </th>
-                </tr>
-                {% for transaction in all_transactions %}
-                <tr>
-                    <td>{{transaction.id}}</td>
-                    <td>{{transaction.showing.id}}</td>
-                    <td>{{transaction.showing.film.title}}</td>
-                    <td>{{transaction.showing.time}}</td>
-                    <td>{{transaction.showing.time}}</td>
-                    <td>{{transaction.date}}</td>
-                    <td>£ {{transaction.total_price}}</td>
-                    <td>{{transaction.ticket_count}}</td>
-                    <td>{{transactions.has_been_paid}}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-    </div>
-
-    <br>
-
+    <table style="width:100%" class="styled-table">
+        <thead>
+        <tr>
+            <th>Showing ID</th>
+            <th>User Email</th>
+            <th>Film Title</th>
+            <th>Showing Date</th>
+            <th>Transaction Time</th>
+            <th>Price</th>
+            <th>Tickets</th>
+            <th>Has been paid</th>
+        </tr>
+        </thead>
+        {% for transactions in all_transactions %}
+        <tbody>
+        <tr>
+            <td>{{transactions.showing.id}}</td>
+            <td>{{transactions.user_email}}</td>
+            <td>{{transactions.showing.film.title}}</td>
+            <td>{{transactions.showing.time}}</td>
+            <td>{{transactions.date}}</td>
+            <td>£{{transactions.total_price}}</td>
+            <td>{{transactions.ticket_count}}</td>
+            <td>
+                {% if transactions.has_been_paid %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+        {% endfor %}
+    </table>
 </div>
 
 {% endblock %}

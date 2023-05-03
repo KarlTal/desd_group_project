@@ -1,9 +1,32 @@
 {% extends 'ClubManager/parent.html' %}
 
 {% block page %}
+{% load static %}
 
-<h1>Homepage</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/login.css' %}">
 
-<h2>Hi club rep</h2>
+{% if success %}
+
+{% else %}
+
+<div class="horizontal">
+    <div class="login-body" style="height: 500px;">
+
+        <p class="sign" align="center">Enter Rep Number</p>
+
+        <hr>
+
+        <form method="POST" enctype="multipart/form-data" class="login-form" align="center" style="margin-top: 30px">
+            {% csrf_token %}
+            <input class="text-field" type="text" id="username" name="username" align="center" placeholder="Rep Number" required>
+
+            <div class="horizontal">
+                <button class="button"><h2>Validate</h2></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endif %}
 
 {% endblock %}

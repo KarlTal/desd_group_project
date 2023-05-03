@@ -2,9 +2,9 @@ import uuid
 from datetime import date
 
 from django.shortcuts import render, redirect
-from django.utils import timezone
 
 from UWEFlix.models import *
+from UWEFlix.views import profile
 
 # Global variable for our pending payments.
 pending_payments = {}
@@ -76,20 +76,25 @@ def book_film(request, film_id, showing_id):
 
                     return redirect('/booking/payment/' + str(unique_key))
 
-                if total_price > user_profile.credits:
+                if club is None and total_price > user_profile.credits:
                     pending_payments[str(unique_key)] = PendingBooking(showing_id, child_quantity, adult_quantity,
                                                                        student_quantity, total_price,
                                                                        user_profile.credits)
 
                     return redirect('/booking/payment/' + str(unique_key))
                 else:
+                    has_been_paid = False
+
                     # Update the users credit.
-                    user_profile.credits = user_profile.credits - total_price
-                    user_profile.save()
+                    if club is None:
+                        user_profile.credits = user_profile.credits - total_price
+                        user_profile.save()
+                        has_been_paid = True
 
                     new_booking = Booking.objects.create(user_email=request.user.email, unique_key=unique_key,
                                                          showing=showing, date=date.today(),
-                                                         total_price=total_price, ticket_count=total_quantity)
+                                                         total_price=total_price, ticket_count=total_quantity,
+                                                         has_been_paid=has_been_paid)
 
                     for i in range(adult_quantity):
                         Ticket.objects.create(booking=new_booking, ticket_type=adult_ticket)
@@ -145,7 +150,8 @@ def payment(request, unique_key):
             # Create the new booking.
             new_booking = Booking.objects.create(user_email=email, unique_key=unique_key, showing=showing,
                                                  date=date.today(),
-                                                 total_price=pending_booking.price, ticket_count=total_quantity)
+                                                 total_price=pending_booking.price, ticket_count=total_quantity,
+                                                 has_been_paid=True)
 
             # Create the new ticket objects and attribute them to the booking.
             for i in range(int(pending_booking.adult_tickets)):
@@ -165,6 +171,37 @@ def payment(request, unique_key):
             return redirect(confirmation, booking_id=new_booking.id, unique_key=unique_key)
 
     return render(request, 'BookingManager/payment.html', {'booking': pending_booking, 'error': error_message})
+
+
+def purchase_credits(request, purchase_type):
+    error_message = ''
+
+    user_profile = UserProfile.objects.get(user_obj=request.user)
+
+    if request.POST:
+        # Validate that the email inputted is correct.
+        if request.POST.get('email') == request.user.email:
+
+            if purchase_type == 'top_up':
+                amount = float(request.POST.get('credit_amount'))
+
+                if amount <= 5:
+                    error_message = 'Amount to top up must be greater than £5.00'
+                else:
+                    # Top up club rep credits
+                    user_profile.credits += amount
+                    user_profile.save()
+
+                    return redirect(profile)
+
+            elif purchase_type == 'settle_accounts':
+
+                print('yes')
+        else:
+            error_message = 'The email provided doesn\'t match your accounts!'
+
+    return render(request, 'BookingManager/payment.html',
+                  {'top_up': (purchase_type == 'top_up'), 'error': error_message})
 
 
 def confirmation(request, booking_id, unique_key):
