@@ -1,13 +1,14 @@
-from django.contrib.auth import logout
+from django.contrib.auth import logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
+from django.db.models import Q
 from CinemaManager.views import cinema_dashboard
 from UWEFlix.decorators import *
 from UWEFlix.forms import *
 from UWEFlix.models import *
 from .forms import *
-
+from datetime import datetime
+from django.db.models import Sum
 
 # The handler for the homepage of the website.
 @login_required(login_url='/login')
@@ -21,6 +22,7 @@ def rep_dashboard(request):
 @allowed_users(allowed_roles='ClubRepresentative')
 def view_transactions(request):
     error_message = ''
+    context = {'version' : 1}
     group = get_group(request.user)
 
     # If the current user is an administrator, just display all the transactions.
@@ -57,8 +59,137 @@ def view_transactions(request):
 
                 request.session["club_rep_login_attempts"] += 1
 
-        return render(request, 'ClubManager/club_rep_verify.html', {'error': error_message})
+                context = {'error':error_message,
+                           'version' : 1
+                           }
 
+        return render(request, 'ClubManager/club_rep_verify.html', context)
+
+
+# The handler for settling the monthly transactions
+@login_required(login_url='login')
+@allowed_users(allowed_roles='ClubRepresentative')
+def settle_transactions_monthly(request):
+    error_message = ''
+    context = {
+        'success': "All monthly transactions have been settled"
+    }
+    #Check if the current club rep has enough credits to settle the amount
+    user = request.user
+    club_rep = UserProfile.objects.get(user_obj=user)
+    #Check the transactions of the current month
+    monthly_transactions = Booking.objects.filter(Q(user_email=user.email)&Q(date__month=datetime.today().month)&Q(has_been_paid=False))
+    print(monthly_transactions)
+    if len(monthly_transactions)>0:
+        #Count total sum of all the transactions
+        total_transactions_price = monthly_transactions.aggregate(Sum('total_price'))
+        if total_transactions_price.get('total_price__sum') > club_rep.credits:
+            error_message = "You do not have enough credits to settle montly transaction"
+            context = {
+                'error': error_message,
+                'version' : 2,
+                'top_up_credits':True,
+                'available_credits':club_rep.credits,
+                'total_transactions_price':total_transactions_price.get('total_price__sum'),
+                'club_rep_id':club_rep.id
+            }
+            return render(request, 'ClubManager/club_rep_verify.html', context)
+        else:
+            if request.method == 'POST':
+
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                user = authenticate(request, username=username, password=password)
+
+                if user is not None:
+                    request.session["club_rep_login_attempts"] = 0
+                    for booking in monthly_transactions:
+                        booking.has_been_paid = True
+                        booking.save()
+                    #Deduct from club rep's credits
+                    club_rep.credits -= total_transactions_price.get('total_price__sum')
+                    club_rep.save()
+                    return redirect(rep_dashboard)
+
+                else:
+                    if request.session["club_rep_login_attempts"] >= 5:
+                        logout(request)
+                        return redirect('/') 
+
+                    error_message = 'Invalid Credentials, ' + str(5 - int(request.session["club_rep_login_attempts"])) \
+                                    + " attempts remaining."
+
+                    request.session["club_rep_login_attempts"] += 1
+                    context ={'error':error_message,
+                            'version' : 2
+                            }
+            
+            return render(request, 'ClubManager/club_rep_verify.html', context)
+    else:
+        return render(request, 'ClubManager/club_rep_verify.html', context)
+
+# The handler for topping up the exact amount of credits for settling the monthly transaction
+@login_required(login_url='login')
+@allowed_users(allowed_roles='ClubRepresentative')
+def top_up_credits(request,type):
+    user = request.user
+    club_rep = UserProfile.objects.get(user_obj=user)
+    error_message = ''
+    context = {}
+
+    if int(type) == 1:
+        print("nay")
+        monthly_transactions = Booking.objects.filter(Q(user_email=user.email)&Q(date__month=datetime.today().month)&Q(has_been_paid=False))
+        total_transactions_price = monthly_transactions.aggregate(Sum('total_price'))
+        credits_needed = total_transactions_price.get('total_price__sum') - club_rep.credits
+        context = {
+            'credits_needed': credits_needed
+        }
+        if request.POST:
+            if request.POST.get('email') == user.email:
+                for booking in monthly_transactions:
+                    booking.has_been_paid = True
+                    booking.save()
+                #Top up club rep credits
+                club_rep.credits += credits_needed
+                club_rep.save()
+                #Deduct from club rep's credits
+                club_rep.credits -= total_transactions_price.get('total_price__sum')
+                club_rep.save()
+                return redirect(settle_transactions_monthly)
+            else:
+                error_message = 'Incorrect Email Address'
+                context = {
+                    'credits_needed': credits_needed,
+                    'error':error_message
+                }
+                return render(request, 'BookingManager/payment.html', context)
+        return render(request, 'BookingManager/payment.html', context)
+    elif int(type) == 2:
+        context = {
+            'version': 2,
+        }
+        if request.POST:
+                if request.POST.get('email') == user.email:
+                    amount = float(request.POST.get('credit_amount'))
+                    if amount <= 5:
+                        error_message = 'Amount to top up must be greater than £5.00'
+                        context = {
+                            'error':error_message
+                        }
+                        return render(request, 'BookingManager/payment.html', context)
+                    #Top up club rep credits    
+                    club_rep.credits += amount
+                    club_rep.save()
+                    return redirect(rep_dashboard)
+
+                else:
+                    error_message = 'Incorrect Email Address'
+                    context = {
+                        'error':error_message
+                    }
+                    return render(request, 'BookingManager/payment.html', context)
+        return render(request, 'BookingManager/payment.html', context)
 
 @login_required(login_url='/login')
 @allowed_users(allowed_roles='CinemaManager')

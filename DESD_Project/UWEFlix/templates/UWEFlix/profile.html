@@ -12,6 +12,9 @@
     <p>Email: {{user.email}}</p>
     <p>Date of Birth: {{profile.date_of_birth}}</p>
     <p>Total Credit: £{{profile.credits|floatformat:2}}</p>
+    {% if request.user|has_group:"ClubRepresentative" %}
+    <input type="submit"  name="TopUp" class="button" onclick="window.location.href='/clubs/top_up_credits/2';"value="Top up credits"/>
+    {% endif %}
 </div>
 
 <br>
@@ -42,6 +45,7 @@
 <br>
 
 <div>
+    {% if request.user|has_group:"Student" %}
     {%if profile.applied_for_rep is True %}
     <h3>Application to become a club rep has been sent</h3>
     {% else %}
@@ -52,6 +56,7 @@
         {{club_rep_form.club}}
         <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
     </form>
+    {% endif %}
     {% endif %}
 </div>
 

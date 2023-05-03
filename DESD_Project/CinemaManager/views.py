@@ -262,4 +262,4 @@ def approve_rep(request, student_id, outcome):
         profile.club_id = None
         profile.save()
 
-    return redirect(view_users_applications)
+    return redirect(approvals)
