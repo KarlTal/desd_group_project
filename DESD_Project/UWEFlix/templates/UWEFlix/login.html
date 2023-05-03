@@ -1,24 +1,30 @@
 {% extends 'UWEFlix/parent.html' %}
 
 {% block page %}
+{% load static %}
 
-<h1>Login</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/login.css' %}">
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="horizontal">
+    <div class="login-body">
 
-    <label for="username">Email/Username</label>
-    <input type="text" id="username" name="username" required/>
+        <p class="sign" align="center">Sign in</p>
 
-    <br>
+        <hr>
 
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required/>
+        <form method="POST" enctype="multipart/form-data" class="login-form" align="center">
+            {% csrf_token %}
+            <input class="username" type="text" id="username" name="username" align="center" placeholder="Username">
+            <input class="pass" type="password" id="password" name="password" align="center" placeholder="Password"
+                   required>
 
-    <br>
+            <div class="horizontal">
+                <button class="button"><h2>Login</h2></button>
+            </div>
 
-    <button class="button">Login</button>
-</form>
+            <a href="{% url 'Register' %}"><p class="no-account" align="center">Don't have an account?</p></a>
+        </form>
+    </div>
+</div>
 
-<p>Don't have an account? <a href="{% url 'Register' %}">Register</a></p>
 {% endblock %}

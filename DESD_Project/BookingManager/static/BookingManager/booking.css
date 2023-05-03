@@ -28,12 +28,6 @@ body {
     padding: 50px;
 }
 
-.horizontal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .vertical {
     margin: 10px;
 }
@@ -99,6 +93,7 @@ input.qtyminus {
     margin: 20px;
     outline: none;
     border: none;
+    cursor: pointer;
 }
 
 .button:hover {

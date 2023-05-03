@@ -1,0 +1,91 @@
+.login-body {
+    background-color: rgba(10, 28, 58, 0.9);
+    width: 30%;
+    height: 640px;
+    border-radius: 10px;
+    margin-top: 70px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.sign {
+    padding-top: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.username {
+    width: 60%;
+    font-weight: 700;
+    font-size: 14px;
+    background: rgba(136, 126, 126, 0.2);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 50px;
+    text-align: center;
+    margin-bottom: 27px;
+    color: white;
+}
+
+.pass {
+    width: 60%;
+    font-weight: 700;
+    font-size: 14px;
+    background: rgba(136, 126, 126, 0.2);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 50px;
+    text-align: center;
+    margin-bottom: 27px;
+    color: white;
+}
+
+form.login-form {
+    padding-top: 60px;
+}
+
+.username:focus, .pass:focus {
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 60px;
+    background-color: #e52729;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    margin: 20px;
+    margin-top: 50px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+  background-color: #941213;
+  transition: 0.25s;
+}
+
+.no-account {
+    text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+    color: white;
+    padding-top: 15px;
+}
+
+a {
+    text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+    color: white;
+    text-decoration: none
+}

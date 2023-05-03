@@ -15,12 +15,7 @@ body {
     margin: 20px;
     outline: none;
     border: none;
-}
-
-.horizontal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    cursor: pointer;
 }
 
 .half {

@@ -62,12 +62,6 @@ label {
     font-size: 24px;
 }
 
-.horizontal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .btn {
     background-color: #04AA6D;
     color: white;

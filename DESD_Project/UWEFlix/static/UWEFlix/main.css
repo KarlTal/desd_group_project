@@ -59,3 +59,9 @@ body {
     background-color: #f44336;
     color: white;
 }
+
+.horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
