@@ -40,7 +40,7 @@ def film(request, film_id):
 
 
 # View handling for user profile.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 def profile(request):
     user_profile = UserProfile.objects.get(user_obj=request.user)
     lookup = Booking.objects.filter(user_email=request.user.email)
@@ -112,7 +112,7 @@ def login_user(request):
 
 
 # View handling for user logging out.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 def logout_user(request):
     logout(request)
     return redirect(login_user)

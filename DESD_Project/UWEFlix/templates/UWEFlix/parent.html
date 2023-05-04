@@ -20,6 +20,11 @@
             if (error != '') {
                 showError(error);
             }
+
+            let success = "{{success}}";
+            if (success != '') {
+                showSuccess(success);
+            }
         });
 
         function showError(message) {
@@ -28,6 +33,14 @@
 
             var error = document.getElementById("error_message");
             error.innerHTML = message;
+        }
+
+        function showSuccess(message) {
+            var overlay = document.getElementById("success");
+            overlay.style.display = "block";
+
+            var success = document.getElementById("success_message");
+            success.innerHTML = message;
         }
     </script>
 </head>
@@ -51,40 +64,35 @@
 
             {% if request.user|has_group:"AccountManager" %}
 
-            <li><a href="{% url 'View Reps' %}">Representatives</a></li>
             <li><a href="{% url 'View Unapproved Discounts' %}">Approve Discounts</a></li>
 
             {% endif %}
 
             {% if request.user|has_group:"CinemaManager" %}
 
-            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+            <li><a href="{% url 'Dashboard' %}">Cinema</a></li>
             <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-            <li><a href="{% url 'View Reps' %}">Representatives</a></li>
             <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
-
-            {% endif %}
-
-            {% if request.user|has_group:"ClubRepresentative" %}
-
-            <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
-            <li><a href="{% url 'Settle Montly Transactions' %}">Settle Transactions</a></li>
 
             {% endif %}
 
             {% if request.user|has_group:"Administrator" %}
 
             <li><a href="{% url 'Account Dashboard' %}">Accounts</a></li>
-            <li><a href="{% url 'Dashboard' %}">Manage</a></li>
+            <li><a href="{% url 'Dashboard' %}">Cinema</a></li>
             <li><a href="{% url 'View Clubs' %}">Clubs</a></li>
-            <li><a href="{% url 'View Reps' %}">Representatives</a></li>
-            <li><a href="{% url 'View Club Transactions' %}">Transactions</a></li>
             <li><a href="{% url 'View Approvals' %}">Approvals</a></li>
 
             {% endif %}
 
             <li style="float:right"><a href="{% url 'Logout' %}">Logout</a></li>
             <li style="float:right"><a href="{% url 'My Profile' %}">My Profile</a></li>
+
+            {% if request.user|has_group:"ClubRepresentative" %}
+
+            <li style="float:right"><a href="{% url 'Club Dashboard' %}">My Club</a></li>
+
+            {% endif %}
 
             {% endif %}
         </ul>
@@ -100,6 +108,11 @@
         <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
         <strong style="margin:0; display:inline; float:center;">Error!</strong>
         <p style="margin:0; display:inline; float:center;" id="error_message">Empty</p>
+    </div>
+
+    <div id="success" class="success">
+        <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+        <p style="margin:0; display:inline; float:center;" id="success_message">Empty</p>
     </div>
 
     <br>

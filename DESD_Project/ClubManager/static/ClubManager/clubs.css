@@ -1,0 +1,28 @@
+body {
+    color: white;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 60px;
+    background-color: #e52729;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    outline: none;
+    border: none;
+    font-weight: bold;
+}
+
+.small {
+    width: 100px;
+    height: 40px;
+}
+
+.button:hover {
+  background-color: #941213;
+  transition: 0.25s;
+}

@@ -1,0 +1,9 @@
+body {
+    color: white;
+}
+
+.period-selector {
+    width: 160px;
+    height: 30px;
+    text-align: center;
+}

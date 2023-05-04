@@ -1,9 +1,98 @@
 {% extends 'ClubManager/parent.html' %}
 
 {% block page %}
+{% load static %}
 
-<h1>Homepage</h1>
+<link rel="stylesheet" href="{% static 'ClubManager/clubs.css' %}">
+<link rel="stylesheet" href="{% static 'UWEFlix/login.css' %}">
 
-<h2>Hi club rep</h2>
+{% if authenticated %}
+<div class="horizontal">
+    <h1>{{profile.club.name}} Club Management</h1>
+</div>
+
+<h2>All Club Transactions</h2>
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>User Email</th>
+        <th>Film Title</th>
+        <th>Showing Date</th>
+        <th>Transaction Time</th>
+        <th>Price</th>
+        <th>Tickets</th>
+        <th>Has been paid</th>
+    </tr>
+    </thead>
+    {% for transactions in all_transactions %}
+    <tbody>
+    <tr>
+        <td>{{transactions.id}}</td>
+        <td>{{transactions.user_email}}</td>
+        <td>{{transactions.showing.film.title}}</td>
+        <td>{{transactions.showing.time}}</td>
+        <td>{{transactions.date}}</td>
+        <td>£{{transactions.total_price}}</td>
+        <td>{{transactions.ticket_count}}</td>
+        <td>
+            {% if transactions.has_been_paid %}
+            Yes
+            {% else %}
+            No
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+<br>
+<hr>
+<br>
+
+<div class="horizontal">
+    <div>
+        <h3 align="center">Available Credit: £{{profile.credits|floatformat:2}}</h3>
+        <h3 align="center" style="padding: 0; margin: 0;">Pending Payment: £{{to_settle|floatformat:2}}</h3>
+
+        <div class="horizontal">
+            <input type="submit" class="button" onclick="window.location.href='/booking/purchase/top_up:-1';"
+               value="Purchase Credits"/>
+
+            <form id="dummy-form" method="POST" action="{% url 'Club Dashboard' %}">
+                {% csrf_token %}
+                <input type="submit" class="button" value="Settle Accounts"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br>
+<hr>
+<br>
+
+{% else %}
+
+<div class="horizontal">
+    <div class="login-body" style="height: 500px;">
+
+        <p class="sign" align="center">Enter Rep Number</p>
+
+        <hr>
+
+        <form method="POST" enctype="multipart/form-data" class="login-form" align="center" style="margin-top: 30px">
+            {% csrf_token %}
+            <input class="text-field" type="password" id="username" name="username" align="center"
+                   placeholder="Rep Number" required>
+
+            <div class="horizontal">
+                <button class="button"><h2>Validate</h2></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endif %}
 
 {% endblock %}

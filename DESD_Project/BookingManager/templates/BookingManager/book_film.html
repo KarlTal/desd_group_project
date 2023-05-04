@@ -72,7 +72,7 @@
             var remaining_seats = "{{showing.screen.capacity}}" - "{{showing.seats_taken}}"
 
             if ((adult_total + child_total + student_total) > remaining_seats) {
-                showError("There are not enough seats available for this many tickets! (2)");
+                showError("There are not enough seats available for this many tickets!");
                 return;
             }
 
@@ -91,7 +91,7 @@
             document.getElementById("final_total").innerHTML = "Total Cost: " + document.getElementById("total_price").innerHTML;
 
             var credits = parseInt({{profile.credits}});
-            if (credits > 0) {
+            if (credits > 0 && ("{{club}}" == "None")) {
                 var final_price = getFinalPrice();
                 var consumed_credit = Math.min(credits, final_price);
                 document.getElementById("final_credits").innerHTML = "Will use £" + consumed_credit + " of credit.";
@@ -145,7 +145,8 @@
         <div class="horizontal">
             <div class="film-info">
                 {% if request.user|has_group:"ClubRepresentative" %}
-                <h1>{{club.name}} Club Booking</h1>
+                <h1>Club Booking</h1>
+                <h5>{{club.name}} Club</h5>
                 {% else %}
                 <h1>Film Booking</h1>
 

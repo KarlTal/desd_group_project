@@ -82,7 +82,8 @@ class Club(models.Model):
     mobile = models.CharField(max_length=255)
     discount = models.IntegerField()
     email = models.EmailField()
-    has_club_rep = models.BooleanField(blank=True, null=True,default=0)
+    has_club_rep = models.BooleanField(blank=True, null=True, default=0)
+
     def __str__(self):
         return str(self.name)
 
@@ -167,7 +168,7 @@ class UserProfile(models.Model):
 
     applied_discount = models.IntegerField(null=True, default=0)
     applied_for_rep = models.BooleanField(null=True, default=False)
-    
+
     def __str__(self):
         return self.user_obj.email + "'s Profile"
 
@@ -177,6 +178,7 @@ class Transaction(models.Model):
     TYPES = (('Debit', 'Debit'), ('Credit', 'Credit'))
 
     user_email = models.EmailField(null=True)
+    origin = models.CharField(max_length=100, default="Transaction")
     type = models.CharField(max_length=6, choices=TYPES)
     amount = models.FloatField(default=0)
     date = models.DateTimeField(default=timezone.now)
