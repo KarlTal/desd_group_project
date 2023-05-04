@@ -40,8 +40,10 @@
                     </div>
 
                     <div class="col-50">
-                        {% if credits_needed %}
-                        <h3>Payment of £{{credits_needed|floatformat:2}}</h3>
+                        {% if booking %}
+                        <h3>Payment of £{{booking.to_pay|floatformat:2}}</h3>
+                        {% else %}
+                         <h3>Topping Up Credit</h3>
                         {% endif %}
 
                         <label for="fname">Accepted Cards</label>
@@ -73,7 +75,7 @@
                             </div>
                         </div>
 
-                        {% if top_up %}
+                        {% if purchase_type == 'top_up' %}
                         <label for="credit_amount">Top Up Amount: Min £5.00 </label>
                         <input min = '5.0' step = 'any' type="number" id="credit_amount" name="credit_amount" placeholder="5">
                         {% endif %}

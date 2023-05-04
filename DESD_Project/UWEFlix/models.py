@@ -178,6 +178,7 @@ class Transaction(models.Model):
     TYPES = (('Debit', 'Debit'), ('Credit', 'Credit'))
 
     user_email = models.EmailField(null=True)
+    origin = models.CharField(max_length=100, default="Transaction")
     type = models.CharField(max_length=6, choices=TYPES)
     amount = models.FloatField(default=0)
     date = models.DateTimeField(default=timezone.now)

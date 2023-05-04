@@ -17,7 +17,6 @@ urlpatterns = [
     path('add_rep/<club_id>', views.add_club_rep, name="Add Club Rep"),
     path('update_rep/<rep_id>', views.update_club_rep, name='Update Club Rep'),
     path('delete_rep/<rep_id>', views.delete_club_rep, name='Delete Club Rep'),
-    path('settle_transactions_monthly/', views.settle_transactions_monthly, name="Settle Montly Transactions"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

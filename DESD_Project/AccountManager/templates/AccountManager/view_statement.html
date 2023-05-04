@@ -9,6 +9,7 @@
     <table style="width:100%">
         <tr>
             <th>Email</th>
+            <th>Origin</th>
             <th>Transaction Type</th>
             <th>Price</th>
             <th>Date</th>
@@ -16,6 +17,7 @@
         {% for transaction in transactions %}
         <tr>
             <td>{{transaction.user_email}}</td>
+            <td>{{transaction.origin}}</td>
             <td>{{transaction.type}}</td>
             <td>£{{transaction.amount|floatformat:2}}</td>
             <td>{{transaction.date}}</td>

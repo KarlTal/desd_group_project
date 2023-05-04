@@ -1,9 +1,5 @@
-from datetime import datetime
-
-from django.contrib.auth import logout, authenticate
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.db.models import Sum
 from django.shortcuts import render
 
 from CinemaManager.views import cinema_dashboard
@@ -14,27 +10,61 @@ from .forms import *
 
 
 # The handler for the homepage of the website.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='ClubRepresentative')
 def rep_dashboard(request):
     error_message = ''
-    success = ("successful_club_rep_login" in request.session)
+    authenticated = ("successful_club_rep_login" in request.session)
 
     # Populate the session data with the counter set to 0 to avoid KeyErrors.
     if "successful_club_rep_login" not in request.session:
         request.session["club_rep_login_attempts"] = 0
 
-    if success:
+    if authenticated:
+        error_message = ''
+        success_message = ''
+        user_profile = UserProfile.objects.get(user_obj=request.user)
 
-        print('nice')
+        to_settle = 0
+        all_transactions = Booking.objects.filter(user_email=request.user.email).order_by('date')
 
+        for transaction in all_transactions:
+            if not transaction.has_been_paid:
+                to_settle = to_settle + transaction.total_price
+
+        if request.method == 'POST':
+            if to_settle <= 0:
+                error_message = 'You do not have any pending payments!'
+            else:
+                if user_profile.credits >= to_settle:
+                    all_transactions = Booking.objects.filter(user_email=request.user.email).order_by('date')
+
+                    for transaction in all_transactions:
+                        if not transaction.has_been_paid:
+                            transaction.has_been_paid = True
+                            transaction.save()
+
+                    # Register our credit transaction.
+                    Transaction.objects.create(user_email=request.user.email, origin='Settling Accounts', type='Debit',
+                                               amount=to_settle)
+
+                    user_profile.credits -= to_settle
+                    user_profile.save()
+
+                    to_settle = 0
+
+                    success_message = 'All pending payments have been settled!'
+                else:
+                    error_message = 'You do not have sufficient credits to settle the pending payments!'
+
+        return render(request, 'ClubManager/home.html',
+                      {'authenticated': True, 'all_transactions': all_transactions, 'profile': user_profile,
+                       'to_settle': to_settle, 'error': error_message, 'success': success_message})
     else:
         if request.method == 'POST':
-            print(request.user.username)
-
             if request.user.username == request.POST['username']:
                 request.session["successful_club_rep_login"] = True
-                success = True
+                return redirect(rep_dashboard)
             else:
                 if request.session["club_rep_login_attempts"] >= 5:
                     logout(request)
@@ -46,74 +76,10 @@ def rep_dashboard(request):
                 # Increment the users attempts.
                 request.session["club_rep_login_attempts"] += 1
 
-    return render(request, 'ClubManager/home.html', {'success': success, 'error': error_message})
+    return render(request, 'ClubManager/home.html', {'authenticated': False, 'error': error_message})
 
 
-# The handler for settling the monthly transactions
-@login_required(login_url='login')
-@allowed_users(allowed_roles='ClubRepresentative')
-def settle_transactions_monthly(request):
-    error_message = ''
-    context = {
-        'success': "All monthly transactions have been settled"
-    }
-    # Check if the current club rep has enough credits to settle the amount
-    user = request.user
-    club_rep = UserProfile.objects.get(user_obj=user)
-    # Check the transactions of the current month
-    monthly_transactions = Booking.objects.filter(
-        Q(user_email=user.email) & Q(date__month=datetime.today().month) & Q(has_been_paid=False))
-    print(monthly_transactions)
-    if len(monthly_transactions) > 0:
-        # Count total sum of all the transactions
-        total_transactions_price = monthly_transactions.aggregate(Sum('total_price'))
-        if total_transactions_price.get('total_price__sum') > club_rep.credits:
-            error_message = "You do not have enough credits to settle montly transaction"
-            context = {
-                'error': error_message,
-                'version': 2,
-                'top_up_credits': True,
-                'available_credits': club_rep.credits,
-                'total_transactions_price': total_transactions_price.get('total_price__sum'),
-                'club_rep_id': club_rep.id
-            }
-            return render(request, 'ClubManager/rep_login.html', context)
-        else:
-            if request.method == 'POST':
-
-                username = request.POST.get('username')
-                password = request.POST.get('password')
-                user = authenticate(request, username=username, password=password)
-
-                if user is not None:
-                    request.session["club_rep_login_attempts"] = 0
-                    for booking in monthly_transactions:
-                        booking.has_been_paid = True
-                        booking.save()
-                    # Deduct from club rep's credits
-                    club_rep.credits -= total_transactions_price.get('total_price__sum')
-                    club_rep.save()
-                    return redirect(rep_dashboard)
-
-                else:
-                    if request.session["club_rep_login_attempts"] >= 5:
-                        logout(request)
-                        return redirect('/')
-
-                    error_message = 'Invalid Credentials, ' + str(5 - int(request.session["club_rep_login_attempts"])) \
-                                    + " attempts remaining."
-
-                    request.session["club_rep_login_attempts"] += 1
-                    context = {'error': error_message,
-                               'version': 2
-                               }
-
-            return render(request, 'ClubManager/rep_login.html', context)
-    else:
-        return render(request, 'ClubManager/rep_login.html', context)
-
-
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def view_clubs(request):
     # Lookup all clubs
@@ -126,7 +92,7 @@ def view_clubs(request):
 
 
 # View handling for registering a new club representative
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_club(request):
     club_form = CreateClubForm()
@@ -142,7 +108,7 @@ def add_club(request):
 
 
 # The handler for the club information update page
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def update_club(request, club_id):
     if club_id:
@@ -160,7 +126,7 @@ def update_club(request, club_id):
     return redirect(cinema_dashboard)
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def delete_club(request, club_id):
     if club_id:
@@ -172,7 +138,7 @@ def delete_club(request, club_id):
 
 
 # The handler for the club rep information update page
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def update_club_rep(request, rep_id):
     if rep_id:
@@ -190,7 +156,7 @@ def update_club_rep(request, rep_id):
     return redirect(cinema_dashboard)
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def delete_club_rep(request, rep_id):
     if rep_id:
@@ -203,7 +169,7 @@ def delete_club_rep(request, rep_id):
 
 
 # View handling for registering a new club representative
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_club_rep(request, club_id):
     lookup = Club.objects.get(id=club_id)

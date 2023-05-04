@@ -3,6 +3,7 @@ from datetime import date
 
 from django.shortcuts import render, redirect
 
+from ClubManager.views import rep_dashboard
 from UWEFlix.models import *
 from UWEFlix.views import profile
 
@@ -58,7 +59,7 @@ def book_film(request, film_id, showing_id):
             elif remaining_seats < total_quantity:
                 error_message = "There are not enough seats available for this many tickets! (1)"
             elif showing.time < timezone.now():
-                error_message = "This showing has already begin. Please choose another one."
+                error_message = "This showing has already begin. Please choose another showing."
             else:
                 unique_key = uuid.uuid4()
 
@@ -107,7 +108,7 @@ def book_film(request, film_id, showing_id):
                     showing.save()
 
                     # Register our credit transaction.
-                    Transaction.objects.create(user_email=request.user.email, type='Credit', amount=total_price)
+                    Transaction.objects.create(user_email=request.user.email, origin='Booking ' + str(new_booking.id), type='Credit', amount=total_price)
 
                     return redirect(confirmation, booking_id=new_booking.id, unique_key=unique_key)
 
@@ -136,22 +137,23 @@ def payment(request, unique_key):
         if remaining_seats < total_quantity:
             error_message = "There are no longer enough seats available!"
         elif showing.time < timezone.now():
-            error_message = "This showing has already begin. Please choose another one."
+            error_message = "This showing has already begin. Please choose another showing."
         else:
-            if pending_booking.credits_used > 0:
-                # Register our credit transaction.
-                Transaction.objects.create(user_email=email, type='Credit', amount=pending_booking.credits_used)
-
-                # Subtract the credits from the users profile.
-                user_profile = UserProfile.objects.get(user_obj=User.objects.get(email=email))
-                user_profile.credits = user_profile.credits - pending_booking.credits_used
-                user_profile.save()
-
             # Create the new booking.
             new_booking = Booking.objects.create(user_email=email, unique_key=unique_key, showing=showing,
                                                  date=date.today(),
                                                  total_price=pending_booking.price, ticket_count=total_quantity,
                                                  has_been_paid=True)
+
+            if pending_booking.credits_used > 0:
+                # Register our credit transaction.
+                Transaction.objects.create(user_email=email, origin='Booking ' + str(new_booking.id), type='Credit',
+                                           amount=pending_booking.credits_used)
+
+                # Subtract the credits from the users profile.
+                user_profile = UserProfile.objects.get(user_obj=User.objects.get(email=email))
+                user_profile.credits = user_profile.credits - pending_booking.credits_used
+                user_profile.save()
 
             # Create the new ticket objects and attribute them to the booking.
             for i in range(int(pending_booking.adult_tickets)):
@@ -166,14 +168,14 @@ def payment(request, unique_key):
             showing.save()
 
             # Register our debit transaction.
-            Transaction.objects.create(user_email=email, type='Debit', amount=pending_booking.to_pay)
+            Transaction.objects.create(user_email=email, origin='Booking ' + str(new_booking.id), type='Debit', amount=pending_booking.to_pay)
 
             return redirect(confirmation, booking_id=new_booking.id, unique_key=unique_key)
 
     return render(request, 'BookingManager/payment.html', {'booking': pending_booking, 'error': error_message})
 
 
-def purchase_credits(request, purchase_type):
+def purchase(request, purchase_type, value):
     error_message = ''
 
     user_profile = UserProfile.objects.get(user_obj=request.user)
@@ -188,20 +190,19 @@ def purchase_credits(request, purchase_type):
                 if amount <= 5:
                     error_message = 'Amount to top up must be greater than £5.00'
                 else:
+                    # Register our credit transaction.
+                    Transaction.objects.create(user_email=request.user.email, origin='Credit Top Up', type='Debit', amount=amount)
+
                     # Top up club rep credits
                     user_profile.credits += amount
                     user_profile.save()
 
                     return redirect(profile)
-
-            elif purchase_type == 'settle_accounts':
-
-                print('yes')
         else:
             error_message = 'The email provided doesn\'t match your accounts!'
 
     return render(request, 'BookingManager/payment.html',
-                  {'top_up': (purchase_type == 'top_up'), 'error': error_message})
+                  {'purchase_type': purchase_type, 'value': value, 'error': error_message})
 
 
 def confirmation(request, booking_id, unique_key):

@@ -10,7 +10,7 @@ urlpatterns = [
     path('payment/<unique_key>', views.payment, name='Payment'),
     path('confirmation/<booking_id>:<unique_key>', views.confirmation, name='Booking Confirmed'),
     path('cancel_booking/<booking_id>', views.cancel_booking, name='Cancel Booking'),
-    path('purchase_credits/<purchase_type>', views.purchase_credits, name="Purchase Credits"),
+    path('purchase/<purchase_type>:<value>', views.purchase, name="Make Purchase"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

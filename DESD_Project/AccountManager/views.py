@@ -7,7 +7,7 @@ from UWEFlix.decorators import allowed_users
 
 
 # The handler for the homepage of the account manager dashboard.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='AccountManager')
 def home(request):
     users = User.objects.all()
@@ -16,7 +16,7 @@ def home(request):
 
 
 # Handle editing users.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='AccountManager')
 def update_user(request, user_id):
     # If the showing_id exists and the form is valid, update the Showing database object with the data from the form.
@@ -68,7 +68,7 @@ def update_user(request, user_id):
 
 
 # The handler for deleting a user.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='AccountManager')
 def delete_user(request, user_id):
     # If a user_id is provided, lookup the User object and delete it.
@@ -81,7 +81,7 @@ def delete_user(request, user_id):
 
 
 # The handler for viewing a statement.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='AccountManager')
 def view_statement(request, email, year, month):
     transactions = Transaction.objects.filter(user_email=email)
@@ -98,7 +98,7 @@ def view_statement(request, email, year, month):
 
 
 # The handler for downloading a statement.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='AccountManager')
 def download_statement(request, email, year, month):
     transactions = Transaction.objects.filter(user_email=email)
@@ -115,7 +115,7 @@ def download_statement(request, email, year, month):
 
     for transaction in filtered_transactions:
         formatted_datetime = transaction.date.strftime("%Y-%m-%d %H:%M:%S")
-        content += f"{formatted_datetime} -- £{round(transaction.amount, 2)} -- {transaction.type}\n"
+        content += f"{formatted_datetime} -- {transaction.origin} -- £{round(transaction.amount, 2)} -- {transaction.type}\n"
 
     # Create an HTTP response with the content and appropriate headers for downloading
     response = HttpResponse(content, content_type='text/plain')

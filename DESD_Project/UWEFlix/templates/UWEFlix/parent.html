@@ -20,6 +20,11 @@
             if (error != '') {
                 showError(error);
             }
+
+            let success = "{{success}}";
+            if (success != '') {
+                showSuccess(success);
+            }
         });
 
         function showError(message) {
@@ -28,6 +33,14 @@
 
             var error = document.getElementById("error_message");
             error.innerHTML = message;
+        }
+
+        function showSuccess(message) {
+            var overlay = document.getElementById("success");
+            overlay.style.display = "block";
+
+            var success = document.getElementById("success_message");
+            success.innerHTML = message;
         }
     </script>
 </head>
@@ -95,6 +108,11 @@
         <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
         <strong style="margin:0; display:inline; float:center;">Error!</strong>
         <p style="margin:0; display:inline; float:center;" id="error_message">Empty</p>
+    </div>
+
+    <div id="success" class="success">
+        <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+        <p style="margin:0; display:inline; float:center;" id="success_message">Empty</p>
     </div>
 
     <br>

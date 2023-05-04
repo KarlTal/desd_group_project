@@ -9,7 +9,7 @@ from .forms import *
 
 
 # The handler for the homepage of the website.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def cinema_dashboard(request):
     # Lookup all current films, screens and showings, so we can display them on the page.
@@ -22,7 +22,7 @@ def cinema_dashboard(request):
 
 
 # The handler for the adding film page.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_film(request):
     # If request is POST and the form used on the page is valid, save it to the database.
@@ -37,7 +37,7 @@ def add_film(request):
 
 
 # The handler for the film information updating page.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def update_film(request, film_id):
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
@@ -57,7 +57,7 @@ def update_film(request, film_id):
 
 
 # The handler for deleting a film.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def delete_film(request, film_id):
     # If a film_id exists, lookup the film and also any showings that contain that film. If there exists a showing
@@ -78,7 +78,7 @@ def delete_film(request, film_id):
 
 
 # The handler for adding a new screen page.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_screen(request):
     if request.POST:
@@ -92,7 +92,7 @@ def add_screen(request):
 
 
 # The handler for deleting a screen.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def delete_screen(request, screen_id):
     # If a screen_id is provided, lookup the Screen object and delete it.
@@ -105,7 +105,7 @@ def delete_screen(request, screen_id):
 
 
 # The handler for adding a showing page.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_showing(request):
     if request.POST:
@@ -129,7 +129,7 @@ def add_showing(request):
 
 
 # The handler for the showing information updating page.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def update_showing(request, showing_id):
     # If the showing_id exists and the form is valid, update the Showing database object with the data from the form.
@@ -149,7 +149,7 @@ def update_showing(request, showing_id):
 
 
 # The handler for deleting a showing.
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def delete_showing(request, showing_id):
     # If a showing_id is provided, lookup the Showing object and delete it.
@@ -161,7 +161,7 @@ def delete_showing(request, showing_id):
 
 
 # View students
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def approvals(request):
     students = User.objects.filter(groups__name='Student').filter(is_active=False)
@@ -174,7 +174,7 @@ def approvals(request):
 
 
 # Approve student discounts
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_discount(request, user_id, outcome):
     user = User.objects.get(id=user_id)
@@ -190,7 +190,7 @@ def approve_discount(request, user_id, outcome):
 
 
 # Approve booking cancellations
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_booking(request, booking_id):
     booking = Booking.objects.filter(id=booking_id)
@@ -207,7 +207,7 @@ def approve_booking(request, booking_id):
 
 
 # Approve student accounts
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_student(request, student_id):
     student = User.objects.get(id=student_id)
@@ -221,7 +221,7 @@ def approve_student(request, student_id):
 
 
 # Approve club rep applications
-@login_required(login_url='/login')
+@login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_rep(request, student_id, outcome):
     user = User.objects.get(id=student_id)
