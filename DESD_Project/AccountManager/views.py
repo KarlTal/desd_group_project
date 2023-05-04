@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 
 from AccountManager.forms import *
 from UWEFlix.decorators import allowed_users
+from UWEFlix.forms import get_form_errors
 
 
 # The handler for the homepage of the account manager dashboard.
@@ -19,12 +20,15 @@ def home(request):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='AccountManager')
 def update_user(request, user_id):
+    error_message = ''
+
     # If the showing_id exists and the form is valid, update the Showing database object with the data from the form.
     if user_id:
         user_lookup = User.objects.get(id=user_id)
         profile_lookup = UserProfile.objects.get(user_obj=user_lookup)
 
         if user_lookup and profile_lookup:
+
             # Create the forms for modifying the users details.
             user_form = UserForm(request.POST or None, instance=user_lookup)
             profile_form = UserProfileForm(request.POST or None, instance=profile_lookup)
@@ -34,6 +38,9 @@ def update_user(request, user_id):
                 user_form.save()
                 profile_form.save()
                 return redirect(home)
+            else:
+                error_message += get_form_errors(user_form)
+                error_message += get_form_errors(profile_form)
 
             # Collect the users account statements.
             account_statements = {}
@@ -59,7 +66,7 @@ def update_user(request, user_id):
 
             # Render the page.
             return render(request, 'AccountManager/update_user.html', {'user': user_lookup, 'profile': profile_lookup,
-                                                                       'user_form': user_form,
+                                                                       'user_form': user_form, 'error': error_message,
                                                                        'profile_form': profile_form,
                                                                        'statements': account_statements.values()})
 

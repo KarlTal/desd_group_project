@@ -86,25 +86,29 @@ def view_clubs(request):
     clubs = Club.objects.all()
     club_reps = UserProfile.objects.exclude(club__isnull=True)
     clubs_no_rep = Club.objects.filter(userprofile=None)
+    bookings = Booking.objects.exclude(club__isnull=True)
 
     return render(request, 'ClubManager/view_clubs.html',
-                  {"clubs": clubs, "club_reps": club_reps, "clubs_no_rep": clubs_no_rep})
+                  {"clubs": clubs, "club_reps": club_reps, "clubs_no_rep": clubs_no_rep, 'club_bookings': bookings})
 
 
 # View handling for registering a new club representative
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_club(request):
+    error_message = ''
     club_form = CreateClubForm()
 
     if request.method == 'POST':
         club_form = CreateClubForm(request.POST)
 
-        if club_form.is_valid():
+        if club_form.is_valid():  #
             club_form.save()
             return redirect(view_clubs)
+        else:
+            error_message = get_form_errors(club_form)
 
-    return render(request, 'ClubManager/add_club.html', {'club_form': club_form})
+    return render(request, 'ClubManager/add_club.html', {'error': error_message, 'club_form': club_form})
 
 
 # The handler for the club information update page
@@ -115,12 +119,14 @@ def update_club(request, club_id):
         lookup = Club.objects.get(id=club_id)
         form = CreateClubForm(request.POST or None, instance=lookup)
 
-        if form.is_valid():
+        if form.is_valid():  #
             form.save()
             return redirect(view_clubs)
+        else:
+            error_message = get_form_errors(form)
 
         # Render the page.
-        return render(request, 'ClubManager/update_club.html', {'club': lookup, 'form': form})
+        return render(request, 'ClubManager/update_club.html', {'error': error_message, 'club': lookup, 'form': form})
 
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)
@@ -145,12 +151,15 @@ def update_club_rep(request, rep_id):
         lookup = UserProfile.objects.get(id=rep_id)
         form = CreateClubRepForm(request.POST or None, instance=lookup)
 
-        if form.is_valid():
+        if form.is_valid():  #
             form.save()
             return redirect(view_clubs)
+        else:
+            error_message = get_form_errors(form)
 
         # Render the page.
-        return render(request, 'ClubManager/update_rep.html', {'club_rep': lookup, 'form': form})
+        return render(request, 'ClubManager/update_rep.html',
+                      {'error': error_message, 'club_rep': lookup, 'form': form})
 
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)
@@ -172,6 +181,8 @@ def delete_club_rep(request, rep_id):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_club_rep(request, club_id):
+    error_message = ''
+
     lookup = Club.objects.get(id=club_id)
     club_rep_form = CreateClubRepForm()
     user_form = CreateUserForm()
@@ -184,7 +195,7 @@ def add_club_rep(request, club_id):
         club_rep_form = CreateClubRepForm(request.POST)
         club_rep_form.fields['club'].initial = club_id
 
-        if user_form.is_valid() and club_rep_form.is_valid():
+        if user_form.is_valid() and club_rep_form.is_valid():  #
             user = user_form.save()
             user.is_active = True  # Makes the account active
 
@@ -198,5 +209,9 @@ def add_club_rep(request, club_id):
             setup_user(user, 'ClubRepresentative')
 
             return redirect(view_clubs)
+        else:
+            error_message += get_form_errors(user_form)
+            error_message += get_form_errors(club_rep_form)
 
-    return render(request, 'ClubManager/add_rep.html', {'user_form': user_form, 'club_rep_form': club_rep_form})
+    return render(request, 'ClubManager/add_rep.html',
+                  {'error': error_message, 'club': lookup, 'user_form': user_form, 'club_rep_form': club_rep_form})

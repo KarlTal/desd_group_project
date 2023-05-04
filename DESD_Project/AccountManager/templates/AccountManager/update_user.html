@@ -1,51 +1,87 @@
 {% extends 'AccountManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>{{user.first_name}} {{user.last_name}}'s Profile</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<style>
+    .thin {
+        width: 29%;
+        margin-left: 5px;
+    }
 
+    .side-panel {
+        width: 60%;
+        margin-left: 100px;
+    }
 
-<div class="container">
-    <form id="update" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+</style>
 
-        {{user_form.as_p}}
+<div class="horizontal">
+    <div class="form-body" style="height: 670px;">
+        <p class="title" align="center">{{user.first_name}} {{user.last_name}}'s Profile</p>
 
-        {% csrf_token %}
+        <hr>
 
-        {{profile_form.as_p}}
-    </form>
-</div>
+        <div class="parent-div">
+            <form id="update" method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-<br>
+                ✍ {{user_form.email|add_class:"text-field thin"|attr:"placeholder:Email" }}
+                {{user_form.username|add_class:"text-field thin"|attr:"placeholder:Username" }}
 
-<div>
-    <button class="button" form="update">Update</button>
-    <button class="button" onclick="window.location.href='/accounts/delete_user/{{user.id}}'">Delete User</button>
-</div>
+                <br>💳 {{user_form.first_name|add_class:"text-field thin"|attr:"placeholder:First Name" }}
+                {{user_form.last_name|add_class:"text-field thin"|attr:"placeholder:Last Name" }}
 
-<br>
+                <br>📅 {{profile_form.club|add_class:"text-field thin"|attr:"placeholder:Club" }}
+                {{profile_form.date_of_birth|add_class:"text-field thin"|attr:"placeholder:Date of Birth" }}
 
-<div>
-    <h2>Account Statements</h2>
+                <br>💵 {{profile_form.credits|add_class:"text-field thin"|attr:"placeholder:Credits" }}
+                {{profile_form.discount|add_class:"text-field thin"|attr:"placeholder:Discount" }}
 
-    <table style="width:100%">
-        <tr>
-            <th>Year</th>
-            <th>Month</th>
-            <th>Total Transactions</th>
-            <th> - </th>
-        </tr>
-        {% for statement in statements %}
-        <tr>
-            <td>{{statement.year}}</td>
-            <td>{{statement.month}}</td>
-            <td>{{statement.transactions|length}}</td>
-            <td><a href="/accounts/view_statement/{{user.email}}:{{statement.year}}:{{statement.month}}">View</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+                <br> Is Active: {{user_form.is_active }}
+
+                <br>
+            </form>
+
+            <div class="horizontal">
+                <button class="button narrow-btn" onclick="window.location.href='/accounts/'"><h2>Back</h2></button>
+                <button class="button narrow-btn" form="update"><h2>Update</h2></button>
+                <button class="button narrow-btn" onclick="window.location.href='/accounts/delete_user/{{user.id}}'">
+                    <h2>Delete</h2></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-panel">
+        <h2>Account Statements</h2>
+
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>Year</th>
+                <th>Month</th>
+                <th>Total Transactions</th>
+                <th></th>
+            </tr>
+            </thead>
+            {% for statement in statements %}
+            <tbody>
+            <tr>
+                <td>{{statement.year}}</td>
+                <td>{{statement.month}}</td>
+                <td>{{statement.transactions|length}}</td>
+                <td class="edit-column"><a class="redirect"
+                                           href="/accounts/view_statement/{{user.email}}:{{statement.year}}:{{statement.month}}">View</a>
+                </td>
+            </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+
 </div>
 
 {% endblock %}

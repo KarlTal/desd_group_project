@@ -1,28 +1,45 @@
 {% extends 'CinemaManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Update: {{club_rep.user.last_name}}</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<style>
+    .thin {
+        width: 29%;
+        margin-left: 5px;
+    }
+</style>
 
+<div class="horizontal">
+    <div class="form-body" style="height: 600px;">
+        <p class="title" align="center">Update {{club_rep.club.name}} Representative</p>
 
-{% if error %}
-<h3 style="color:red;">{{error}}</h3>
-{% endif %}
+        <hr>
 
-<div class="container">
-    <form id="update" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <div class="parent-div">
+            <form id="update" method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-        {{form.as_p}}
-    </form>
-</div>
+                ✍ {{form.club|add_class:"text-field"|attr:"placeholder:Club" }}
+                <br>📅 {{form.date_of_birth|add_class:"text-field"|attr:"placeholder:Date of Birth" }}
+                <br>💵 {{form.credits|add_class:"text-field"|attr:"placeholder:Initial Credit" }}
 
-<br>
+                <br>
+            </form>
 
-<div>
-    <button class="button" form="update">Update</button>
-    <button class="button" onclick="window.location.href='/clubs/delete_rep/{{club_rep.id}}'">Delete Club Rep</button>
+            <div class="horizontal">
+                <button class="button back" onclick="window.location.href='/clubs/view_clubs/'"><h2>Back</h2>
+                </button>
+                <button class="button" form="update"><h2>Update</h2></button>
+                <button class="button" onclick="window.location.href='/clubs/delete_rep/{{club_rep.id}}'"><h2>
+                    Delete</h2>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

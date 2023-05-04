@@ -50,17 +50,18 @@ def profile(request):
 
     if request.POST:
         club_rep_form = ApplicationToBeClubRepForm(request.POST, instance=user_profile)
+
         if request.POST.get('ClubRepForm') == 'ClubRepForm':
-            print(club_rep_form.fields['club'])
-            if club_rep_form.is_valid():
+
+            if club_rep_form.is_valid(): #
                 club_rep_form.save()
                 user_profile_obj = UserProfile.objects.get(user_obj=request.user)
                 user_profile_obj.applied_for_rep = True
                 user_profile_obj.save()
-            else:
-                print("Something went wrong")
 
-            return redirect(profile)
+                return redirect(profile)
+            else:
+                error_message = get_form_errors(club_rep_form)
 
         else:
             discount = int(request.POST.get('discount'))
@@ -121,12 +122,15 @@ def logout_user(request):
 # View handling for registering a new user.
 @unauthenticated_user
 def register(request):
+    error_message = ''
     form = CreateUserForm()
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
-        if form.is_valid():
+        if form.is_valid(): #
             setup_user(form.save(), 'Student')
             return redirect(login_user)
+        else:
+            error_message = get_form_errors(form)
 
-    return render(request, 'UWEFlix/register.html', {'form': form})
+    return render(request, 'UWEFlix/register.html', {'form': form, 'error': error_message})

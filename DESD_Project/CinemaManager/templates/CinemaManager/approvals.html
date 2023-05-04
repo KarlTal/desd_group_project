@@ -32,7 +32,7 @@
             <td>{{student.last_name}}</td>
             <td>{{student.username}}</td>
             <td>{{student.email}}</td>
-            <td><a href="/manager/approve_student/{{student.id}}">Approve</a></td>
+            <td class="edit-column"><a class="redirect" href="/manager/approve_student/{{student.id}}">Approve</a></td>
         </tr>
         </tbody>
         {% endfor %}
@@ -63,7 +63,7 @@
             <td>{{booking.showing}}</td>
             <td>{{booking.date}}</td>
             <td>{{booking.ticket_count}}</td>
-            <td><a href="/manager/approve_booking/{{booking.id}}">Approve</a></td>
+            <td class="edit-column"><a class="redirect" href="/manager/approve_booking/{{booking.id}}">Approve</a></td>
         </tr>
         </tbody>
         {% endfor %}
@@ -92,8 +92,13 @@
             <td>{{discount.club}}</td>
             <td>{{discount.discount}}%</td>
             <td>{{discount.applied_discount}}%</td>
-            <td><a href="/manager/approve_discount/{{discount.user_obj.id}}:1">Approve</a> / <a
-                    href="/manager/approve_discount/{{discount.user_obj.id}}:0">Reject</a></td>
+            <td class="edit-column">
+                <div class="horizontal">
+                    <a class="redirect" style="margin-right: 10px;"
+                       href="/manager/approve_discount/{{discount.user_obj.id}}:1">Approve</a>
+                    <a class="redirect" href="/manager/approve_discount/{{discount.user_obj.id}}:0">Reject</a>
+                </div>
+            </td>
         </tr>
         </tbody>
         {% endfor %}
@@ -118,8 +123,13 @@
         <tr>
             <td>{{user.user_obj}}</td>
             <td>{{user.club}}</td>
-            <td><a href="/manager/approve_rep/{{user.user_obj.id}}:1">Approve</a> / <a
-                    href="/manager/approve_rep/{{user.user_obj.id}}:0">Reject</a></td>
+            <td class="edit-column">
+                <div class="horizontal">
+                    <a class="redirect" style="margin-right: 10px;"
+                       href="/manager/approve_rep/{{user.user_obj.id}}:1">Approve</a>
+                    <a class="redirect" href="/manager/approve_rep/{{user.user_obj.id}}:0">Reject</a>
+                </div>
+            </td>
         </tr>
         </tbody>
         {% endfor %}

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from UWEFlix.decorators import allowed_users
+from UWEFlix.forms import get_form_errors
 from .forms import *
 
 
@@ -25,32 +26,41 @@ def cinema_dashboard(request):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_film(request):
+    error_message = ''
+
     # If request is POST and the form used on the page is valid, save it to the database.
     if request.POST:
         form = FilmForm(request.POST, request.FILES)  # Added for images
-        if form.is_valid():
+
+        if form.is_valid():  #
             form.save()
-        return redirect(cinema_dashboard)
+            return redirect(cinema_dashboard)
+        else:
+            error_message = get_form_errors(form)
 
     # Render the page.
-    return render(request, 'CinemaManager/add_film.html', {'form': FilmForm})
+    return render(request, 'CinemaManager/add_film.html', {'error': error_message, 'form': FilmForm})
 
 
 # The handler for the film information updating page.
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def update_film(request, film_id):
+    error_message = ''
+
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
         lookup = Film.objects.get(id=film_id)
         form = FilmForm(request.POST or None, request.FILES or None, instance=lookup)
 
-        if form.is_valid():
+        if form.is_valid():  #
             form.save()
             return redirect(cinema_dashboard)
+        else:
+            error_message = get_form_errors(form)
 
         # Render the page.
-        return render(request, 'CinemaManager/update_film.html', {'film': lookup, 'form': form})
+        return render(request, 'CinemaManager/update_film.html', {'error': error_message, 'film': lookup, 'form': form})
 
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)
@@ -81,14 +91,19 @@ def delete_film(request, film_id):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_screen(request):
+    error_message = ''
+
     if request.POST:
         form = ScreenForm(request.POST)
-        if form.is_valid():
+
+        if form.is_valid():  #
             form.save()
-        return redirect(cinema_dashboard)
+            return redirect(cinema_dashboard)
+        else:
+            error_message = get_form_errors(form)
 
     # Render the page.
-    return render(request, 'CinemaManager/add_screen.html', {'form': ScreenForm})
+    return render(request, 'CinemaManager/add_screen.html', {'error': error_message, 'form': ScreenForm})
 
 
 # The handler for deleting a screen.
@@ -108,10 +123,12 @@ def delete_screen(request, screen_id):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def add_showing(request):
+    error_message = ''
+
     if request.POST:
         form = ShowingForm(request.POST)
 
-        if form.is_valid():
+        if form.is_valid():  #
             showing = form.save()
 
             bulk_add = request.POST.get('bulk-add')
@@ -122,10 +139,12 @@ def add_showing(request):
                     original_time = original_time + timedelta(minutes=(math.ceil(showing.film.duration / 30) * 30))
                     Showing.objects.create(film=showing.film, screen=showing.screen, time=original_time, seats_taken=0)
 
-        return redirect(cinema_dashboard)
+            return redirect(cinema_dashboard)
+        else:
+            error_message = get_form_errors(form)
 
     # Render the page.
-    return render(request, 'CinemaManager/add_showing.html', {'form': ShowingForm})
+    return render(request, 'CinemaManager/add_showing.html', {'error': error_message, 'form': ShowingForm})
 
 
 # The handler for the showing information updating page.
@@ -135,14 +154,19 @@ def update_showing(request, showing_id):
     # If the showing_id exists and the form is valid, update the Showing database object with the data from the form.
     if showing_id:
         lookup = Showing.objects.get(id=showing_id)
+
         if lookup:
             form = ShowingForm(request.POST or None, instance=lookup)
-            if form.is_valid():
+
+            if form.is_valid():  #
                 form.save()
                 return redirect(cinema_dashboard)
+            else:
+                error_message = get_form_errors(form)
 
             # Render the page.
-            return render(request, 'CinemaManager/update_showing.html', {'showing': lookup, 'form': form})
+            return render(request, 'CinemaManager/update_showing.html',
+                          {'error': error_message, 'showing': lookup, 'form': form})
 
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)

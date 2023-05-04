@@ -1,12 +1,25 @@
 {% extends 'AccountManager/parent.html' %}
 
 {% block page %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'AccountManager/statement.css' %}">
 
 <div>
-    <h1>Account Statement for {{email}}</h1>
-    <h3>{{period}}</h3>
+    <div class="horizontal">
+        <h1>Account Statement for {{email}}</h1>
+    </div>
 
-    <table style="width:100%">
+    <div class="horizontal">
+        <h3 style="padding: 0; margin: 0;">{{period}}</h3>
+    </div>
+
+    <br>
+    <hr>
+    <br>
+
+    <table class="styled-table">
+        <thead>
         <tr>
             <th>Email</th>
             <th>Origin</th>
@@ -14,7 +27,9 @@
             <th>Price</th>
             <th>Date</th>
         </tr>
+        </thead>
         {% for transaction in transactions %}
+        <tbody>
         <tr>
             <td>{{transaction.user_email}}</td>
             <td>{{transaction.origin}}</td>
@@ -22,14 +37,19 @@
             <td>£{{transaction.amount|floatformat:2}}</td>
             <td>{{transaction.date}}</td>
         </tr>
+        </tbody>
         {% endfor %}
     </table>
 </div>
 
 <br>
+<hr>
+<br>
 
-<div>
-    <button class="button" onclick="window.location.href='/accounts/download_statement/{{email}}:{{year}}:{{month}}'">Download Statement</button>
+<div class="horizontal">
+    <button class="button" onclick="window.location.href='/accounts/download_statement/{{email}}:{{year}}:{{month}}'">
+        Download Statement
+    </button>
 </div>
 
 {% endblock %}

@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
+
 from .models import *
-from UWEFlix.models import UserProfile
 
 
 # Form responsible for handling the creation of UWEFlix users.
@@ -16,6 +16,7 @@ class CreateUserForm(UserCreationForm):
 
 class DateTimeLocalInput(forms.DateTimeInput):
     input_type = "datetime-local"
+
 
 # Form responsible for allowing students to apply to become a club rep.
 class ApplicationToBeClubRepForm(ModelForm):
@@ -60,3 +61,13 @@ class UWEFlixBackend(ModelBackend):
                 return user
 
         return None
+
+
+def get_form_errors(form):
+    error_message = ''
+
+    for field, error_list in form.errors.items():
+        for error in error_list:
+            error_message += error + " "
+
+    return error_message

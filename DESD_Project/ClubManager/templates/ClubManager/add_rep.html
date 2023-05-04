@@ -2,37 +2,44 @@
 
 {% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Register</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{user_form.first_name.label}}
-    {{user_form.first_name}}
-    <br>
-    {{user_form.last_name.label}}
-    {{user_form.last_name}}
-    <br>
-    {{user_form.email.label}}
-    {{user_form.email}}
-    <br>
-    {{user_form.password1.label}}
-    {{user_form.password1}}
-    <br>
-    {{user_form.password2.label}}
-    {{user_form.password2}}
-    <br>
-    {{club_rep_form.date_of_birth.label}}
-    {{club_rep_form.date_of_birth}}
-    <br>
-    {{club_rep_form.credits.label}}
-    {{club_rep_form.credits}}
-    <br>
-    {% render_field club_rep_form.club.as_hidden%}
-    <br>
-    <button class="button">Create User</button>
-</form>
+<style>
+    .thin {
+        width: 29%;
+        margin-left: 5px;
+    }
+</style>
 
-{{form.errors}}
+<div class="horizontal">
+    <div class="form-body" style="height: 720px;">
+        <p class="title" align="center">Add {{club.name}} Representative</p>
+
+        <hr>
+
+        <div class="parent-div">
+            <form id="update" method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
+
+                ✍ {{user_form.first_name|add_class:"text-field thin"|attr:"placeholder:First Name" }}
+                {{user_form.last_name|add_class:"text-field thin"|attr:"placeholder:Last Name" }}
+                <br>📧 {{user_form.email|add_class:"text-field"|attr:"placeholder:Email" }}
+                <br>🔒 {{user_form.password1|add_class:"text-field thin"|attr:"placeholder:Password" }}
+                {{user_form.password2|add_class:"text-field thin"|attr:"placeholder:Confirm Password" }}
+                <br>📅 {{club_rep_form.date_of_birth|add_class:"text-field"|attr:"placeholder:Date of Birth" }}
+                <br>💵 {{club_rep_form.credits|add_class:"text-field"|attr:"placeholder:Initial Credit" }}
+
+                <br>
+
+                <div class="horizontal">
+                    <button class="button back" onclick="window.location.href='/clubs/view_clubs/'"><h2>Back</h2></button>
+                    <button class="button"><h2>Create User</h2></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

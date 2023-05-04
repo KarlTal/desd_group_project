@@ -16,7 +16,7 @@
         <form method="POST" enctype="multipart/form-data" class="login-form" align="center">
             {% csrf_token %}
 
-            {{ form.first_name|add_class:"text-field"|attr:"placeholder:First Name" }}
+            {{form.first_name|add_class:"text-field"|attr:"placeholder:First Name" }}
             {{form.last_name|add_class:"text-field"|attr:"placeholder:Surname" }}
             {{form.email|add_class:"text-field"|attr:"placeholder:Email" }}
             {{form.password1|add_class:"text-field"|attr:"placeholder:Password" }}

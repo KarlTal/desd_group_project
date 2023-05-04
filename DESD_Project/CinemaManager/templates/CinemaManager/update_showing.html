@@ -1,24 +1,37 @@
 {% extends 'CinemaManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Update: {{showing.time}}</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<div class="horizontal">
+    <div class="form-body" style="height: 550px;">
+        <p class="title" align="center" style="font-size: 35px;">Update: {{showing.time}}</p>
 
+        <hr>
 
-<div class="container">
-    <form id="update" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <div class="parent-div">
+            <form id="update" method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-        {{form.as_p}}
-    </form>
-</div>
+                🎬 {{form.film|add_class:"text-field"|attr:"placeholder:Film" }}
+                <br>📺 {{form.screen|add_class:"text-field screen"|attr:"placeholder:Screen" }}
+                <br>📅 {{form.time|add_class:"text-field"|attr:"placeholder:Showing Time" }}
 
-<br>
+                <br>
+            </form>
 
-<div>
-    <button class="button" form="update">Update</button>
-    <button class="button" onclick="window.location.href='/manager/delete_showing/{{showing.id}}'">Delete Showing</button>
+            <div class="horizontal">
+                <button class="button narrow-btn" onclick="window.location.href='/manager/'"><h2>Back</h2></button>
+                <button class="button narrow-btn" form="update"><h2>Update</h2></button>
+                <button class="button narrow-btn"
+                        onclick="window.location.href='/manager/delete_showing/{{showing.id}}'"><h2>Delete</h2>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

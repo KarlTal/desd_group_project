@@ -1,24 +1,45 @@
 {% extends 'CinemaManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Update: {{film.title}}</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<style>
+    .image {
+        width: 400px;
+    }
+</style>
 
+<div class="horizontal">
+    <div class="form-body" style="height: 850px;">
+        <p class="title" align="center">Update: {{film.title}}</p>
 
-<div class="container">
-    <form id="update" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <hr>
 
-        {{form.as_p}}
-    </form>
-</div>
+        <div class="parent-div">
+            <form id="update" method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-<br>
+                🎬 {{form.title|add_class:"text-field"|attr:"placeholder:Film Title" }}
+                <br>📺 {{form.age_rating|add_class:"text-field"|attr:"placeholder:Age Rating" }}
+                <br>⏰ {{form.duration|add_class:"text-field"|attr:"placeholder:Duration" }}
+                <br>🧾 {{form.description|add_class:"text-field"|attr:"placeholder:Description" }}
+                <br>🎥 {{form.trailer|add_class:"text-field"|attr:"placeholder:Trailer Youtube URL" }}
+                <br>
+                <br>{{form.image|add_class:"text-field image"}}
+                <br>
+            </form>
 
-<div>
-    <button class="button" form="update">Update</button>
-    <button class="button" onclick="window.location.href='/manager/delete_film/{{film.id}}'">Delete Film</button>
+            <div class="horizontal">
+                <button class="button narrow-btn" onclick="window.location.href='/manager/'"><h2>Back</h2></button>
+                <button class="button narrow-btn" form="update"><h2>Update</h2></button>
+                <button class="button narrow-btn" onclick="window.location.href='/manager/delete_film/{{film.id}}'"><h2>
+                    Delete</h2></button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

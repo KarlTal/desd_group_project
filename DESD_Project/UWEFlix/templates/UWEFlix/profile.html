@@ -6,18 +6,8 @@
 
 <link rel="stylesheet" href="{% static 'UWEFlix/profile.css' %}">
 
-<h1>My Profile</h1>
-
-<div>
-    <h3>Your Details</h3>
-
-    <p>Name: {{user.first_name}} {{user.last_name}}</p>
-    <p>Email: {{user.email}}</p>
-    <p>Date of Birth: {{profile.date_of_birth}}</p>
-    <p>Total Credit: £{{profile.credits|floatformat:2}}</p>
-    {% if request.user|has_group:"ClubRepresentative" %}
-    <input type="submit"  name="TopUp" class="button" onclick="window.location.href='/booking/purchase/top_up:-1';" value="Top Up Credits"/>
-    {% endif %}
+<div class="horizontal">
+    <h1>My Profile</h1>
 </div>
 
 <br>
@@ -25,71 +15,104 @@
 <div>
     <h3>My Bookings</h3>
 
-    <table style="width:100%">
+    <table class="styled-table">
+        <thead>
         <tr>
             <th>Showing</th>
             <th>Date</th>
             <th>Total Price</th>
             <th>Ticket Count</th>
-            <th>View</th>
+            <th></th>
         </tr>
+        </thead>
         {% for booking in bookings %}
+        <tbody>
         <tr>
             <td>{{booking.showing.film}}</td>
             <td>{{booking.date}}</td>
             <td>£{{booking.total_price}}</td>
             <td>{{booking.ticket_count}}</td>
-            <td><a href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
+            <td class="edit-column"><a class="redirect" href="/booking/confirmation/{{booking.id}}:{{booking.unique_key}}">View</a></td>
         </tr>
+        </tbody>
         {% endfor %}
     </table>
 </div>
 
 <br>
+<hr>
+<br>
+<br>
 
-<div>
-    {% if request.user|has_group:"Student" %}
-    {%if profile.applied_for_rep is True %}
-    <h3>Application to become a club rep has been sent</h3>
-    {% else %}
-    <h3>Apply to become a club rep</h3>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <label>Apply to become a club rep:</label>
-        {{club_rep_form.club}}
-        <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
-    </form>
-    {% endif %}
-    {% endif %}
+<div class="horizontal">
+
+    <div class="item">
+
+        <h2>Club Rep Status</h2>
+        <br>
+        <hr class="hr-wide">
+
+        {% if not request.user|has_group:"Student" %}
+
+        {%if profile.applied_for_rep is True %}
+        <h3>Your application is pending!</h3>
+        {% else %}
+        <form method="POST" enctype="multipart/form-data" style="padding-top: 25px;">
+            {% csrf_token %}
+            <label>Apply to become a representative:</label>
+            {{club_rep_form.club}}
+            <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
+        </form>
+        {% endif %}
+
+        {% else %}
+        <h5>You are currently a Club Rep.</h5>
+        {% endif %}
+    </div>
+
+    <div class="item">
+        <h2>Your Discounts</h2>
+        <br>
+        <hr class="hr-wide">
+
+        <p>Current Discount Rate: {{profile.discount}}%</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label for="discount">Apply for Discount:</label>
+            <input type="number" id="discount" name="discount" required/>
+
+            <button class="button" name="Discount" value="Discount">Submit</button>
+        </form>
+
+        {% if profile.applied_discount > 0 %}
+
+        <p>Discount application status: Waiting on approval ({{profile.applied_discount}}%)</p>
+
+        {% else %}
+
+        <p>Discount application status: Not Applied</p>
+
+        {% endif %}
+    </div>
+
+    <div class="item">
+        <h2>Your Details</h2>
+        <br>
+        <hr class="hr-wide">
+
+        <p>Name: {{user.first_name}} {{user.last_name}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Date of Birth: {{profile.date_of_birth}}</p>
+        <p>Total Credit: £{{profile.credits|floatformat:2}}</p>
+        <input type="submit" name="TopUp" class="button" onclick="window.location.href='/booking/purchase/top_up:-1';"
+               value="Top Up Credits"/>
+    </div>
+
 </div>
 
 <br>
-
-<div>
-    <h3>Discounts</h3>
-
-    <p>Current Discount Rate: {{profile.discount}}%</p>
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <label for="discount">Apply for Discount:</label>
-        <input type="number" id="discount" name="discount" required/>
-
-        <button class="button" name="Discount" value="Discount">Submit</button>
-    </form>
-
-    {% if profile.applied_discount > 0 %}
-
-    <p>Discount application status: Waiting on approval ({{profile.applied_discount}}%)</p>
-
-    {% else %}
-
-    <p>Discount application status: Not Applied</p>
-
-    {% endif %}
-</div>
-
 <br>
 
 {% endblock %}

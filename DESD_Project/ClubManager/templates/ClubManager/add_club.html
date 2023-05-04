@@ -1,42 +1,50 @@
 {% extends 'ClubManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Create a club </h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{club_form.name.label}}
-    {{club_form.name}}
-    <br>
-    {{club_form.street_number.label}}
-    {{club_form.street_number}}
-    <br>
-    {{club_form.street_name.label}}
-    {{club_form.street_name}}
-    <br>
-    {{club_form.city.label}}
-    {{club_form.city}}
-    <br>
-    {{club_form.postcode.label}}
-    {{club_form.postcode}}
-    <br>
-    {{club_form.landline.label}}
-    {{club_form.landline}}
-    <br>
-    {{club_form.mobile.label}}
-    {{club_form.mobile}}
-    <br>
-    {{club_form.discount.label}}
-    {{club_form.discount}}%
-    <br>
-    {{club_form.email.label}}
-    {{club_form.email}}
-    <br>
-   
-    <button class="button">Submit</button>
-</form>
+<style>
+    .thin {
+        width: 29%;
+        margin-left: 5px;
+    }
+</style>
 
-{{form.errors}}
+<div class="horizontal">
+    <div class="form-body" style="height: 780px;">
+        <p class="title" align="center">Create Club</p>
+
+        <hr>
+
+        <div class="parent-div">
+            <form method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
+
+                ✍ {{club_form.name|add_class:"text-field"|attr:"placeholder:Club Name" }}
+                <br>📧 {{club_form.email|add_class:"text-field"|attr:"placeholder:Club Email" }}
+
+                <br>📺 {{club_form.street_number|add_class:"text-field thin"|attr:"placeholder:Street Number" }}
+                {{club_form.street_name|add_class:"text-field thin"|attr:"placeholder:Street Name" }}
+                <br>🏠 {{club_form.city|add_class:"text-field thin"|attr:"placeholder:City" }}
+                {{club_form.postcode|add_class:"text-field thin"|attr:"placeholder:Postcode" }}
+
+                <br>📞 {{club_form.landline|add_class:"text-field thin"|attr:"placeholder:Landline #" }}
+                {{club_form.mobile|add_class:"text-field thin"|attr:"placeholder:Mobile #" }}
+
+                <br>🔽 {{club_form.discount|add_class:"text-field"|attr:"placeholder:Discount %" }}
+
+                <br>
+
+                <div class="horizontal">
+                    <button class="button back" onclick="window.location.href='/clubs/view_clubs/'"><h2>Back</h2></button>
+                    <button class="button"><h2>Submit</h2></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

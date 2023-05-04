@@ -3,7 +3,6 @@ from datetime import date
 
 from django.shortcuts import render, redirect
 
-from ClubManager.views import rep_dashboard
 from UWEFlix.models import *
 from UWEFlix.views import profile
 
@@ -93,7 +92,7 @@ def book_film(request, film_id, showing_id):
                         has_been_paid = True
 
                     new_booking = Booking.objects.create(user_email=request.user.email, unique_key=unique_key,
-                                                         showing=showing, date=date.today(),
+                                                         club=club, showing=showing, date=date.today(),
                                                          total_price=total_price, ticket_count=total_quantity,
                                                          has_been_paid=has_been_paid)
 
@@ -108,7 +107,8 @@ def book_film(request, film_id, showing_id):
                     showing.save()
 
                     # Register our credit transaction.
-                    Transaction.objects.create(user_email=request.user.email, origin='Booking ' + str(new_booking.id), type='Credit', amount=total_price)
+                    Transaction.objects.create(user_email=request.user.email, origin='Booking ' + str(new_booking.id),
+                                               type='Credit', amount=total_price)
 
                     return redirect(confirmation, booking_id=new_booking.id, unique_key=unique_key)
 
@@ -168,7 +168,8 @@ def payment(request, unique_key):
             showing.save()
 
             # Register our debit transaction.
-            Transaction.objects.create(user_email=email, origin='Booking ' + str(new_booking.id), type='Debit', amount=pending_booking.to_pay)
+            Transaction.objects.create(user_email=email, origin='Booking ' + str(new_booking.id), type='Debit',
+                                       amount=pending_booking.to_pay)
 
             return redirect(confirmation, booking_id=new_booking.id, unique_key=unique_key)
 
@@ -191,7 +192,8 @@ def purchase(request, purchase_type, value):
                     error_message = 'Amount to top up must be greater than £5.00'
                 else:
                     # Register our credit transaction.
-                    Transaction.objects.create(user_email=request.user.email, origin='Credit Top Up', type='Debit', amount=amount)
+                    Transaction.objects.create(user_email=request.user.email, origin='Credit Top Up', type='Debit',
+                                               amount=amount)
 
                     # Top up club rep credits
                     user_profile.credits += amount

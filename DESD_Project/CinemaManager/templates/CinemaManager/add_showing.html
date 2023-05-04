@@ -1,23 +1,37 @@
 {% extends 'CinemaManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Add Showing</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<div class="horizontal">
+    <div class="form-body" style="height: 600px;">
+        <p class="title" align="center">Add Showing</p>
 
+        <hr>
 
-<div class="container">
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <div class="parent-div">
+            <form method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-        {{form.as_p}}
+                🎬 {{form.film|add_class:"text-field"|attr:"placeholder:Film" }}
+                <br>📺 {{form.screen|add_class:"text-field screen"|attr:"placeholder:Screen" }}
+                <br>📅 {{form.time|add_class:"text-field"|attr:"placeholder:Showing Time" }}
 
-        <label for="bulk-add">Add Bulk?</label>
-        <input type="checkbox" id="bulk-add" name="bulk-add" value="bulk-add"><br>
-        <br>
+                <br><label for="bulk-add">Add Bulk?</label>
+                <input type="checkbox" id="bulk-add" name="bulk-add" value="bulk-add"><br>
 
-        <button class="button">Submit</button>
-    </form>
+                <br>
+
+                <div class="horizontal">
+                    <button class="button back" onclick="window.location.href='/manager/'"><h2>Back</h2></button>
+                    <button class="button"><h2>Submit</h2></button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

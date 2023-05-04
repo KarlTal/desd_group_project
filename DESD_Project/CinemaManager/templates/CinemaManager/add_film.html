@@ -1,18 +1,37 @@
 {% extends 'CinemaManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Add Film</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<div class="horizontal">
+    <div class="form-body" style="height: 750px;">
+        <p class="title" align="center">Add Film</p>
 
-<div class="container">
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <hr>
 
-        {{form.as_p}}
+        <div class="parent-div">
+            <form method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-        <button class="button">Submit</button>
-    </form>
+                🎬 {{form.title|add_class:"text-field"|attr:"placeholder:Film Title" }}
+                <br>📺 {{form.age_rating|add_class:"text-field"|attr:"placeholder:Age Rating" }}
+                <br>⏰ {{form.duration|add_class:"text-field"|attr:"placeholder:Duration" }}
+                <br>🧾 {{form.description|add_class:"text-field"|attr:"placeholder:Description" }}
+                <br>📷 {{form.image|add_class:"text-field" }}
+                <br>🎥 {{form.trailer|add_class:"text-field"|attr:"placeholder:Trailer Youtube URL" }}
+
+                <br>
+
+                <div class="horizontal">
+                    <button class="button back" onclick="window.location.href='/manager/'"><h2>Back</h2></button>
+                    <button class="button"><h2>Submit</h2></button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

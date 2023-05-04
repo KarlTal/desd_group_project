@@ -1,28 +1,54 @@
 {% extends 'CinemaManager/parent.html' %}
 
+{% load widget_tweaks %}
 {% block page %}
+{% load static %}
 
-<h1>Update: {{club.title}}</h1>
+<link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
+<style>
+    .thin {
+        width: 29%;
+        margin-left: 5px;
+    }
+</style>
 
+<div class="horizontal">
+    <div class="form-body" style="height: 780px;">
+        <p class="title" align="center">Update: {{club.name}}</p>
 
-{% if error %}
-<h3 style="color:red;">{{error}}</h3>
-{% endif %}
+        <hr>
 
-<div class="container">
-    <form id="update" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <div class="parent-div">
+            <form id="update" method="POST" enctype="multipart/form-data" align="center">
+                {% csrf_token %}
 
-        {{form.as_p}}
-    </form>
-</div>
+                ✍ {{form.name|add_class:"text-field"|attr:"placeholder:Club Name" }}
+                <br>📧 {{form.email|add_class:"text-field"|attr:"placeholder:Club Email" }}
 
-<br>
+                <br>📺 {{form.street_number|add_class:"text-field thin"|attr:"placeholder:Street Number" }}
+                {{form.street_name|add_class:"text-field thin"|attr:"placeholder:Street Name" }}
+                <br>🏠 {{form.city|add_class:"text-field thin"|attr:"placeholder:City" }}
+                {{form.postcode|add_class:"text-field thin"|attr:"placeholder:Postcode" }}
 
-<div>
-    <button class="button" form="update">Update</button>
-    <button class="button" onclick="window.location.href='/clubs/delete_club/{{club.id}}'">Delete Club</button>
+                <br>📞 {{form.landline|add_class:"text-field thin"|attr:"placeholder:Landline #" }}
+                {{form.mobile|add_class:"text-field thin"|attr:"placeholder:Mobile #" }}
+
+                <br>🔽 {{form.discount|add_class:"text-field"|attr:"placeholder:Discount %" }}
+
+                <br>
+            </form>
+
+            <div class="horizontal">
+                <button class="button narrow-btn" onclick="window.location.href='/clubs/view_clubs/'"><h2>Back</h2>
+                </button>
+                <button class="button narrow-btn" form="update"><h2>Update</h2></button>
+                <button class="button narrow-btn" onclick="window.location.href='/clubs/delete_club/{{club.id}}'">
+                    <h2>Delete</h2>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
