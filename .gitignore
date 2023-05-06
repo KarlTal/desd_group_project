@@ -5,6 +5,5 @@
 .venv/
 DESD_Project/DESD_Project/.env
 __pycache__/
-DESD_Project/.env
 DESD_Project/data/
 DESD_Project/db.sqlite3
