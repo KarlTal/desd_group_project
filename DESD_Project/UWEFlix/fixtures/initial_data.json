@@ -60,42 +60,6 @@
     }
   },
   {
-    "model": "UWEFlix.film",
-    "pk": 1,
-    "fields": {
-      "title": "Avatar: The Way of Water",
-      "age_rating": "12",
-      "duration": 150,
-      "description": "Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their home.",
-      "image": "Assets/avatar2_dDHgIhU_cYr3Arh.png",
-      "trailer": "https://www.youtube.com/embed/d9MyW72ELq0"
-    }
-  },
-  {
-    "model": "UWEFlix.film",
-    "pk": 2,
-    "fields": {
-      "title": "Avengers: Endgame",
-      "age_rating": "12A",
-      "duration": 165,
-      "description": "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
-      "image": "Assets/endgame_nmFJ9l0_KCNDi4h.png",
-      "trailer": "https://www.youtube.com/embed/TcMBFSGVi1c"
-    }
-  },
-  {
-    "model": "UWEFlix.film",
-    "pk": 3,
-    "fields": {
-      "title": "Shrek",
-      "age_rating": "U",
-      "duration": 100,
-      "description": "A mean lord exiles fairytale creatures to the swamp of a grumpy ogre, who must go on a quest and rescue a princess for the lord in order to get his land back.",
-      "image": "Assets/shrek_Ncrez9L_obDSeu8.png",
-      "trailer": "https://www.youtube.com/embed/CwXOrWvPBPk"
-    }
-  },
-  {
     "model": "UWEFlix.screen",
     "pk": 1,
     "fields": {
@@ -107,16 +71,6 @@
     "pk": 2,
     "fields": {
       "capacity": 150
-    }
-  },
-  {
-    "model": "UWEFlix.showing",
-    "pk": 1,
-    "fields": {
-      "film": 1,
-      "screen": 2,
-      "time": "2023-03-28T00:45:40Z",
-      "seats_taken": 0
     }
   },
   {

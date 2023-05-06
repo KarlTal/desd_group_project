@@ -1,0 +1,194 @@
+[
+  {
+    "model": "UWEFlix.film",
+    "pk": 2,
+    "fields": {
+      "title": "Avengers: Endgame",
+      "age_rating": "PG-13",
+      "duration": 190,
+      "description": "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
+      "image": "Avengers_Endgame.jpg",
+      "trailer": "https://www.youtube.com/embed/TcMBFSGVi1c"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 3,
+    "fields": {
+      "title": "The Shawshank Redemption",
+      "age_rating": "R",
+      "duration": 142,
+      "description": "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.",
+      "image": "The_Shawshank_Redemption.jpg",
+      "trailer": "https://www.youtube.com/embed/6hB3S9bIaco"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 4,
+    "fields": {
+      "title": "The Godfather",
+      "age_rating": "R",
+      "duration": 175,
+      "description": "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son.",
+      "image": "The_Godfather.jpg",
+      "trailer": "https://www.youtube.com/embed/sY1S34973zA"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 5,
+    "fields": {
+      "title": "The Dark Knight",
+      "age_rating": "PG-13",
+      "duration": 152,
+      "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+      "image": "The_Dark_Knight.jpg",
+      "trailer": "https://www.youtube.com/embed/LDG9bisJEaI"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 6,
+    "fields": {
+      "title": "Schindler's List",
+      "age_rating": "R",
+      "duration": 195,
+      "description": "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.",
+      "image": "Schindlers_List.jpg",
+      "trailer": "https://www.youtube.com/embed/gG22XNhtnoY"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 7,
+    "fields": {
+      "title": "Pulp Fiction",
+      "age_rating": "R",
+      "duration": 154,
+      "description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+      "image": "Pulp_Fiction.jpg",
+      "trailer": "https://www.youtube.com/embed/s7EdQ4FqbhY"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 8,
+    "fields": {
+      "title": "Inception",
+      "age_rating": "PG-13",
+      "duration": 148,
+      "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.",
+      "image": "Inception.jpg",
+      "trailer": "https://www.youtube.com/embed/8hP9D6kZseM"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 9,
+    "fields": {
+      "title": "Forrest Gump",
+      "age_rating": "PG-13",
+      "duration": 142,
+      "description": "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood swe...",
+      "image": "Forrest_Gump.jpg",
+      "trailer": "https://www.youtube.com/embed/bLvqoHBptjg"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 10,
+    "fields": {
+      "title": "The Matrix",
+      "age_rating": "R",
+      "duration": 136,
+      "description": "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
+      "image": "The_Matrix.jpg",
+      "trailer": "https://www.youtube.com/embed/m8e-FF8MsqU"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 11,
+    "fields": {
+      "title": "Interstellar",
+      "age_rating": "PG-13",
+      "duration": 169,
+      "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      "image": "Interstellar.jpg",
+      "trailer": "https://www.youtube.com/embed/zSWdZVtXT7E"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 12,
+    "fields": {
+      "title": "Se7en",
+      "age_rating": "R",
+      "duration": 127,
+      "description": "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
+      "image": "Se7en.jpg",
+      "trailer": "https://www.youtube.com/embed/znmZoVkCjpI"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 13,
+    "fields": {
+      "title": "Spirited Away",
+      "age_rating": "PG",
+      "duration": 125,
+      "description": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches and spirits, a world where humans are changed into beasts.",
+      "image": "Spirited_Away.jpg",
+      "trailer": "https://www.youtube.com/embed/ByXuk9QqQkk"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 14,
+    "fields": {
+      "title": "Whiplash",
+      "age_rating": "R",
+      "duration": 106,
+      "description": "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
+      "image": "Whiplash.jpg",
+      "trailer": "https://www.youtube.com/embed/7d_jQycdQGo"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 15,
+    "fields": {
+      "title": "Avengers: Infinity War",
+      "age_rating": "PG-13",
+      "duration": 149,
+      "description": "The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos before his blitz of devastation and ruin puts an end to the universe.",
+      "image": "Avengers_Infinity_War.jpg",
+      "trailer": "https://www.youtube.com/embed/6ZfuNTqbHE8"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 16,
+    "fields": {
+      "title": "Avatar: The Way of Water",
+      "age_rating": "PG-13",
+      "duration": 192,
+      "description": "Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their home.",
+      "image": "Avatar_The_Way_of_Water.jpg",
+      "trailer": "https://www.youtube.com/embed/d9MyW72ELq0"
+    }
+  },
+  {
+    "model": "UWEFlix.film",
+    "pk": 17,
+    "fields": {
+      "title": "WALL-E",
+      "age_rating": "G",
+      "duration": 98,
+      "description": "In the distant future, a small waste-collecting robot inadvertently embarks on a space journey that will ultimately decide the fate of mankind.",
+      "image": "WALL-E.jpg",
+      "trailer": "https://www.youtube.com/embed/CZ1CATNbXg0"
+    }
+  }
+]

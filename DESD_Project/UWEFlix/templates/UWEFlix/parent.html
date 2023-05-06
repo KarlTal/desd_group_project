@@ -43,6 +43,8 @@
             success.innerHTML = message;
         }
     </script>
+
+    {{ redirect_to_login_immediately }}
 </head>
 
 <body>
@@ -58,7 +60,6 @@
             {% if request.user.is_anonymous %}
 
             <li style="float:right"><a href="{% url 'Login' %}">Login</a></li>
-            <li style="float:right"><a href="{% url 'Login' %}">About</a></li>
 
             {% else %}
 
@@ -126,7 +127,5 @@
     <p>All rights reserved UWEFlix 2023 ©</p>
 </div>
 
-{{ redirect_to_login_immediately }}
 </body>
-
 </html>

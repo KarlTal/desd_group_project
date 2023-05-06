@@ -1,6 +1,9 @@
+import requests
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, Group
 from django.db import models
 from django.utils import timezone
+
+film_debug_sync = False
 
 
 class CustomUserManager(UserManager):
@@ -90,15 +93,16 @@ class Club(models.Model):
 
 # The database class for the Films displayed at UWEFlix
 class Film(models.Model):
-    RATINGS = (('U', 'U'), ('PG', 'PG'), ('12A', '12A'), ('12', '12'), ('15', '15'), ('18', '18'))
-
     title = models.CharField(max_length=32)
-    age_rating = models.CharField(max_length=5, choices=RATINGS)
+    age_rating = models.CharField(max_length=5)
     duration = models.IntegerField()
     description = models.CharField(max_length=255)
 
-    image = models.ImageField(upload_to='Assets/', null=True)
+    image = models.CharField(max_length=255, null=True)
     trailer = models.CharField(max_length=255, null=True)
+
+    class Meta:
+        app_label = 'UWEFlix'
 
     def __str__(self):
         return self.title
@@ -207,3 +211,37 @@ def setup_user(user, group_key):
 
 def get_group(user):
     return user.groups.all()[0].name
+
+
+# For debug use only. Ensures Film data is consistent between 2 separate databases.
+def update_films():
+    if not film_debug_sync:
+        return
+
+    response = requests.get('http://127.0.0.1:8080/')
+    data = response.json()
+
+    try:
+        updated_film_ids = []
+
+        for film_data in data:
+            # Update the film if it already exists, otherwise create a new one
+            film, created = Film.objects.update_or_create(
+                id=film_data['id'],
+                defaults={
+                    'title': film_data['title'],
+                    'age_rating': film_data['age_rating'],
+                    'duration': film_data['duration'],
+                    'description': film_data['description'],
+                    'image': 'http://127.0.0.1:8080' + film_data['image'],
+                    'trailer': film_data['trailer'],
+                }
+            )
+
+            # Add the ID of the updated/created film to the list
+            updated_film_ids.append(film.id)
+
+        # Delete all films whose IDs are not in the list of updated film IDs
+        Film.objects.exclude(id__in=updated_film_ids).delete()
+    except:
+        pass

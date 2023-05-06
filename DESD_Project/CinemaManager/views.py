@@ -13,13 +13,22 @@ from .forms import *
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def cinema_dashboard(request):
+    update_films()
+
     # Lookup all current films, screens and showings, so we can display them on the page.
     films = Film.objects.all()
     screens = Screen.objects.all()
     showings = Showing.objects.all()
+    tickets = TicketType.objects.all()
 
     # Render the page.
-    return render(request, 'CinemaManager/home.html', {'films': films, 'screens': screens, 'showings': showings})
+    return render(request, 'CinemaManager/home.html',
+                  {'films': films, 'screens': screens, 'showings': showings, 'tickets': tickets})
+
+
+# =============================================== #
+#              FILM API MANAGEMENT                #
+# =============================================== #
 
 
 # The handler for the adding film page.
@@ -28,13 +37,25 @@ def cinema_dashboard(request):
 def add_film(request):
     error_message = ''
 
-    # If request is POST and the form used on the page is valid, save it to the database.
     if request.POST:
-        form = FilmForm(request.POST, request.FILES)  # Added for images
+        form = FilmForm(request.POST)
 
-        if form.is_valid():  #
-            form.save()
-            return redirect(cinema_dashboard)
+        # If the form is valid, then make a request to the Film Manager API to add a new Film.
+        if form.is_valid():
+            # try:
+            response = requests.post('http://film-manager:8080/add/',
+                                     data={'title': form.cleaned_data.get('title'),
+                                           'trailer': form.cleaned_data.get(
+                                               'trailer')})
+
+            # Ensure that we receive a valid response, otherwise print the received error.
+            if response.status_code != 201:
+                error_message = response.text
+            else:
+                update_films()
+                return redirect(cinema_dashboard)
+        # except:
+        #     error_message = 'Failed to connect to Film backend! Is it down?'
         else:
             error_message = get_form_errors(form)
 
@@ -46,16 +67,30 @@ def add_film(request):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def update_film(request, film_id):
-    error_message = ''
-
-    # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
         lookup = Film.objects.get(id=film_id)
-        form = FilmForm(request.POST or None, request.FILES or None, instance=lookup)
+        form = UpdateFilmForm(request.POST or None, request.FILES or None, instance=lookup)
 
-        if form.is_valid():  #
-            form.save()
-            return redirect(cinema_dashboard)
+        # If the form is valid, then make a request to the Film Manager API to update a Film.
+        if form.is_valid():
+            try:
+                response = requests.post('http://film-manager:8080/update/', data={
+                    'id': lookup.id,
+                    'title': form.cleaned_data.get('title'),
+                    'age_rating': form.cleaned_data.get('age_rating'),
+                    'duration': form.cleaned_data.get('duration'),
+                    'description': form.cleaned_data.get('description'),
+                    'trailer': form.cleaned_data.get('trailer')
+                })
+
+                # Ensure that we receive a valid response, otherwise print the received error.
+                if response.status_code != 200:
+                    error_message = response.json().get('error')
+                else:
+                    update_films()
+                    return redirect(cinema_dashboard)
+            except:
+                error_message = 'Failed to connect to Film backend! Is it down?'
         else:
             error_message = get_form_errors(form)
 
@@ -75,16 +110,34 @@ def delete_film(request, film_id):
     if film_id:
         lookup = Film.objects.get(id=film_id)
         showing = Showing.objects.filter(film=lookup)
+        form = FilmForm(request.POST or None, instance=lookup)
 
+        # If the film has a showing assigned, then display an error message.
         if showing:
-            form = FilmForm(request.POST or None, instance=lookup)
-            error_msg = "You cannot delete a Film that has a Showing!"
-            return render(request, 'CinemaManager/update_film.html', {'film': lookup, 'form': form, 'error': error_msg})
+            error_message = "You cannot delete a Film that has a Showing!"
+        else:
+            try:
+                # Otherwise, send a request to the Film Manager API to delete the film.
+                response = requests.post('http://film-manager:8080/delete/', data={'id': lookup.id})
 
-        lookup.delete()
+                # Ensure that we receive a valid response, otherwise print the received error.
+                if response.status_code != 200:
+                    error_message = response.json().get('error')
+                else:
+                    update_films()
+                    return redirect(cinema_dashboard)
+            except:
+                error_message = 'Failed to connect to Film backend! Is it down?'
+
+        return render(request, 'CinemaManager/update_film.html', {'film': lookup, 'form': form, 'error': error_message})
 
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)
+
+
+# =============================================== #
+#       SCREEN, TICKET & SHOWING MANAGEMENT       #
+# =============================================== #
 
 
 # The handler for adding a new screen page.
@@ -182,6 +235,33 @@ def delete_showing(request, showing_id):
         lookup.delete()
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)
+
+
+def update_ticket(request, ticket_id):
+    # If the ticket_id exists and the form is valid, update the Ticket database object with the data from the form.
+    if ticket_id:
+        lookup = TicketType.objects.get(id=ticket_id)
+
+        if lookup:
+            form = TicketForm(request.POST or None, instance=lookup)
+
+            if form.is_valid():  #
+                form.save()
+                return redirect(cinema_dashboard)
+            else:
+                error_message = get_form_errors(form)
+
+            # Render the page.
+            return render(request, 'CinemaManager/update_ticket.html',
+                          {'error': error_message, 'ticket': lookup, 'form': form})
+
+    # Redirect back to the homepage.
+    return redirect(cinema_dashboard)
+
+
+# =============================================== #
+#                APPROVAL HANDLING                #
+# =============================================== #
 
 
 # View students

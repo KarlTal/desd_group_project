@@ -31,7 +31,7 @@
         <td>{{film.age_rating}}</td>
         <td>{{film.duration}} Minutes</td>
         <td>{{film.description}}</td>
-        <td><img src="{{film.image.url}}" style="width:100px; height:100px;"></td>
+        <td><img src="http://127.0.0.1:8080/Assets/{{film.image}}" style="width:100px; height:100px;"></td>
         <td class="edit-column"><a class="redirect" href="/manager/update_film/{{film.id}}">Modify</a></td>
     </tr>
     </tbody>
@@ -119,6 +119,38 @@
                value="Add Showing"/>
     </div>
 </div>
+
+<br>
+<hr>
+<br>
+
+<div class="float-child">
+    <h2>💵 Ticket Prices</h2>
+
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        </thead>
+        {% for ticket in tickets %}
+        <tbody>
+        <tr>
+            <td>{{ticket.id}}</td>
+            <td>{{ticket.ticket_name}}</td>
+            <td>£{{ticket.price}}</td>
+            <td class="edit-column"><a class="redirect" href="/manager/update_ticket/{{ticket.id}}">Modify</a></td>
+        </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <br>
+</div>
+
 <br>
 
 {% endblock %}

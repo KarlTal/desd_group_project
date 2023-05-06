@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   desd_project:
     image: ${APP_NAME}
@@ -7,11 +9,13 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
-    entrypoint: ["./DESD_Project-entrypoint.sh"]
+    entrypoint: [ "./DESD_Project-entrypoint.sh" ]
     depends_on:
       db:
         condition: service_healthy
-  
+    networks:
+      - shared_network
+
   db:
     image: mysql:latest
     container_name: ${APP_NAME}-mysql_db
@@ -21,7 +25,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASS}
     ports:
-    - '3307:3306'
+      - '3306:3306'
     restart: always
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3306" ]
@@ -30,4 +34,9 @@ services:
       retries: 5
     volumes:
       - ./data/mysql/db:/var/lib/mysql
+    networks:
+      - shared_network
 
+networks:
+  shared_network:
+    name: shared_network

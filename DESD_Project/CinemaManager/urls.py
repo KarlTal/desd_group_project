@@ -21,6 +21,9 @@ urlpatterns = [
     path('update_showing/<showing_id>', views.update_showing, name='Update Showing'),
     path('delete_showing/<showing_id>', views.delete_showing, name='Delete Showing'),
 
+    # Ticket related URLs.
+    path('update_ticket/<ticket_id>', views.update_ticket, name='Update Ticket'),
+
     # Approval of accounts
     path('approvals/', views.approvals, name="View Approvals"),
     path('approve_booking/<booking_id>', views.approve_booking, name='Approve Booking'),
