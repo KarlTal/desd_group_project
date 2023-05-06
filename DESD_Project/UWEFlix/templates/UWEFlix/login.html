@@ -5,10 +5,20 @@
 
 <link rel="stylesheet" href="{% static 'UWEFlix/login.css' %}">
 
+
+
 <div class="horizontal">
+
+
     <div class="login-body">
 
         <p class="sign" align="center">Sign in</p>
+
+        {% for message in messages %}
+        <div style = "color:white;"class="message text-center alert alert-info {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
 
         <hr>
 
