@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'UWEFlix/form.css' %}">
 
 <div class="horizontal">
-    <div class="form-body" style="height: 750px;">
+    <div class="form-body" style="height: 500px;">
         <p class="title" align="center">Add Film</p>
 
         <hr>
@@ -16,11 +16,7 @@
             <form method="POST" enctype="multipart/form-data" align="center">
                 {% csrf_token %}
 
-                🎬 {{form.title|add_class:"text-field"|attr:"placeholder:Film Title" }}
-                <br>📺 {{form.age_rating|add_class:"text-field"|attr:"placeholder:Age Rating" }}
-                <br>⏰ {{form.duration|add_class:"text-field"|attr:"placeholder:Duration" }}
-                <br>🧾 {{form.description|add_class:"text-field"|attr:"placeholder:Description" }}
-                <br>📷 {{form.image|add_class:"text-field" }}
+                🎬 {{form.title|add_class:"text-field"|attr:"placeholder:Full Film Title" }}
                 <br>🎥 {{form.trailer|add_class:"text-field"|attr:"placeholder:Trailer Youtube URL" }}
 
                 <br>
