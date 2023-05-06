@@ -47,3 +47,11 @@ class ShowingForm(ModelForm):
     class Meta:
         model = Showing
         fields = ['film', 'screen', 'time']
+
+
+# The Form used to modify UWEFlix Tickets.
+class TicketForm(ModelForm):
+    # Specify the Meta so Django knows what fields we're modifying.
+    class Meta:
+        model = TicketType
+        fields = ['price']

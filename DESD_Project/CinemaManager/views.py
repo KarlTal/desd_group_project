@@ -19,9 +19,11 @@ def cinema_dashboard(request):
     films = Film.objects.all()
     screens = Screen.objects.all()
     showings = Showing.objects.all()
+    tickets = TicketType.objects.all()
 
     # Render the page.
-    return render(request, 'CinemaManager/home.html', {'films': films, 'screens': screens, 'showings': showings})
+    return render(request, 'CinemaManager/home.html',
+                  {'films': films, 'screens': screens, 'showings': showings, 'tickets': tickets})
 
 
 # =============================================== #
@@ -134,7 +136,7 @@ def delete_film(request, film_id):
 
 
 # =============================================== #
-#           SCREEN & SHOWING MANAGEMENT           #
+#       SCREEN, TICKET & SHOWING MANAGEMENT       #
 # =============================================== #
 
 
@@ -231,6 +233,28 @@ def delete_showing(request, showing_id):
     if showing_id:
         lookup = Showing.objects.get(id=showing_id)
         lookup.delete()
+    # Redirect back to the homepage.
+    return redirect(cinema_dashboard)
+
+
+def update_ticket(request, ticket_id):
+    # If the ticket_id exists and the form is valid, update the Ticket database object with the data from the form.
+    if ticket_id:
+        lookup = TicketType.objects.get(id=ticket_id)
+
+        if lookup:
+            form = TicketForm(request.POST or None, instance=lookup)
+
+            if form.is_valid():  #
+                form.save()
+                return redirect(cinema_dashboard)
+            else:
+                error_message = get_form_errors(form)
+
+            # Render the page.
+            return render(request, 'CinemaManager/update_ticket.html',
+                          {'error': error_message, 'ticket': lookup, 'form': form})
+
     # Redirect back to the homepage.
     return redirect(cinema_dashboard)
 
