@@ -297,10 +297,9 @@ def approve_discount(request, user_id, outcome):
 @login_required(login_url='/login/')
 @allowed_users(allowed_roles='CinemaManager')
 def approve_booking(request, booking_id):
-    booking = Booking.objects.filter(id=booking_id)
-
+    booking = Booking.objects.get(id=booking_id)
+    showing = Showing.objects.get(booking = booking)
     # Reduce the number of seats taken.
-    showing = booking.showing
     showing.seats_taken = showing.seats_taken - booking.ticket_count
     showing.save()
 
