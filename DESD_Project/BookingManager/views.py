@@ -1,6 +1,5 @@
 import uuid
-from datetime import date
-
+from datetime import date,datetime, timedelta
 from django.shortcuts import render, redirect
 
 from UWEFlix.models import *
@@ -53,11 +52,13 @@ def book_film(request, film_id, showing_id):
             child_quantity = int(request.POST["child_quantity"])
             total_quantity = student_quantity + adult_quantity + child_quantity
 
+            current_time = (timezone.now()+ timedelta(hours=1)).strftime('%H:%M:%S')
+            
             if total_quantity <= 0:
                 error_message = "You must book at least 1 seat!"
             elif remaining_seats < total_quantity:
                 error_message = "There are not enough seats available for this many tickets! (1)"
-            elif showing.time < timezone.now():
+            elif str(showing.time.time()) < current_time:
                 error_message = "This showing has already begin. Please choose another showing."
             else:
                 unique_key = uuid.uuid4()
