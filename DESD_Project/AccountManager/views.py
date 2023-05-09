@@ -47,7 +47,7 @@ def update_user(request, user_id):
 
             transactions = Transaction.objects.filter(user_email=user_lookup.email)
             now = timezone.now()
-
+            print(transactions)
             # Iterate through all of our transactions to collect the statements that exist.
             for transaction in transactions:
                 year = transaction.date.year
@@ -55,23 +55,21 @@ def update_user(request, user_id):
 
                 # Ignore statements from invalid months.
                 if year == now.year and month >= now.month:
-                    continue
+                    key = (year, month)
+                    if key not in account_statements:
+                        account_statements[key] = AccountStatement(year, month, [])
 
-                key = (year, month)
+                    account_statements[key].transactions.append(transaction)
 
-                if key not in account_statements:
-                    account_statements[key] = AccountStatement(year, month, [])
 
-                account_statements[key].transactions.append(transaction)
-
-            # Render the page.
+            print(account_statements)
             return render(request, 'AccountManager/update_user.html', {'user': user_lookup, 'profile': profile_lookup,
                                                                        'user_form': user_form, 'error': error_message,
                                                                        'profile_form': profile_form,
                                                                        'statements': account_statements.values()})
 
     # Redirect back to the homepage.
-    return redirect(cinema_dashboard)
+    return redirect(home)
 
 
 # The handler for deleting a user.
