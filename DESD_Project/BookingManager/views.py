@@ -54,16 +54,13 @@ def book_film(request, film_id, showing_id):
 
             current_time = (timezone.now()+ timedelta(hours=1)).strftime('%H:%M:%S')
             date_obj = datetime.now()
-            print("hi")
             if total_quantity <= 0:
                 error_message = "You must book at least 1 seat!"
             elif remaining_seats < total_quantity:
                 error_message = "There are not enough seats available for this many tickets! (1)"
             elif str(showing.time.time()) < current_time and showing.time.date() == date_obj.date():
                 error_message = "This showing has already begin. Please choose another showing."
-                print("bad")
             else:
-                print("tee")
                 unique_key = uuid.uuid4()
 
                 student_price = student_ticket.price
