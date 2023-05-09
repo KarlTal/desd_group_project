@@ -15,9 +15,8 @@ from .forms import *
 def rep_dashboard(request):
     error_message = ''
     authenticated = ("successful_club_rep_login" in request.session)
-
     # Populate the session data with the counter set to 0 to avoid KeyErrors.
-    if "successful_club_rep_login" not in request.session:
+    if "club_rep_login_attempts" not in request.session:
         request.session["club_rep_login_attempts"] = 0
 
     if authenticated:
@@ -74,7 +73,7 @@ def rep_dashboard(request):
                                 + " attempts remaining."
 
                 # Increment the users attempts.
-                request.session["club_rep_login_attempts"] += 1
+                request.session["club_rep_login_attempts"] +=1
 
     return render(request, 'ClubManager/home.html', {'authenticated': False, 'error': error_message})
 

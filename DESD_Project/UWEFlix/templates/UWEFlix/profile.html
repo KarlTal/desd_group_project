@@ -52,20 +52,20 @@
         <br>
         <hr class="hr-wide">
 
-        {% if not request.user|has_group:"Student" %}
+        {% if request.user|has_group:"Student" %}
 
-        {%if profile.applied_for_rep is True %}
-        <h3>Your application is pending!</h3>
-        {% else %}
-        <form method="POST" enctype="multipart/form-data" style="padding-top: 25px;">
-            {% csrf_token %}
-            <label>Apply to become a representative:</label>
-            {{club_rep_form.club}}
-            <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
-        </form>
-        {% endif %}
+            {%if profile.applied_for_rep is True %}
+            <h3>Your application is pending!</h3>
+            {% else %}
+            <form method="POST" enctype="multipart/form-data" style="padding-top: 25px;">
+                {% csrf_token %}
+                <label>Apply to become a representative:</label>
+                {{club_rep_form.club}}
+                <button class="submit" name="ClubRepForm" value="ClubRepForm">Submit</button>
+            </form>
+            {% endif %}
 
-        {% else %}
+        {% elif request.user|has_group:"ClubRepresentative"  %}
         <h5>You are currently a Club Rep.</h5>
         {% endif %}
     </div>

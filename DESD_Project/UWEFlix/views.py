@@ -1,13 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
 from CinemaManager.views import cinema_dashboard
 from ClubManager.views import rep_dashboard
 from .decorators import *
 from .forms import *
-
-
+from datetime import datetime
 # View handling for the UWEFlix homepage.
 def home(request):
     films = Film.objects.all()
@@ -19,10 +17,8 @@ def film(request, film_id):
     # If the film_id exists and the form is valid, update the Film database object with the data from the form.
     if film_id:
         lookup = Film.objects.get(id=film_id)
-
-        showings = Showing.objects.filter(time__gte=timezone.now()).filter(film=lookup)
+        showings = Showing.objects.filter(time__gte=datetime.now()).filter(film=lookup)
         dates = []
-
         for showing in showings:
             key = showing.time.strftime("%A %d/%m/%y")
 
@@ -103,6 +99,7 @@ def login_user(request):
                 else:
                     return redirect(home)
             elif 'ClubRepresentative' in group:
+                request.session["club_rep_login_attempts"] = 0
                 return redirect(rep_dashboard)
             else:
                 return redirect(home)
