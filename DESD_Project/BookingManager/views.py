@@ -52,18 +52,18 @@ def book_film(request, film_id, showing_id):
             child_quantity = int(request.POST["child_quantity"])
             total_quantity = student_quantity + adult_quantity + child_quantity
 
+            current_time = (timezone.now()+ timedelta(hours=1)).strftime('%H:%M:%S')
             date_obj = datetime.now()
-            print("Showing time:" + str(showing.time.time()))
-            print("Current time:" + str(date_obj.time()))
-            print("Showing day:" + str(showing.time.date()))
-            print("Current day:" + str(date_obj.date()))
+            print("hi")
             if total_quantity <= 0:
                 error_message = "You must book at least 1 seat!"
             elif remaining_seats < total_quantity:
                 error_message = "There are not enough seats available for this many tickets! (1)"
-            elif showing.time.time() < date_obj.time() and showing.time.date() == date_obj.date():
+            elif str(showing.time.time()) < current_time and showing.time.date() == date_obj.date():
                 error_message = "This showing has already begin. Please choose another showing."
+                print("bad")
             else:
+                print("tee")
                 unique_key = uuid.uuid4()
 
                 student_price = student_ticket.price
@@ -138,14 +138,13 @@ def payment(request, unique_key):
         total_quantity = pending_booking.total_tickets
         remaining_seats = showing.screen.capacity - showing.seats_taken
 
+        current_time = (timezone.now()+ timedelta(hours=1)).strftime('%H:%M:%S')
         date_obj = datetime.now()
-        print("Showing time:" + str(showing.time.time()))
-        print("Current time:" + str(date_obj.time()))
-        print("Showing day:" + str(showing.time.date()))
-        print("Current day:" + str(date_obj.date()))
+        
         if remaining_seats < total_quantity:
             error_message = "There are no longer enough seats available!"
-        elif showing.time.time() < date_obj.time() and showing.time.date() == date_obj.date():
+        elif str(showing.time.time()) < current_time and showing.time.date() == date_obj.date():
+
             error_message = "This showing has already begin. Please choose another showing."
         else:
             # Create the new booking.
